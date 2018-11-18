@@ -7,6 +7,10 @@
  
 \usepackage[margin=1in]{geometry} 
 \usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{subfig}
  
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -23,7 +27,25 @@
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
- 
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\kern10pt
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\newcommand*{\answer}{%
+  \par
+  \kern1pt
+  \begingroup
+    \centering
+    \raisebox{.2\baselineskip}{%
+      \textcolor{gray}{
+	    \rule{.6667\linewidth}{.1pt}%
+      }
+    }%
+    \par
+  \kern8pt
+  \endgroup
+}
+
 \begin{document}
  
 % --------------------------------------------------------------
@@ -32,37 +54,41 @@
  
 %\renewcommand{\qedsymbol}{\filledbox}
  
-\title{Homework Template}%replace X with the appropriate number
-\author{Professor Sarah\\ %replace with your name
-MATH 301 - Introduction to Proof and Abstract Reasoning} %if necessary, replace with your course title
+\title{DD2434 Machine Learning, Advanced Course Assignment 1}
+\author{Lin Chun Hung, chlin3@kth.se} 
  
 \maketitle
- 
-\begin{theorem}{x.yz} %You can use theorem, proposition, exercise, or reflection here.  Modify x.yz to be whatever number you are proving
-Delete this text and write theorem statement here.
-\end{theorem}
- 
-\begin{proof}
-Blah, blah, blah.  Here is an example of the \texttt{align} environment:
-%Note 1: The * tells LaTeX not to number the lines.  If you remove the *, be sure to remove it below, too.
-%Note 2: Inside the align environment, you do not want to use $-signs.  The reason for this is that this is already a math environment. This is why we have to include \text{} around any text inside the align environment.
-\begin{align*}
-\sum_{i=1}^{k+1}i & = \left(\sum_{i=1}^{k}i\right) +(k+1)\\ 
-& = \frac{k(k+1)}{2}+k+1 & (\text{by inductive hypothesis})\\
-& = \frac{k(k+1)+2(k+1)}{2}\\
-& = \frac{(k+1)(k+2)}{2}\\
-& = \frac{(k+1)((k+1)+1)}{2}.
-\end{align*}
-\end{proof}
- 
-\begin{proposition}{x.yz}
-Let $n\in \Z$.  
-\end{proposition}
- 
-\begin{proof}[Disproof]%Whatever you put in the square brackets will be the label for the block of text to follow in the proof environment.
-Blah, blah, blah.  I'm so smart.
-\end{proof}
- 
+
+% Question 1
+\begin{question}{1}
+Consider input output pairs are linked by the mapping to have the following
+ relation:
+\begin{equation}
+    \boldsymbol{t}_i = f(\boldsymbol{x}_i) + \epsilon_i
+\end{equation}
+where the $\epsilon_i$ is the unbiased random noise. Since we have no piror knowledge
+on the random noise term, the random noise is then assumed as following the normal
+distribution. \\
+
+With the assumption that features are uncorrelated, we choose the spherical
+covariance matrix for the likelihood.
+\end{question} % End question 1
+
+% Question 2
+\begin{question}{2}
+Consider the general product rule of probability:
+$$\mathrm {P} \left(\bigcap _{k=1}^{n}A_{k}\right)=
+  \prod _{k=1}^{n}\mathrm {P} \left(A_{k}\,{\Bigg |}\,\bigcap _{j=1}^{k-1}A_{j}\right)$$
+
+Therefore the likelihood would be:
+\begin{equation}
+  p(\boldsymbol{T}\mid f,\boldsymbol{X}) =
+  \prod _{i=1}^{N}p(\boldsymbol{t}_i \mid \boldsymbol{t}_{i-1},...,\boldsymbol{t}_{1},
+  f,\boldsymbol{X})
+\end{equation}
+
+\end{question} % End question 2
+
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
 % --------------------------------------------------------------
