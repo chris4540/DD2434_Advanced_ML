@@ -31,20 +31,20 @@
 \kern10pt
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
-\newcommand*{\answer}{%
-  \par
-  \kern1pt
-  \begingroup
-    \centering
-    \raisebox{.2\baselineskip}{%
-      \textcolor{gray}{
-	    \rule{.6667\linewidth}{.1pt}%
-      }
-    }%
-    \par
-  \kern8pt
-  \endgroup
-}
+% \newcommand*{\answer}{%
+%   \par
+%   \kern1pt
+%   \begingroup
+%     \centering
+%     \raisebox{.2\baselineskip}{%
+%       \textcolor{gray}{
+% 	    \rule{.6667\linewidth}{.1pt}%
+%       }
+%     }%
+%     \par
+%   \kern8pt
+%   \endgroup
+% }
 \newcommand\TODO[1]{\textcolor{red}{#1}}
 
 \begin{document}
@@ -69,9 +69,9 @@ Consider input output pairs are linked by the mapping to have the following
 \begin{equation}
     \textbf{t}_i = f(\textbf{x}_i) + \bm{\epsilon}
 \end{equation}
-where the $\epsilon_i$ is the unbiased random noise. Since we have no piror knowledge
+where the $\bm{\epsilon}$ is the unbiased random noise. Since we have no piror knowledge
 on the random noise term, the random noise is then assumed as following the normal
-distribution. \\
+distribution. \textbf{TODO: More on this}\\
 
 With the assumption that features are uncorrelated, we choose the spherical
 covariance matrix for the likelihood.
@@ -105,6 +105,33 @@ Therefore the likelihood would be:
 \end{equation}
 \end{question} % End question 3
 % ====================================================================
+% ====================================================================
+% Question 4
+\begin{question}{4}
+The choice of piror distribution reflects the choice of regularizer. Chossing L1 
+norm as regularizer is known as the lasso (least absolute shrinkage and selection operator).
+The regularizer will force some weighting coefficients $w_j$ to be zero, given 
+a proper choice of model parameter $\tau$. It plays the role of feature selection
+since those zero weighting coefficients indicate that the corresponding features
+are irrelvant to the output. \\ 
+
+The penalization term or the negative log-prior:
+\begin{equation}
+  \frac{\lambda}{2} \left \|vec(W - W_0)\right \|_{q}  % Fix this eqn
+\end{equation}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{q4_regular.png}
+  \caption{A boat.}
+  \label{fig:boat1}
+\end{figure}
+\end{question} % End question 4
+% ====================================================================
+
+
+
+
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
