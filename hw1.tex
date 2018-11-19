@@ -6,7 +6,7 @@
 \documentclass[12pt]{article}
  
 \usepackage[margin=1in]{geometry} 
-\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsmath,amsthm,amssymb,bm}
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -45,6 +45,7 @@
   \kern8pt
   \endgroup
 }
+\newcommand\TODO[1]{\textcolor{red}{#1}}
 
 \begin{document}
  
@@ -59,12 +60,14 @@
  
 \maketitle
 
+% ====================================================================
 % Question 1
 \begin{question}{1}
+% TODO: Fix the arguments
 Consider input output pairs are linked by the mapping to have the following
  relation:
 \begin{equation}
-    \boldsymbol{t}_i = f(\boldsymbol{x}_i) + \epsilon_i
+    \textbf{t}_i = f(\textbf{x}_i) + \bm{\epsilon}
 \end{equation}
 where the $\epsilon_i$ is the unbiased random noise. Since we have no piror knowledge
 on the random noise term, the random noise is then assumed as following the normal
@@ -73,7 +76,9 @@ distribution. \\
 With the assumption that features are uncorrelated, we choose the spherical
 covariance matrix for the likelihood.
 \end{question} % End question 1
+% ====================================================================
 
+% ====================================================================
 % Question 2
 \begin{question}{2}
 Consider the general product rule of probability:
@@ -82,12 +87,24 @@ $$\mathrm {P} \left(\bigcap _{k=1}^{n}A_{k}\right)=
 
 Therefore the likelihood would be:
 \begin{equation}
-  p(\boldsymbol{T}\mid f,\boldsymbol{X}) =
-  \prod _{i=1}^{N}p(\boldsymbol{t}_i \mid \boldsymbol{t}_{i-1},...,\boldsymbol{t}_{1},
-  f,\boldsymbol{X})
+  p(\textbf{T}\mid f,\textbf{X}) =
+  \prod _{i=1}^{N}p(\textbf{t}_i \mid \textbf{t}_{i-1},...,\textbf{t}_{1},
+  f,\textbf{X})
 \end{equation}
 
 \end{question} % End question 2
+% ====================================================================
+
+% ====================================================================
+% Question 3 
+\begin{question}{3}
+
+\begin{equation}
+  p(\textbf{T}\mid \textbf{X},\textbf{W}) =
+  \prod _{i=1}^{N}N(\textbf{W}\textbf{x}_i, \sigma^2\textbf{I})
+\end{equation}
+\end{question} % End question 3
+% ====================================================================
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
