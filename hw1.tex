@@ -6,10 +6,8 @@
 \documentclass[12pt]{article}
  
 \usepackage[margin=1in]{geometry} 
-\usepackage{amsmath,amsthm,amssymb,bm}
 \usepackage{mathtools}
-\usepackage{graphicx}
-\usepackage{tikz}
+\usepackage{bm}
 \usepackage{subfig}
  
 \newcommand{\N}{\mathbb{N}}
@@ -115,10 +113,9 @@ norm as regularizer is known as the lasso (least absolute shrinkage and selectio
 The regularizer will force some weighting coefficients $w_j$ to be zero, given 
 a proper choice of model parameter $\tau$. It plays the role of feature selection
 since those zero weighting coefficients indicate that the corresponding features
-are irrelvant to the output. \\ 
+are irrelvant to the output.\\
 
 The penalization term or the negative log-prior:
-
 $$  \frac{\lambda}{2} \left \|\textbf{vec}(\bf{W} - \bf{W}_0)\right \|_{q}  $$
 
 \begin{figure}[h!]
@@ -168,30 +165,28 @@ Consider the equation 7 in the question with respect to the parameters $\textbf{
   \ln p(\textbf{T}\mid \textbf{X}, \textbf{W}) + \ln p(\textbf{W}) + \text{Const.} 
 \end{align*}
 Consider the quadratic terms on both sides:
-\begin{equation}
+
+\begin{equation}\label{eq:q5-covar}
   \begin{aligned}[b]
     -\frac12\textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W})
-    &= -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{WX})^T\textbf{vec}(\textbf{WX})
+    =& -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{WX})^T\textbf{vec}(\textbf{WX})
     -\frac{1}{2\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}) \\
     -\frac12\textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W})
-    &= -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{W})^T(\mathbf{X}^T \otimes \mathbf{I}_D)^T
-    (\mathbf{X}^T \otimes \mathbf{I}_D)\textbf{vec}(\textbf{W})
-    -\frac{1}{2\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}) \\
-    -\frac12\bm{\Sigma}_{p0}^{-1} &= 
+    =& -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{W})^T(\mathbf{X}^T \otimes \mathbf{I}_D)^T
+    (\mathbf{X}^T \otimes \mathbf{I}_D)\textbf{vec}(\textbf{W}) \\
+    & -\frac{1}{2\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}) \\
+    -\frac12\bm{\Sigma}_{p0}^{-1} =&
     -\frac{1}{2\sigma^2}(\mathbf{X} \otimes \mathbf{I}_D)(\mathbf{X}^T \otimes \mathbf{I}_D) 
     -\frac{1}{2\tau^2} \mathbf{I}_{Dq}\\
-    \bm{\Sigma}_{p0}^{-1} &=
+    \bm{\Sigma}_{p0}^{-1} = & \hspace{5mm} 
     \frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T)\otimes \mathbf{I}_D +\frac{1}{\tau^2} \mathbf{I}_{Dq}
   \end{aligned}
 \end{equation}
 
-
-
-
+   
 \end{question}
 % End question 5
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
 % --------------------------------------------------------------
- 
 \end{document}
