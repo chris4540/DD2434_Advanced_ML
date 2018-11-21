@@ -158,6 +158,35 @@ p(\textbf{W}\mid \textbf{X}, \textbf{T}) =
   \mathcal{N}_{Dq}(\textbf{vec}(\textbf{W}_{p0}), \bm{\Sigma}_{p0} )
 $$
 
+To calculate the mean and covariance of the posterior over the parameters,
+Consider the equation 7 in the question with respect to the parameters $\textbf{W}$
+ and compare the quadratic and linear terms of the exponents in both sides:
+\begin{align*}
+  p(\textbf{W}\mid \textbf{X}, \textbf{T}) &=
+  \frac{1}{Z}p(\textbf{T}\mid \textbf{X}, \textbf{W})p(\textbf{W})  \\
+  \ln p(\textbf{W}\mid \textbf{X}, \textbf{T}) &= 
+  \ln p(\textbf{T}\mid \textbf{X}, \textbf{W}) + \ln p(\textbf{W}) + \text{Const.} 
+\end{align*}
+Consider the quadratic terms on both sides:
+\begin{equation}
+  \begin{aligned}[b]
+    -\frac12\textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W})
+    &= -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{WX})^T\textbf{vec}(\textbf{WX})
+    -\frac{1}{2\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}) \\
+    -\frac12\textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W})
+    &= -\frac{1}{2\sigma^2}\textbf{vec}(\textbf{W})^T(\mathbf{X}^T \otimes \mathbf{I}_D)^T
+    (\mathbf{X}^T \otimes \mathbf{I}_D)\textbf{vec}(\textbf{W})
+    -\frac{1}{2\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}) \\
+    -\frac12\bm{\Sigma}_{p0}^{-1} &= 
+    -\frac{1}{2\sigma^2}(\mathbf{X} \otimes \mathbf{I}_D)(\mathbf{X}^T \otimes \mathbf{I}_D) 
+    -\frac{1}{2\tau^2} \mathbf{I}_{Dq}\\
+    \bm{\Sigma}_{p0}^{-1} &=
+    \frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T)\otimes \mathbf{I}_D +\frac{1}{\tau^2} \mathbf{I}_{Dq}
+  \end{aligned}
+\end{equation}
+
+
+
 
 \end{question}
 % End question 5
