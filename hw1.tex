@@ -135,7 +135,7 @@ TODO: Discussion
 
 
 % Question 5
-\begin{question}{5}vec()
+\begin{question}{5}
 Consider the regression equation in general:
 $$\textbf{T} = \textbf{WX} + \textbf{ErrorMatrix} $$
 Therefore, the likelihood in terms of matrix normal distribution is:
@@ -147,9 +147,17 @@ p(\bf{T}\mid \bf{X}, \bf{W}) &=
 The prior is:
 \begin{align*}
 p(\bf{W}) &= 
-  \mathcal{NM}_{D \times q}(\bf{W}_0, \bf{I}, \tau^2 \bf{I})
-  &= \mathcal{N}_{Dq}(\bf{vec}(\bf{W}), \tau^2 \bf{I})
+  \mathcal{NM}_{D \times q}(\textbf{W}_0, \bf{I}, \tau^2 \bf{I}) \\
+  &= \mathcal{N}_{Dq}(\textbf{vec}(\textbf{W}_0), \tau^2 \bf{I})
 \end{align*}
+
+Due to the choice of a conjugate Gaussian prior distribution, the posterior will 
+also be Gaussian:
+$$
+p(\textbf{W}\mid \textbf{X}, \textbf{T}) =
+  \mathcal{N}_{Dq}(\textbf{vec}(\textbf{W}_{p0}), \bm{\Sigma}_{p0} )
+$$
+
 
 \end{question}
 % End question 5
