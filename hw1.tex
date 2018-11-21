@@ -60,25 +60,26 @@
  
 \maketitle
 
-% ====================================================================
+
 % Question 1
 \begin{question}{1}
 % TODO: Fix the arguments
 Consider input output pairs are linked by the mapping to have the following
  relation:
-\begin{equation}
-    \textbf{t}_i = f(\textbf{x}_i) + \bm{\epsilon}
-\end{equation}
+$$ 
+    \bf{t}_i = f(\bf{x}_i) + \bm{\epsilon}
+$$
 where the $\bm{\epsilon}$ is the unbiased random noise. Since we have no piror knowledge
 on the random noise term, the random noise is then assumed as following the normal
-distribution. \textbf{TODO: More on this}\\
+distribution. TODO: More on this \\
 
 With the assumption that features are uncorrelated, we choose the spherical
 covariance matrix for the likelihood.
-\end{question} % End question 1
-% ====================================================================
+\end{question}
+% End question 2
 
-% ====================================================================
+
+
 % Question 2
 \begin{question}{2}
 Consider the general product rule of probability:
@@ -86,26 +87,27 @@ $$\mathrm {P} \left(\bigcap _{k=1}^{n}A_{k}\right)=
   \prod _{k=1}^{n}\mathrm {P} \left(A_{k}\,{\Bigg |}\,\bigcap _{j=1}^{k-1}A_{j}\right)$$
 
 Therefore the likelihood would be:
-\begin{equation}
-  p(\textbf{T}\mid f,\textbf{X}) =
-  \prod _{i=1}^{N}p(\textbf{t}_i \mid \textbf{t}_{i-1},...,\textbf{t}_{1},
-  f,\textbf{X})
-\end{equation}
+$$ 
+  p(\bf{T}\mid f,\bf{X}) =
+  \prod _{i=1}^{N}p(\bf{t}_i \mid \bf{t}_{i-1},...,\bf{t}_{1},
+  f,\bf{X})
+$$
 
-\end{question} % End question 2
-% ====================================================================
+\end{question} 
+% End question 2
 
-% ====================================================================
+
 % Question 3 
 \begin{question}{3}
 
-\begin{equation}
-  p(\textbf{T}\mid \textbf{X},\textbf{W}) =
-  \prod _{i=1}^{N}N(\textbf{W}\textbf{x}_i, \sigma^2\textbf{I})
-\end{equation}
-\end{question} % End question 3
-% ====================================================================
-% ====================================================================
+$$ 
+  p(\bf{T}\mid \bf{X},\bf{W}) =
+  \prod _{i=1}^{N}N(\bf{W}\bf{x}_i, \sigma^2\bf{I})
+$$
+
+\end{question}
+% End question 3
+
 % Question 4
 \begin{question}{4}
 The choice of piror distribution reflects the choice of regularizer. Chossing L1 
@@ -116,9 +118,8 @@ since those zero weighting coefficients indicate that the corresponding features
 are irrelvant to the output. \\ 
 
 The penalization term or the negative log-prior:
-\begin{equation}
-  \frac{\lambda}{2} \left \|vec(W - W_0)\right \|_{q}  % Fix this eqn
-\end{equation}
+
+$$  \frac{\lambda}{2} \left \|\textbf{vec}(\bf{W} - \bf{W}_0)\right \|_{q}  $$
 
 \begin{figure}[h!]
   \centering
@@ -126,13 +127,32 @@ The penalization term or the negative log-prior:
   \caption{A boat.}
   \label{fig:boat1}
 \end{figure}
-\end{question} % End question 4
-% ====================================================================
+
+TODO: Discussion
+\end{question}
+% End question 4
 
 
 
+% Question 5
+\begin{question}{5}vec()
+Consider the regression equation in general:
+$$\textbf{T} = \textbf{WX} + \textbf{ErrorMatrix} $$
+Therefore, the likelihood in terms of matrix normal distribution is:
+\begin{align*}
+p(\bf{T}\mid \bf{X}, \bf{W}) &= 
+  \mathcal{NM}_{D \times N}(\bf{WX}, \bf{I}, \sigma^2 \bf{I}) \\ 
+  &= \mathcal{N}_{DN}(\bf{vec}(\bf{WX}), \sigma^2 \bf{I})
+\end{align*}
+The prior is:
+\begin{align*}
+p(\bf{W}) &= 
+  \mathcal{NM}_{D \times q}(\bf{W}_0, \bf{I}, \tau^2 \bf{I})
+  &= \mathcal{N}_{Dq}(\bf{vec}(\bf{W}), \tau^2 \bf{I})
+\end{align*}
 
-
+\end{question}
+% End question 5
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
 % --------------------------------------------------------------
