@@ -146,10 +146,18 @@ To calculate the mean and covariance of the posterior over the parameters,
 Consider the equation 7 in the question with respect to the parameters $\textbf{W}$
  and compare the quadratic and linear terms of the exponents in both sides:
 \begin{align*}
-  p(\textbf{W}\mid \textbf{X}, \textbf{T}) &=
+  p(\textbf{W}\mid \textbf{X}, \textbf{T}) =&
   \frac{1}{Z}p(\textbf{T}\mid \textbf{X}, \textbf{W})p(\textbf{W})  \\
-  \ln p(\textbf{W}\mid \textbf{X}, \textbf{T}) &= 
-  \ln p(\textbf{T}\mid \textbf{X}, \textbf{W}) + \ln p(\textbf{W}) + \text{Const.} 
+  \ln p(\textbf{W}\mid \textbf{X}, \textbf{T}) =&
+  \ln p(\textbf{T}\mid \textbf{X}, \textbf{W}) + \ln p(\textbf{W}) + \text{Const.} \\
+\end{align*}
+\begin{align*}
+  LHS =& -\frac12[\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_{p0)}]^T
+          \bm{\Sigma}_{p0}^{-1}[\textbf{vec}(\textbf{W})-\textbf{vec}(\textbf{W}_{p0})] \\
+  RHS =& -\frac{1}{2\sigma^2}[\textbf{vec}(\textbf{T}) - \textbf{vec}(\textbf{WX})]^T
+                             [\textbf{vec}(\textbf{T}) - \textbf{vec}(\textbf{WX})] \\
+       &-\frac{1}{2\tau^2}[\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)]^T
+                          [\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)]
 \end{align*}
 
 Consider the quadratic terms on both sides:
@@ -165,28 +173,31 @@ Consider the quadratic terms on both sides:
     -\frac12\bm{\Sigma}_{p0}^{-1} =&
     -\frac{1}{2\sigma^2}(\mathbf{X} \otimes \mathbf{I}_D)(\mathbf{X}^T \otimes \mathbf{I}_D) 
     -\frac{1}{2\tau^2} \mathbf{I}_{Dq}\\
-    \bm{\Sigma}_{p0}^{-1} = & \hspace{5mm} 
+    \bm{\Sigma}_{p0}^{-1} =& \hspace{5mm} 
     \frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T)\otimes \mathbf{I}_D +\frac{1}{\tau^2}\mathbf{I}_{Dq}
   \end{aligned}
 \end{equation}
 
-Consider the linear terms on both sides:
+Consider the linear terms on both sides:  
+\begin{align*}
+    \textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W}_{p0})
+    =& \hspace{1mm} 
+       \frac{1}{\sigma^2}\textbf{vec}(\textbf{WX})^T\textbf{vec}(\textbf{T}) 
+     + \frac{1}{\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}_0)\\
+    \textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W}_{p0})
+    =& \hspace{1mm} 
+       \frac{1}{\sigma^2}\textbf{vec}(\textbf{W})^T(\mathbf{X}\otimes\mathbf{I}_D)
+       \textbf{vec}(\textbf{T}) 
+     + \frac{1}{\tau^2}\textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W}_0)\\
+    \textbf{vec}(\textbf{W}_{p0}) =& \hspace{1mm} 
+       \bm{\Sigma}_{p0}[\frac{1}{\sigma^2}(\mathbf{X}\otimes\mathbf{I}_D)
+       \textbf{vec}(\textbf{T}) + \frac{1}{\tau^2}\textbf{vec}(\textbf{W}_0)] \\
+\end{align*}
 \begin{equation} \label{eq:q5-mean}
-  \begin{aligned}[b]
-    \textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W}_{p0}))
-    =& \frac{1}{\sigma^2}\textbf{vec}(\textbf{WX})^T\textbf{vec}(\textbf{T})\\
-    \textbf{vec}(\textbf{W})^T\bm{\Sigma}_{p0}^{-1}\textbf{vec}(\textbf{W}_{p0}))
-    =& \frac{1}{\sigma^2}\textbf{vec}(\textbf{W})^T(\mathbf{X}\otimes\mathbf{I}_D)
-       \textbf{vec}(\textbf{T}) \\
-    \textbf{vec}(\textbf{W}_{p0})) =&
-    \frac{\bm{\Sigma}_{p0}}{\sigma^2}(\mathbf{X}\otimes\mathbf{I}_D)\textbf{vec}(\textbf{T}) \\
-    \textbf{vec}(\textbf{W}_{p0})) =&
-    \frac{1}{\sigma^2}[\frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T)\otimes \mathbf{I}_D +\frac{1}{\tau^2}\mathbf{I}_{Dq}]^{-1}
-    (\mathbf{X}\otimes\mathbf{I}_D)\textbf{vec}(\textbf{T}) \\
-    \textbf{vec}(\textbf{W}_{p0})) =&
-    \frac{1}{\sigma^2}([\frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T) +\frac{1}{\tau^2}\mathbf{I}_{q}]^{-1}
-    \mathbf{X}\otimes\mathbf{I}_D)\textbf{vec}(\textbf{T}) \\
-  \end{aligned}
+    \textbf{vec}(\textbf{W}_{p0}) =
+    [\frac{1}{\sigma^2}(\mathbf{X}\mathbf{X}^T)\otimes \mathbf{I}_D +\frac{1}{\tau^2}\mathbf{I}_{Dq}]^{-1}
+       [\frac{1}{\sigma^2}(\mathbf{X}\otimes\mathbf{I}_D)
+       \textbf{vec}(\textbf{T}) + \frac{1}{\tau^2}\textbf{vec}(\textbf{W}_0)]
 \end{equation}
 
 Consider an infinitely broad prior, which means $\tau \to \infty$, reduces the 
