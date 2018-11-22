@@ -125,13 +125,13 @@ $$\textbf{T} = \textbf{WX} + \textbf{ErrorMatrix} $$
 Therefore, the likelihood in terms of matrix normal distribution is:
 \begin{align*}
 p(\bf{T}\mid \bf{X}, \bf{W}) &= 
-  \mathcal{NM}_{D \times N}(\bf{WX}, \bf{I}, \sigma^2 \bf{I}) \\ 
+  \mathcal{MN}_{D \times N}(\bf{WX}, \bf{I}, \sigma^2 \bf{I}) \\ 
   &= \mathcal{N}_{DN}(\bf{vec}(\bf{WX}), \sigma^2 \bf{I})
 \end{align*}
 The prior is:
 \begin{align*}
 p(\bf{W}) &= 
-  \mathcal{NM}_{D \times q}(\textbf{W}_0, \bf{I}, \tau^2 \bf{I}) \\
+  \mathcal{MN}_{D \times q}(\textbf{W}_0, \bf{I}, \tau^2 \bf{I}) \\
   &= \mathcal{N}_{Dq}(\textbf{vec}(\textbf{W}_0), \tau^2 \bf{I})
 \end{align*}
 
