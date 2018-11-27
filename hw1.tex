@@ -253,7 +253,21 @@ function evaluated at some input points.
 \end{question}
 
 \begin{question}{8}
-  
+\begin{align*}
+  p(\mathbf{T} \mid \mathbf{X}, \bm{\theta}) = \int p(\mathbf{T}\mid f)p(f) df
+\end{align*}
+
+The marginalisation connects the prior and the likelihood of the data. The
+ integral is an weighted average which averages the likelihood of the data.
+ The weighting is given by the prior which is the probability distribution of
+ the function.
+
+The uncertainties of the data and the prior are combined or added up into the 
+ uncertainty of the marginalisation. Equation 6.62 of Bishop book (2006 Ed.) shows
+ how two uncertainties (covariances) are simplily added up.
+
+The hyperparameters $\bm{\theta}$ still condition on the part of covariance of the 
+ marginalisation from the prior. That part of covariance is the kernel function.
 \end{question}
 
 
