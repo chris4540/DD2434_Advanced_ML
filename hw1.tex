@@ -213,26 +213,55 @@ The constant $Z$ plays no role in the calculation since only the quadratic and l
 
 % Question 6
 \begin{question}{6}
-The marginal distribution of $\mathbf{t}$ is given by:
-\begin{equation} % TODO: fix this eq.
-  p(t) = \int p(\mathbf{T}\mid f)p(f) df = N(t\mid 0, C)
-\end{equation}
-where the covariance matrix C has elements:
-\begin{equation}
-  Bitshop 6.62
-\end{equation}
+\begin{align*}
+  p(f\mid X,\theta) = N(0, k(X, X))  % TODO: fix this equation
+\end{align*}
+  The prior distribution over functions expresses our beliefs and knowledge about
+how the function looks like before we consider the data.
 
-The prior tells how two points in the data set are similar with the choice of the
-kernal. As the result, the ouputs of the underlying function of the corresponding
-two points will be more strongly correlated than dissimilar points. 
+We choose the mean function as zero or the instaniation of function to be zero
+ since we have forced the data to have zero-mean. We can choose a non-zero mean
+ function of the Gaussian process. Indeed, we can use a fixed mean function, but
+ the result is trivial that we can obtain the predictive mean function by adding 
+ the mean-removal result to the fixed mean function.
+ (Rasmussen, C. E., 2004, page 27)
 
-From the marginal distribution of $\mathbf{t}$, we can see that the covariance
-matrix consists of two components: the covariance of the prior and the variance of
-the noise. Notes that the noise are assumpted as independent among data points.
+The covariance of the marginal distribution, which is the prior, is the covariance
+function controlled by the hyperparameter $\bm{\theta}$. The covariance function
+tells that if two input points are similar, then the output should be similar as
+well. The specification of the covariance function indicates a distribution over 
+functions. To visualize it, we can draw some smaples from the distribution of 
+function evaluated at some input points.
 
-For simplicity, we choose the mean vector of prior to zero vector. It is because
-we have no prior knowledge of the distribution of the instaniation of functions or
-the distribution of functions in function-space view.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{q6_output_prior.png}
+  \caption{fix me!}
+  \label{fig:fix me!}
+\end{figure}
+
+
+% Consider the output 
+% The marginal distribution of $\mathbf{t}$ is given by:
+% \begin{equation} % TODO: fix this eq.
+%   p(t) = \int p(\mathbf{T}\mid f)p(f) df = N(t\mid 0, C)
+% \end{equation}
+% where the covariance matrix C has elements:
+% \begin{equation}
+%   Bitshop 6.62
+% \end{equation}
+
+% The prior tells how two points in the data set are similar with the choice of the
+% kernal. As the result, the ouputs of the underlying function of the corresponding
+% two points will be more strongly correlated than dissimilar points. 
+
+% From the marginal distribution of $\mathbf{t}$, we can see that the covariance
+% matrix consists of two components: the covariance of the prior and the variance of
+% the noise. Notes that the noise are assumpted as independent among data points.
+
+% For simplicity, we choose the mean vector of prior to zero vector. It is because
+% we have no prior knowledge of the distribution of the instaniation of functions or
+% the distribution of functions in function-space view.
 
 TODO: Add graph 
 \end{question}
@@ -244,15 +273,17 @@ TODO: Add graph
       = p(\mathbf{T}\mid f)p(f \mid \mathbf{X},\bm{\theta})
       p(\mathbf{X})p(\bm{\theta}) 
   \end{align*}
+  TODO: Add graph model
 \end{question}
+
+\begin{question}{8}
+  
+\end{question}
+
+
+
+
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
 % --------------------------------------------------------------
-%-----------------------------------
-% \begin{equation} \label{eq:constantspeed}
-%   v=\frac{s}{t}
-%   \end{equation}
-%-----------------------------------
-% It is very important to remember that Equation~\eqref{eq:constantspeed} only works for   objects moving at \emph{constant speed}. This reference uses the \verb|\eqref{eq:constantspeed}| feature offered by \verb|amsmath| package.
-
 \end{document}
