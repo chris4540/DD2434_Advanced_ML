@@ -9,6 +9,7 @@
 \usepackage{mathtools}
 \usepackage{bm}
 \usepackage{subfig}
+\usepackage{amssymb}
 
 \setlength{\parskip}{1em}
 
@@ -283,6 +284,38 @@ The hyperparameters $\bm{\theta}$ still condition on the part of covariance of t
 \end{question}
 
 \begin{question}{12}
+This prior encodes that we have no perference on the latent variable. It just 
+ shows that we have no information about the latent variable $X$. Therefore, 
+ we assume that it is a zero-mean Gaussian and each compoent are indepenent.
+\end{question}
+
+\begin{question}{13}
+Consider the linear equation of $\mathbf{Y}(\mathbf{X})$:
+  \begin{align*}
+    \mathbf{Y}(\mathbf{X}) = \mathbf{W}\mathbf{X} + \bm{ErrorMatrix}
+  \end{align*}
+And each column of $\mathbf{Y}$ can be written as:
+\begin{align*}
+  \mathbf{y}_i = \mathbf{W}\mathbf{x}_i + \bm{\epsilon}
+\end{align*}
+Because $p(\mathbf{X})$ and $p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})$ are Gaussian, 
+ the marginal distribution is Gaussian.
+ Furthermore, we can consider each $\mathbf{y}_i$ are indepenent. Therefore, 
+ we can write:
+\begin{align*}
+  p(\mathbf{Y}\mid\mathbf{W}) = \prod_{i=1}^{N} p(\mathbf{y}_i\mid\mathbf{W})
+\end{align*}
+\end{question}
+
+\begin{question}{14}
+  
+The last two expression of Eq. 25 are equivalent. It is because the dominator:
+  \begin{align*} % TODO: input the last two integral of eq. 25
+    \int p(Y|X, W)p(W)dW
+  \end{align*}
+is not a function of $W$. And we know that the integral gives a possitive real number.
+Therefore, when finding the maximum value of $W$, the dominator can be ignored.
+
 \end{question}
 
 % --------------------------------------------------------------
