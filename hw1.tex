@@ -299,11 +299,23 @@ And each column of $\mathbf{Y}$ can be written as:
   \mathbf{y}_i = \mathbf{W}\mathbf{x}_i + \bm{\epsilon}
 \end{align*}
 Because $p(\mathbf{X})$ and $p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})$ are Gaussian, 
- the marginal distribution is Gaussian.
+ the marginal distribution is also Gaussian.
  Furthermore, we can consider each $\mathbf{y}_i$ are indepenent. Therefore, 
  we can write:
 \begin{align*}
-  p(\mathbf{Y}\mid\mathbf{W}) = \prod_{i=1}^{N} p(\mathbf{y}_i\mid\mathbf{W})
+  p(\mathbf{Y}\mid\mathbf{W}) &= \prod_{i=1}^{N} p(\mathbf{y}_i\mid\mathbf{W}) \\
+  p(\mathbf{y}_i\mid\mathbf{W}) &= N(\mathbf{y}_i\mid \mathbb{E}[\mathbf{y}_i], \text{cov}[\mathbf{y}_i])
+\end{align*}
+Then, our job is to calculate the mean and covariance of the Gaussian.
+Notes that $\mathbf{W}$ is given and the mean of $\bm{\epsilon}$ is $\mathbf{0}$
+\begin{align*}
+  \mathbb{E}[\mathbf{y}_i] &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\ 
+  &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\
+  &= \mathbf{0} + \mathbf{0} 
+                      && \mathbb{E}[\mathbf{x}_i] = \mathbf{0}\\
+  &= \mathbf{0}
+\end{align*}
+\begin{align*}
 \end{align*}
 \end{question}
 
