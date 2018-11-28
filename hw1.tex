@@ -333,20 +333,34 @@ The marginal distribution is:
 \begin{equation}
   p(\mathbf{Y}\mid\mathbf{W}) 
   = \prod_{i=1}^{N} 
-    \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I})
+    \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{C})
 \end{equation}
+where $\mathbf{C}$ is a covariance matrix defined as:
+\begin{align*}
+  \mathbf{C} = \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I}
+\end{align*}
 \end{question}
 
 \begin{question}{14}
+First, let's write down different estimation in log-space.
+
+Maximum-likelihood:
+\begin{align*}
+  \hat{\mathbf{W}} 
+  &= \operatorname{argmax}_{\mathbf{W}}  p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})
+\end{align*}
   
 The last two expression of Eq. 25 are equivalent. It is because the dominator:
   \begin{align*} % TODO: input the last two integral of eq. 25
-    \int p(Y|X, W)p(W)dW
+    \int p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})p(\mathbf{W})d\mathbf{W}
   \end{align*}
-is not a function of $W$. And we know that the integral gives a possitive real number.
+is not a function of $\mathbf{W}$. And we know that the integral gives a possitive real number.
 Therefore, when finding the maximum value of $W$, the dominator can be ignored.
 
 \end{question}
+\begin{question}{15}
+  TODO
+\end{question}  
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
