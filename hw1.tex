@@ -307,16 +307,34 @@ Because $p(\mathbf{X})$ and $p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})$ are Gaussi
   p(\mathbf{y}_i\mid\mathbf{W}) &= N(\mathbf{y}_i\mid \mathbb{E}[\mathbf{y}_i], \text{cov}[\mathbf{y}_i])
 \end{align*}
 Then, our job is to calculate the mean and covariance of the Gaussian.
-Notes that $\mathbf{W}$ is given and the mean of $\bm{\epsilon}$ is $\mathbf{0}$
+
+Notes that $\mathbf{W}$ is given, $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I})$
+ and $\mathbf{x}_i \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ as 
+ $p(\mathbf{X}) = \mathcal{N}(\mathbf{0}, \mathbf{I})$
 \begin{align*}
   \mathbb{E}[\mathbf{y}_i] &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\ 
   &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\
   &= \mathbf{0} + \mathbf{0} 
-                      && \mathbb{E}[\mathbf{x}_i] = \mathbf{0}\\
-  &= \mathbf{0}
+                      && (\text{by the prior }\mathbb{E}[\mathbf{x}_i] = \mathbf{0})\\
+  &= \mathbf{0} \\
+  \text{cov}[\mathbf{y}_i] 
+  &= \mathbb{E}[(\mathbf{W}\mathbf{x}_i + \bm{\epsilon})
+                (\mathbf{W}\mathbf{x}_i + \bm{\epsilon})^{T}] \\
+  &= \mathbb{E}[\mathbf{W}\mathbf{x}_i\mathbf{x}_i^T\mathbf{W}^T]
+     + \mathbb{E}[\bm{\epsilon}\bm{\epsilon}^{T}]
+     && (\text{noise and }\mathbf{W}\mathbf{x}_i\text{ are uncorrelated}) \\
+  &= \mathbf{W}\mathbb{E}[\mathbf{x}_i\mathbf{x}_i^T]\mathbf{W}^T + \sigma^2 \mathbf{I}
+     && (\bm{\epsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I})) \\
+  &= \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I}
+     && (\text{cov}[\mathbf{x}_i] = \mathbf{I})
 \end{align*}
-\begin{align*}
-\end{align*}
+
+The marginal distribution is:
+\begin{equation}
+  p(\mathbf{Y}\mid\mathbf{W}) 
+  = \prod_{i=1}^{N} 
+    \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I})
+\end{equation}
 \end{question}
 
 \begin{question}{14}
