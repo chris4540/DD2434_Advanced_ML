@@ -347,7 +347,8 @@ First, let's write down different estimation in log-space.
 Maximum-likelihood:
 \begin{align*}
   \hat{\mathbf{W}} 
-  &= \operatorname{argmax}_{\mathbf{W}}  p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})
+  &= \operatorname{argmax}_{\mathbf{W}}  p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W}) \\
+  &= \operatorname{argmax}_{\mathbf{W}}[-\frac{1}{2\sigma^2}]
 \end{align*}
   
 The last two expression of Eq. 25 are equivalent. It is because the dominator:
@@ -357,6 +358,10 @@ The last two expression of Eq. 25 are equivalent. It is because the dominator:
 is not a function of $\mathbf{W}$. And we know that the integral gives a possitive real number.
 Therefore, when finding the maximum value of $W$, the dominator can be ignored.
 
+The Type-II Maximum-likelihood is a sensible approach since it consider how to
+ choose a parameter $\mathbf{W}$ which maximizes the model evidence. In other words,
+ it is in the sense that we choose a parameter to maximize the probability of 
+ getting such a set of observations.
 \end{question}
 \begin{question}{15}
   TODO
