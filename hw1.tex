@@ -495,8 +495,24 @@ distribution.
 $M_3$ is more flexible than $M_2$ and $M_1$. $M_2$ can explain data which can 
 also be explained by $M_3$ except one situation. That situation is all
 grid are of the same output. It is because of the bias term $\theta^3_3$.
+\end{question}
 
+\begin{question}{20}
+In marginalization, we can encode our beliefs by setting the prior on a variable.
+The variable usually we are not interested in our model.
 
+The implication of the process is to calculate the weighted average of the model
+likelihood according the prior on the parameters.
+\end{question}
+
+\begin{question}{21}
+First, the spherical Gaussian prior implies that each components of the weighting
+vector $\bm{\theta}$ is indepenent.
+
+Second, large variance of the weighting factor allows sampling a weighting vector
+with large L2-norm. In the sense of SVM, the margin of the sparation plain is 
+inversely proportional to the L2-norm of the weighting vector. Therefore, we
+allow the speration plane with a large uncertainty or large variation.
 \end{question}
 % --------------------------------------------------------------
 \end{document}
