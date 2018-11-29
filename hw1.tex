@@ -446,6 +446,26 @@ zero probability over $\mathcal{D}_2$ and $M_0$ becomes a good model to $\mathca
 \end{question}
 
 \begin{question}{18}
+Each model is the probability of the outcome $t^i$ given the model and model
+parameters:
+\begin{align*}
+  p(t^n\mid M_1, \bm{\theta}_1) = \frac{1}{1 + \exp(-t^n\theta^1_1 x^n_1)}
+\end{align*}
+This is a logistic regression. Since for each model, we can treat it as a 
+two-class classification problem. That is giving a grid location as input, 
+predict the output $t^i$ which is either 1 or -1.
+
+Model $M_1$ is more flexible compared to $M_0$ since $M_1$ has one 
+free parameter. It is the weighting of $x^n_1$ and $x^n_1$ is one of the coordinate
+of the grid.
+
+Since $M_1$ consider only one coordinate of the grid, we can imagine that only a 
+small subset of data can be captured by this model. 
+For example, If $x^n_1$ represents the column index of the grid, then only whole
+column has the same output can be explained by this model.
+Therefore, the model $M_1$ has a small spreading of its probability mass over 
+$\mathcal{D}$.
+
 \end{question}
 
 % --------------------------------------------------------------
