@@ -10,6 +10,8 @@
 \usepackage{bm}
 \usepackage{subfig}
 \usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cleveref}
 
 \setlength{\parskip}{1em}
 
@@ -330,15 +332,15 @@ Notes that $\mathbf{W}$ is given, $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \s
 \end{align*}
 
 The marginal distribution is:
-\begin{equation}
+\begin{equation}\label{eq:q13-result}
   p(\mathbf{Y}\mid\mathbf{W}) 
   = \prod_{i=1}^{N} 
     \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{C})
 \end{equation}
 where $\mathbf{C}$ is a covariance matrix defined as:
-\begin{align*}
+\begin{equation}\label{eq:q13-matC}
   \mathbf{C} = \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I}
-\end{align*}
+\end{equation}
 \end{question}
 
 \begin{question}{14}
@@ -393,9 +395,33 @@ The Type-II Maximum-likelihood is a sensible approach since it consider how to
  it is in the sense that we choose a parameter to maximize the probability of 
  getting such a set of observations.
 \end{question}
+
+
 \begin{question}{15}
-  TODO
-\end{question}  
+The course book chapter 12.2.1 has the similar formulation.\\
+The objective function:
+\begin{align*}
+  \mathcal{L}(\mathbf{W}) &= -\log(p(\mathbf{Y}\mid\mathbf{W})) \\
+  &= -\prod_{i=1}^{N} \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{C})
+      && \text{(make use of \eqref{eq:q13-result})} \\
+  &= \frac{ND}{2}\log{2\pi} + \frac{N}{2}\log(|\mathbf{C}|) 
+     + \frac{1}{2} \sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i \\
+  &= \frac{N}{2}[D\log(2\pi) + \log(|\mathbf{C}|) + \text{Tr}(\mathbf{C}^{-1}\mathbf{S})]
+\end{align*}
+where S is defined as:
+\begin{align*}
+  \mathbf{S} = \frac{1}{N}\sum_{i=1}^{N} \mathbf{y}_i\mathbf{y}_i^T
+\end{align*}
+\\
+The gradient of the objective w.r.t the parameters $\mathbf{W}$
+(Tipping and Bishop (1999)):
+% TODO: derive the relation. Complete: 60%
+\begin{align*}
+  \frac{\partial{\mathcal{L}}}{\partial{\mathbf{W}}} 
+    &= N(\mathbf{C}^{-1}\mathbf{W} 
+         - \mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W})
+\end{align*}
+\end{question}
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
