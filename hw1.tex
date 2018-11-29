@@ -465,10 +465,38 @@ For example, If $x^n_1$ represents the column index of the grid, then only whole
 column has the same output can be explained by this model.
 Therefore, the model $M_1$ has a small spreading of its probability mass over 
 $\mathcal{D}$.
-
 \end{question}
 
-% --------------------------------------------------------------
-%     You don't have to mess with anything below this line.
+\begin{question}{19}
+The terms in the exponent of the logistic equation can be considered as 
+a linear speration plane.
+$M_2$ and $M_3$ are considered as more flexible linear speration planes on the grid.
+Choosing the form of $M_1$, $M_2$, and $M_3$, we only choose linear separable data.
+Therefore, $M_1$, $M_2$, and $M_3$ place probability mass over the linear separable
+dataset.
+
+%TODO: more with graphs
+The linear separable datasets are suitable for the models $M_1, M_2, M_3$.
+
+The uncertainty of models can be considered as model variance. 
+It implies the uncertainty....% TODO
+
+In terms of number of model parameters, $M_3$ is more flexible then $M_2$ since
+$M_3$ has three parameters and $M_2$ has two.
+In addition, $M_3$ can be considered as realization of other models 
+${M_1, M_2}$ by setting some parameters to zero.
+Therefore, $M_3$ is the most flexible among those four models.
+On the other hand, $M_0$ are considered as the most restrictive since
+it have no model parameter.
+
+In terms of the number of data set a model can explain, $M_0$ is the most
+flexible since it can explain all possible data by the uniform probability 
+distribution.
+$M_3$ is more flexible than $M_2$ and $M_1$. $M_2$ can explain data which can 
+also be explained by $M_3$ except one situation. That situation is all
+grid are of the same output. It is because of the bias term $\theta^3_3$.
+
+
+\end{question}
 % --------------------------------------------------------------
 \end{document}
