@@ -344,19 +344,49 @@ where $\mathbf{C}$ is a covariance matrix defined as:
 \begin{question}{14}
 First, let's write down different estimation in log-space.
 
-Maximum-likelihood:
+Consdier we have a linear relation Y(X) mentioned in Q13.
+\\ 
+Maximum-likelihood estimation:
 \begin{align*}
   \hat{\mathbf{W}} 
-  &= \operatorname{argmax}_{\mathbf{W}}  p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W}) \\
-  &= \operatorname{argmax}_{\mathbf{W}}[-\frac{1}{2\sigma^2}]
+  &= \operatorname{argmin}_{\mathbf{W}}
+    [\sum_{i=1}^{N} \| \mathbf{y}_i - \mathbf{W}\mathbf{x}_i\|^2]
 \end{align*}
+It is equivalent to find the parameter with least square method. More data makes
+the computational time longer.
+
+Maximum-a-posteriori (MAP) estimation:
+\begin{align*}
+  \hat{\mathbf{W}} 
+  &= \operatorname{argmin}_{\mathbf{W}}
+    [\sum_{i=1}^{N} \| \mathbf{y}_i - \mathbf{W}\mathbf{x}_i\|^2
+      + \lambda \textbf{vec}(\textbf{W})^T\textbf{vec}(\textbf{W})]
+\end{align*}
+MAP approach has an extra regularization term for preventing from overfitting.
+We have a degree of freedom to choose the regularizer coefficient.
+If we have more data, then regularization term will be less important compared
+with the least square error term.
+
+Type-II Maximum-Likelihood:
+\begin{align*}
+  \hat{\mathbf{W}} 
+  &= \operatorname{argmin}_{\mathbf{W}}
+    [\sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i
+      + N\log{|\mathbf{C}|}]
+\end{align*}
+Type-II maximum likelihood approach does not depends on $\mathbf{X}$ and it is
+very useful in our case. $N\log{|\mathbf{C}|}$ expresses the model complexity
+and $\sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i$ plays the role of
+goodness of fit. When data become more, the plenalty of the model complexity becomes
+more important.
   
 The last two expression of Eq. 25 are equivalent. It is because the dominator:
   \begin{align*} % TODO: input the last two integral of eq. 25
     \int p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})p(\mathbf{W})d\mathbf{W}
   \end{align*}
-is not a function of $\mathbf{W}$. And we know that the integral gives a possitive real number.
-Therefore, when finding the maximum value of $W$, the dominator can be ignored.
+is not a function of $\mathbf{W}$. And we know that that integral gives a possitive
+ real number. Therefore, when finding the maximum value of $\mathbf{W}$, the dominator 
+ can be ignored.
 
 The Type-II Maximum-likelihood is a sensible approach since it consider how to
  choose a parameter $\mathbf{W}$ which maximizes the model evidence. In other words,
