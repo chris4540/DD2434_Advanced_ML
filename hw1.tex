@@ -553,7 +553,8 @@ origin. Hence, $M_3$ can explain all linear speratable data.
 
 \begin{question}{23}
 Tables below shows the datasets which are given the highest and lowest
-evidence for each model. The related discussion is under the cooresponding table.
+evidence for each model. The related discussions are under the cooresponding 
+tables.
 
 \begin{table}[h]
     \centering
@@ -588,14 +589,52 @@ evidence for each model. The related discussion is under the cooresponding table
 \end{table}
 Since $M_1$ can be considered as a vectical seperation plane passing through the
 origin, it is sensible to see such configuration in table
-\ref{subtable:M1-high}.
-In table \ref{subtable:M1-low}, we can see that it is not possible to make a 
+(\ref{subtable:M1-high}).
+In table (\ref{subtable:M1-low}), we can see that it is not possible to make a 
 vertical line to seperate crosses and circles.
 
+\begin{table}[h]
+  \centering
+  \subfloat[Highest evidence data set]{%
+    \hspace{2cm}%
+    \begin{tabular}{|c|c|c|} 
+      \hline
+      X & X & O \\
+      \hline
+      X & O & O \\
+      \hline
+      X & O & O \\
+      \hline
+    \end{tabular}\label{subtable:M2-high}
+    \hspace{2cm}%
+  }\hspace{1cm}
+  \subfloat[Lowest evidence data set]{%
+    \hspace{2cm}%
+    \begin{tabular}{|c|c|c|}
+      \hline
+      O & X & O \\
+      \hline
+      X & O & X \\
+      \hline
+      O & X & O \\
+      \hline
+    \end{tabular}\label{subtable:M2-low}
+    \hspace{2cm}%
+  }
+\caption{Model 2}
+\label{table:M2}
+\end{table}
+
+For $M_2$, it is a speration line restricted to pass through the origin the 
+center of the grid.
+It is possible to use a left-bottom to up-right diagonal line to sperate crosses
+and circles as shown in table (\ref{subtable:M2-high}). While it is not possible 
+to use any line passing through the middle box to sperate crosses and circles in
+table (\ref{subtable:M2-low}).
 \end{question}
 
-\begin{question}{24}
+% \begin{question}{24}
   
-\end{question}
+% \end{question}
 % --------------------------------------------------------------
 \end{document}
