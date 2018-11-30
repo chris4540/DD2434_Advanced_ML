@@ -14,8 +14,8 @@ def generateDataset():
         arr = np.asarray(l)
         grid = np.reshape(arr, (3, 3))
         sets.append(grid)
+    np.random.shuffle(sets)
     return sets
-
 
 def drawDataset(dataset):
     for i in range(3):
@@ -56,8 +56,8 @@ def priorSample(nParams, nSamples):
         nParams:
         nSamples:
     """
-    sigma_sq = 1e3
-    cov = sigma_sq * np.eye(nParams)
+    sigma_sq = 1000
+    cov = sigma_sq * np.identity(nParams)
     mean = np.zeros(nParams)
     theta = np.random.multivariate_normal(mean, cov, nSamples)
     return theta
@@ -75,11 +75,11 @@ def create_index_set(evidence):
         ordered index
     """
     vals = -np.sum(evidence, axis=0)
-    sort_index = np.argsort(vals) # it sort
+    sort_index = np.argsort(vals)
     return sort_index
 
 if __name__ == "__main__":
-    S = int(1e4)
+    S = int(20000)
     l = generateDataset()
     thetas = priorSample(3, S)
 
@@ -88,14 +88,8 @@ if __name__ == "__main__":
 
     for i in range(4):
         for j in range(512):
-            if i == 0:
-                evidence[i][j] = computeEvidence(l[j], i, thetas)
-            if i == 1:
-                evidence[i][j] = computeEvidence(l[j], i, thetas)
-            if i == 2:
-                evidence[i][j] = computeEvidence(l[j], i, thetas)
-            if i == 3:
-                evidence[i][j] = computeEvidence(l[j], i, thetas)
+            evidence[i][j] = computeEvidence(l[j], i, thetas)
+
 
     index = create_index_set(evidence)
 
@@ -116,6 +110,7 @@ if __name__ == "__main__":
     fig.tight_layout()
     plt.savefig("../fig/Q22-all.png", dpi=100)
 
-    ax.set_xlim(0, 100)
+    ax.set_xlim(0, 80)
+    plt.xticks(list(range(0, 81, 10)))
     plt.savefig("../fig/Q22-sub.png", dpi=100)
 
