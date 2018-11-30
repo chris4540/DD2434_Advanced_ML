@@ -512,7 +512,7 @@ likelihood according the prior on the parameters.
 First, the spherical Gaussian prior implies that all components of the weighting
 vector $\bm{\theta}$ is indepenent.
 
-Second, large variance of the weighting factor allows sampling a weighting vector
+Second, large variance of the weighting factor allows to sample a weighting vector
 with large L2-norm from the distribution. 
 In the sense of SVM, the margin of the sparation plain is 
 inversely proportional to the L2-norm of the weighting vector. Therefore, we
@@ -520,18 +520,36 @@ allow the speration plane with a large uncertainty or large variation.
 \end{question}
 
 \begin{question}{22}
-  The evidence over the whole dataset is shown in figure \ref{fig:PlotEvid}.
-  \begin{figure}[!ht]
-    \subfloat[Plot evident against all data sets, $\mathcal{D}$\label{subfig-1:dummy}]{%
-      \includegraphics[width=0.45\textwidth]{fig/Q22-all.png}
-    }
-    \hfill
-    \subfloat[Plot evident against possible data sets, $\mathcal{D}$\label{subfig-2:dummy}]{%
-      \includegraphics[width=0.45\textwidth]{fig/Q22-sub.png}
-    }
-    \caption{Plot evidence against all data set $\mathcal{D}$ for different models}
-    \label{fig:PlotEvid}
-  \end{figure}
+The evidence over the whole dataset is shown in figure \ref{fig:PlotEvid}.
+
+Take a look on figure \ref{subfig-2:plotEvidSub}.
+Considering the spreading of probability mass of each model, we can find that
+$M_0$ spreads its probability mass over whole region of data set. And the dataset
+region covered by $M_3$ is greater than $M_2$ and the data set region of $M_2$ 
+is greater than $M_1$.
+
+We can consider the parameterization scheme employed by each model. 
+$M_1$ represents
+a vertical speration plane (if we consider $x_0$ as the column index of the grid).
+The model is simple enough so that the amount of data set can be explained by this
+model is limited. 
+$M_2$ can be viewed as a speration plane passing through the origin and $M_2$ is then 
+flexible than $M_1$. Thus the region covered by $M_2$ is larger by $M_1$.
+$M_3$ is more flexible since it is a speration plane allowed to have offset from the
+origin. Hence, $M_3$ can explain all linear speratable data.
+
+\begin{figure}[h]
+  \subfloat[Plot evident against all data sets, $\mathcal{D}$\label{subfig-1:plotEvidAll}]{%
+  \includegraphics[width=0.45\textwidth]{fig/Q22-all.png}
+  }
+  \hfill
+  \subfloat[Plot evident against possible data sets, $\mathcal{D}$\label{subfig-2:plotEvidSub}]{%
+  \includegraphics[width=0.45\textwidth]{fig/Q22-sub.png}
+  }
+  \caption{Plot evidence against all data set $\mathcal{D}$ for different models}
+  \label{fig:PlotEvid}
+\end{figure}
+
 \end{question}
 % --------------------------------------------------------------
 \end{document}
