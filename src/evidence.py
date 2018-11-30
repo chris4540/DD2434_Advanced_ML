@@ -94,21 +94,24 @@ def generateModel(model, dataset, parm):
     return p
 
 
-def get_params(nparams, samples, mu=None):
+def get_params(nparams, samples, mu=None, sigma_sq=None):
     """
     Obtain parmas "theta" from the Nd mormal distribution
 
     Args:
         nparams (int): the number of params
     """
-    # mu =  np.ones(nparams)
+
     if mu is None:
         mu = np.zeros(nparams)
 
-    sigma2 = 10**3
-    Sigma = np.eye(nparams) * sigma2
-    prior = np.random.multivariate_normal(mu, Sigma, samples)
-    return prior
+    if sigma_sq is None:
+        sigma_sq = 10**3
+
+    cov = np.eye(nparams) * sigma_sq
+
+    ret = np.random.multivariate_normal(mu, cov, samples)
+    return ret
 
 
 def Evidence(model, dataset, samples):
@@ -157,40 +160,41 @@ def drawDataset(dataset):
 
 if __name__ == "__main__":
     #drawDataset(l[0])
-    S = 2
+    S = 3
     # l = generateData()
     #print(l[9])
     #plotData(l[9])
 
-
+    # =========================
     # sampling from prior
+    # =========================
     theta_0 = get_params(1, S)
     theta_1 = get_params(2, S)
     theta_2 = get_params(3, S)
 
-    print(samples1)
-    print(samples2)
-    print(samples3)
+    print(theta_0)
+    print(theta_1)
+    print(theta_2)
     import sys
     sys.exit(0)
 
     # Approximate evidence
-    evidence = np.zeros([4,512])
-    for i in range(4):
-        for j in range(512):
-            if i == 0:
-                evidence[i][j]=Evidence(i, l[j], samples1)
-            if i == 1:
-                evidence[i][j]=Evidence(i, l[j], samples1)
-            if i == 2:
-                evidence[i][j]=Evidence(i, l[j], samples2)
-            if i == 3:
-                evidence[i][j]=Evidence(i, l[j], samples3)
+    # evidence = np.zeros([4,512])
+    # for i in range(4):
+    #     for j in range(512):
+    #         if i == 0:
+    #             evidence[i][j]=Evidence(i, l[j], samples1)
+    #         if i == 1:
+    #             evidence[i][j]=Evidence(i, l[j], samples1)
+    #         if i == 2:
+    #             evidence[i][j]=Evidence(i, l[j], samples2)
+    #         if i == 3:
+    #             evidence[i][j]=Evidence(i, l[j], samples3)
 
 
-    max = np.argmax(evidence,axis=1)
-    min = np.argmin(evidence,axis=1)
-    sum = np.sum(evidence, axis=1)
+    # max = np.argmax(evidence,axis=1)
+    # min = np.argmin(evidence,axis=1)
+    # sum = np.sum(evidence, axis=1)
 
 
 
