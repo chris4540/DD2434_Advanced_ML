@@ -35,11 +35,11 @@ def model(mdl_idx, dataset, thetas):
         return np.ones(nSamples) / 512.0
 
     if mdl_idx == 1:
-        thetas[:, 1] = 0
+        thetas[:, 0] = 0
         thetas[:, 2] = 0
 
     if mdl_idx == 2:
-        thetas[:, 2] = 0
+        thetas[:, 0] = 0
 
     # make a mesh
     i_coords, j_coords = np.meshgrid([-1, 0, 1], [1, 0, -1], indexing='xy')
@@ -56,7 +56,7 @@ def priorSample(nParams, nSamples):
         nParams:
         nSamples:
     """
-    sigma_sq = 1000
+    sigma_sq = 1e3
     cov = sigma_sq * np.eye(nParams)
     mean = np.zeros(nParams)
     theta = np.random.multivariate_normal(mean, cov, nSamples)
@@ -74,12 +74,12 @@ def create_index_set(evidence):
     Return:
         ordered index
     """
-    vals = np.sum(evidence, axis=0)
-    sort_index = np.argsort(-vals) # it sort
+    vals = -np.sum(evidence, axis=0)
+    sort_index = np.argsort(vals) # it sort
     return sort_index
 
 if __name__ == "__main__":
-    S = int(1e8)
+    S = int(1e4)
     l = generateDataset()
     thetas = priorSample(3, S)
 
@@ -103,11 +103,19 @@ if __name__ == "__main__":
     # max_ = np.argmax(evidence, axis=1)
     # min_ = np.argmin(evidence, axis=1)
     # sum_ = np.sum(evidence, axis=1)
-
+    fig, ax = plt.subplots()
     plt.plot(evidence[0, index], 'm', label="P($\mathcal{D}$ | ${M}_0$)")
     plt.plot(evidence[1, index], 'b', label="P($\mathcal{D}$ | ${M}_1$)")
     plt.plot(evidence[2, index], 'r', label="P($\mathcal{D}$ | ${M}_2$)")
     plt.plot(evidence[3, index], 'g', label="P($\mathcal{D}$ | ${M}_3$)")
     plt.legend()
-    plt.show()
-    # plt.savefig("Q22.png")
+    ax.set_xlim(0, 512)
+    ax.set_ylim(0)
+    ax.set_xlabel('Data set')
+    ax.set_ylabel('Evidence')
+    fig.tight_layout()
+    plt.savefig("../fig/Q22-all.png", dpi=100)
+
+    ax.set_xlim(0, 100)
+    plt.savefig("../fig/Q22-sub.png", dpi=100)
+
