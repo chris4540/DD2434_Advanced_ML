@@ -12,6 +12,9 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{cleveref}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{positioning}
 
 \setlength{\parskip}{1em}
 
@@ -506,13 +509,28 @@ likelihood according the prior on the parameters.
 \end{question}
 
 \begin{question}{21}
-First, the spherical Gaussian prior implies that each components of the weighting
+First, the spherical Gaussian prior implies that all components of the weighting
 vector $\bm{\theta}$ is indepenent.
 
 Second, large variance of the weighting factor allows sampling a weighting vector
-with large L2-norm. In the sense of SVM, the margin of the sparation plain is 
+with large L2-norm from the distribution. 
+In the sense of SVM, the margin of the sparation plain is 
 inversely proportional to the L2-norm of the weighting vector. Therefore, we
 allow the speration plane with a large uncertainty or large variation.
+\end{question}
+
+\begin{question}{22}
+  \begin{figure}[!ht]
+    \subfloat[First sub-figure\label{subfig-1:dummy}]{%
+      \includegraphics[width=0.45\textwidth]{fig/Q22-all.png}
+    }
+    \hfill
+    \subfloat[First sub-figure\label{subfig-2:dummy}]{%
+      \includegraphics[width=0.45\textwidth]{fig/Q22-sub.png}
+    }
+    \caption{Dummy figure}
+    \label{fig:dummy}
+  \end{figure}
 \end{question}
 % --------------------------------------------------------------
 \end{document}
