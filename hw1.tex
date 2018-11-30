@@ -552,41 +552,45 @@ origin. Hence, $M_3$ can explain all linear speratable data.
 \end{question}
 
 \begin{question}{23}
-Below shows the datasets which are given the highest and lowest
-evidence for each model. 
+Tables below shows the datasets which are given the highest and lowest
+evidence for each model. The related discussion is under the cooresponding table.
 
-
-\begin{table}[htbp]
-  %   \small
+\begin{table}[h]
     \centering
     \subfloat[Highest evidence data set]{%
       \hspace{2cm}%
-      \begin{tabular}{|c|c|c|}
+      \begin{tabular}{|c|c|c|} 
         \hline
-        X & O & X \\
+        X & X & O \\
         \hline
-        X & O & X \\
+        X & O & O \\
         \hline
-        X & X & X \\
+        X & O & O \\
         \hline
-      \end{tabular}
+      \end{tabular}\label{subtable:M1-high}
       \hspace{2cm}%
     }\hspace{1cm}
     \subfloat[Lowest evidence data set]{%
       \hspace{2cm}%
       \begin{tabular}{|c|c|c|}
         \hline
-        O & O & X \\
-        \hline
-        O & O & X \\
+        X & O & O \\
         \hline
         O & X & X \\
         \hline
-      \end{tabular}
+        O & O & O \\
+        \hline
+      \end{tabular}\label{subtable:M1-low}
       \hspace{2cm}%
     }
   \caption{Model 1}
-  \end{table}
+  \label{table:M1}
+\end{table}
+Since $M_1$ can be considered as a vectical seperation plane passing through the
+origin, it is sensible to see such configuration in table
+\ref{subtable:M1-high}.
+In table \ref{subtable:M1-low}, we can see that it is not possible to make a 
+vertical line to seperate crosses and circles.
 
 \end{question}
 
