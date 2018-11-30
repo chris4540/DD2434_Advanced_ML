@@ -551,11 +551,8 @@ origin. Hence, $M_3$ can explain all linear speratable data.
 \end{figure}
 \end{question}
 
+%TODO: review Q23
 \begin{question}{23}
-Tables below shows the datasets which are given the highest and lowest
-evidence for each model. The related discussions are under the cooresponding 
-tables.
-
 \begin{table}[h]
     \centering
     \subfloat[Highest evidence data set]{%
@@ -584,13 +581,13 @@ tables.
       \end{tabular}\label{subtable:M1-low}
       \hspace{2cm}%
     }
-  \caption{Model 1}
+  \caption{The highest and lowest evident data set for $M_1$}
   \label{table:M1}
 \end{table}
 Since $M_1$ can be considered as a vectical seperation plane passing through the
 origin, it is sensible to see such configuration in table
 (\ref{subtable:M1-high}).
-In table (\ref{subtable:M1-low}), we can see that it is not possible to make a 
+In table (\ref{subtable:M1-low}), we can see that it is not possible to draw any
 vertical line to seperate crosses and circles.
 
 \begin{table}[h]
@@ -621,16 +618,60 @@ vertical line to seperate crosses and circles.
     \end{tabular}\label{subtable:M2-low}
     \hspace{2cm}%
   }
-\caption{Model 2}
+  \caption{The highest and lowest evident data set for $M_2$}
 \label{table:M2}
 \end{table}
-
 For $M_2$, it is a speration line restricted to pass through the origin the 
 center of the grid.
 It is possible to use a left-bottom to up-right diagonal line to sperate crosses
 and circles as shown in table (\ref{subtable:M2-high}). While it is not possible 
 to use any line passing through the middle box to sperate crosses and circles in
 table (\ref{subtable:M2-low}).
+
+\begin{table}[h]
+  \centering
+  \subfloat[Highest evidence data set]{%
+    \hspace{2cm}%
+    \begin{tabular}{|c|c|c|} 
+      \hline
+      X & X & X \\
+      \hline
+      X & X & X \\
+      \hline
+      X & X & X \\
+      \hline
+    \end{tabular}\label{subtable:M3-high}
+    \hspace{2cm}%
+  }\hspace{1cm}
+  \subfloat[Lowest evidence data set]{%
+    \hspace{2cm}%
+    \begin{tabular}{|c|c|c|}
+      \hline
+      O & X & O \\
+      \hline
+      X & X & X \\
+      \hline
+      X & O & O \\
+      \hline
+    \end{tabular}\label{subtable:M3-low}
+    \hspace{2cm}%
+  }
+  \caption{The highest and lowest evident data set for $M_3$}
+\label{table:M3}
+\end{table}
+
+It is noted that $M_3$ is the only model having a bias term (interception term)
+in the logistic regression term. 
+$M_3$ is the only model can explain all circles and crosses
+cases with its bias term. Moreover, the prior has the preference on chossing large
+parameters with its large variance. Therefore, the prior makes the seperate line 
+to have a large intercept and the line most likely seperate the data shown in table 
+(\ref{subtable:M3-high}).
+The peak of $M_3$ in 
+figure \ref{subfig-2:plotEvidSub} can also be explained by all circles and all crosses. 
+Therefore, the model evidence of all circles or crosses is the highest for $M_3$.
+
+The data set shown in table(\ref{subtable:M3-low}) is not linear sperable.
 \end{question}
 
 % \begin{question}{24}
