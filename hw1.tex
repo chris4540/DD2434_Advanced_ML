@@ -696,14 +696,27 @@ the model evidence $p(\mathcal{D}\mid M_i)$. Therefore, we can consider
 that the models $\{{M_i}\}_{i=1}^3$ becomes restrictive under dependent choice 
 of parameter compared to indepenent choice. Each model covers smaller amount of 
 data set as show in figure \ref{fig:Q24-non-diag-plotEvid}.
-\begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
+\begin{figure}[h] 
   \centering
   \includegraphics[width=0.5\linewidth]{fig/Q24-non-diag.png}
   \caption{Plot evidence against data set with a non-diagonal parameter prior}
   \label{fig:Q24-non-diag-plotEvid}
 \end{figure}
 
-If we use a non-zero mean prior such as $\mu = [5, 5, 5]^T$, 
+If we use a non-zero mean prior such as $\mu = [5, 5, 5]^T$, we can see that
+some model favor on specific data sets. It is because there are peaks in the plot
+\ref{fig:Q24-non-zero-plotEvid}. Those data sets are diagonal separable since 
+we make a perference on the choice of parameter.
+
+The region covered by each model should be almost the same as the zero-mean prior.
+It is because the flexiblity of models holds when changing the mean of prior.
+  
+  \begin{figure}[h] 
+    \centering
+    \includegraphics[width=0.5\linewidth]{fig/Q24-non-zero-mean-sub.png}
+    \caption{Plot evidence against data set with a non-zero mean parameter prior}
+    \label{fig:Q24-non-zero-plotEvid}
+  \end{figure}
 \end{question}
 % --------------------------------------------------------------
 \end{document}
