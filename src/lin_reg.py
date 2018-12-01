@@ -136,14 +136,14 @@ if False:
 # plot_BVG(prior_mu, prior_cov)
 
 # Set the amount of inputs to use in order to estimate the likelihood
-nObs = 5
+nObs = 1
 
 # Plot the posterior distribution of the parameters given x and t
 mean, cov = estimatePosterior(
     prior_mu, prior_cov, error_mean, error_variance, x, t, nObs)
 # Plot the posterior
 plot_BVG(mean, cov)
-plt.savefig("../fig/Q9-post-s{}-n{}.png".format(error_variance, nObs), dpi=100)
+plt.savefig("../fig/Q9-post-s{:g}-n{}.png".format(error_variance*10, nObs), dpi=100)
 
 # Sample parameters from the posterior
 nSample_posterior = 6
@@ -161,6 +161,7 @@ ax.set_ylabel('y')
 for i in range(len(w1)):
     # Plot line based on sampled parameters
     plt.plot(x[:,0], w1[i]*x[:,0] + w2[i], color="blue", linestyle="-", linewidth=0.5)
+fig.set_size_inches(5, 5)
 fig.tight_layout()
-plt.savefig("../fig/Q9-fun-s{}-n{}.png".format(error_variance, nObs), dpi=100)
+plt.savefig("../fig/Q9-fun-s{:g}-n{}.png".format(error_variance*10, nObs), dpi=100)
 # plt.show()
