@@ -123,4 +123,5 @@ if __name__ == "__main__":
     plt.legend()
     ax.grid(True)
     # plt.show()
+    fig.tight_layout()
     plt.savefig("../fig/Q16-replearn.png", dpi=100)
