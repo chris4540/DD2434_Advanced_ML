@@ -321,38 +321,52 @@ And the figure \ref{fig:Q9-prior} shows the prior distribution over $\mathbf{W}$
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.3$}
 \end{figure}
 
+When more data observed, the posterior become concentrated over the parameter space.
+In general, we can say that the posterior receive more information about data.
+Therefore, the posterior can have more confident to tell what is the underlying 
+parameter behind the data. On the other hand, the posterior gaussian covariance
+could be expressed as 
+$(\frac{1}{\sigma^2}\mathbf{X}\mathbf{X}^T + \frac{1}{\tau^2}\mathbf{I})^{-1}$.
+The more data observed, the determinant of $\mathbf{X}\mathbf{X}^T$ will be 
+larger and the determinant of covariance matrix will be smaller.
+
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s1-n5.png}
   }
   \hfill
   \subfloat[Functions with the parameters sampled from the posterior]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s1-n5.png}
   }
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.1$}
 \end{figure}
 
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s5-n5.png}
   }
   \hfill
   \subfloat[Functions with the parameters sampled from the posterior]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s5-n5.png}
   }
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.5$}
 \end{figure}
 
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s7-n5.png}
   }
   \hfill
   \subfloat[Functions with the parameters sampled from the posterior]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s3-n5.png}
+  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s7-n5.png}
   }
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.7$}
 \end{figure}
+
+Consider the noise with different values of $\sigma$, the spreading of the 
+probability distribution of posterior over $\mathbf{W}$ increases as the sigma
+value increases. As the uncertainty of posterior increases, the models or the 
+resulting functions variate more.
 \end{question}
 
 \begin{question}{10}
