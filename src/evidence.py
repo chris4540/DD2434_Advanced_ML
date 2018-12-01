@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from itertools import product
 from scipy.stats import multivariate_normal
 
-
 def generateDataset():
     """
     Create the output dataset {t_i}, i = 1..9
@@ -50,15 +49,27 @@ def model(mdl_idx, dataset, thetas):
     return np.prod(probs, axis=1)
 
 
-def priorSample(nParams, nSamples):
+def priorSample(nSamples):
     """
     Args:
         nParams:
         nSamples:
     """
-    sigma_sq = 1000
+    nParams = 3
+    # sigma_sq = 1e4
+    # sigma_sq = 1e2
+    # sigma_sq = 1e10
+    # sigma_sq = 1e-3
+    sigma_sq = 1e3
     cov = sigma_sq * np.identity(nParams)
-    mean = np.zeros(nParams)
+    # cov[0, 1] = -400
+    # cov[1, 0] = -400
+    # cov[0, 2] = 700
+    # cov[2, 0] = 700
+    # cov[1, 2] = 900
+    # cov[2, 1] = 900
+    # mean = np.zeros(nParams)
+    mean = np.ones(nParams) * 5
     theta = np.random.multivariate_normal(mean, cov, nSamples)
     return theta
 
@@ -81,7 +92,7 @@ def create_index_set(evidence):
 if __name__ == "__main__":
     S = int(20000)
     l = generateDataset()
-    thetas = priorSample(3, S)
+    thetas = priorSample(S)
 
     evidence = np.zeros([4, 512])
 
@@ -104,13 +115,13 @@ if __name__ == "__main__":
     plt.plot(evidence[3, index], 'g', label="P($\mathcal{D}$ | ${M}_3$)")
     plt.legend()
     ax.set_xlim(0, 512)
-    ax.set_ylim(0)
+    ax.set_ylim(0, 0.13)
     ax.set_xlabel('Data set')
     ax.set_ylabel('Evidence')
     fig.tight_layout()
-    plt.savefig("../fig/Q22-all.png", dpi=100)
+    plt.savefig("../fig/Q26c-all.png", dpi=100)
 
     ax.set_xlim(0, 80)
     plt.xticks(list(range(0, 81, 10)))
-    plt.savefig("../fig/Q22-sub.png", dpi=100)
+    plt.savefig("../fig/Q26c-sub.png", dpi=100)
 
