@@ -427,7 +427,53 @@ The gradient of the objective w.r.t the parameters $\mathbf{W}$
 \end{question}
 
 \begin{question}{16}
-  TODO
+Figure \ref{fig:q16-replearn} shows both the learned and the origal 
+representation of $\mathbf{x}$.
+The representation is generated from the mapping $f_{non-lin}$.
+
+We can see that there is a rotational symmetry between the learned representation
+and the original representation. It is becasue we have a degree of freedom to choose
+a $\widetilde{\mathbf{W}}$ which is related to rotate the latent space coordinates.
+
+Consider $\widetilde{\mathbf{W}} = \mathbf{WR}$. In the linear model 
+$\mathbf{Y}(\mathbf{X}) = \mathbf{WX} + \bm{\mu} + \bm{\epsilon}$, 
+$\mathbf{R}$ can be considered as rotating the coordinates of the 
+latent variable space.
+
+In our objective function $\mathcal{L}(\mathbf{W})$, it is invariant if we chossing
+a $\widetilde{\mathbf{W}}$ which satisfies the relation $\widetilde{\mathbf{W}} = \mathbf{WR}$.
+  \begin{align*}
+    \mathbf{C}(\widetilde{\mathbf{W}}) 
+      &= \widetilde{\mathbf{W}}\widetilde{\mathbf{W}}^T + \sigma^2\mathbf{I} \\
+      &= \mathbf{W}\mathbf{R}\mathbf{R}^T\mathbf{W}^T + \sigma^2\mathbf{I} \\
+      &= \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I}
+        && (\mathbf{R}\mathbf{R}^T = \mathbf{I}) \\
+      &= \mathbf{C}(\mathbf{W})
+  \end{align*}
+$\mathbf{R}\mathbf{R}^T = \mathbf{I}$ since $\mathbf{R}$ is a rotation matrix.
+And we also have:
+  \begin{align*}
+    \mathcal{L}(\widetilde{\mathbf{W}})
+      &= \frac{N}{2}[D\log(2\pi) 
+        + \log(|\mathbf{C}(\widetilde{\mathbf{W}})|) 
+        + \text{Tr}(\mathbf{C}(\widetilde{\mathbf{W}})^{-1}\mathbf{S})] \\
+      &= \frac{N}{2}[D\log(2\pi) 
+        + \log(|\mathbf{C}(\mathbf{W})|) 
+        + \text{Tr}(\mathbf{C}(\mathbf{W})^{-1}\mathbf{S})]
+        && (\mathbf{C}(\widetilde{\mathbf{W}}) = \mathbf{C}(\mathbf{W})) \\
+      &= \mathcal{L}(\mathbf{W})
+  \end{align*}
+
+Therefore, the objective function and the corresponding marginal likelihood
+are invariant with respect to chossing a $\widetilde{\mathbf{W}}$ which satisfies
+$\widetilde{\mathbf{W}} = \mathbf{WR}$.
+
+  \begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
+    \centering
+    \includegraphics[width=0.5\linewidth]{fig/Q16-replearn.png}
+    \caption{Plot }
+    \label{fig:q16-replearn}
+  \end{figure}
 \end{question}
 
 \begin{question}{17}
