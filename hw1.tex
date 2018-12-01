@@ -277,7 +277,27 @@ The hyperparameters $\bm{\theta}$ still condition on the part of covariance of t
 \end{question}
 
 \begin{question}{9}
-  Practical TODO:
+We set the prior distribution as:
+  \begin{align*}
+    p(\mathbf{W}) = 
+      \mathcal{N}(
+        \begin{bmatrix}
+          0\\ 
+          0
+        \end{bmatrix},
+        \begin{bmatrix}
+          2 & 0\\ 
+          0 & 2
+        \end{bmatrix}
+      )
+  \end{align*}
+And the figure \ref{fig:Q9-prior} shows the prior distribution over $\mathbf{W}$
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{fig/Q9-prior.png}
+  \caption{Plot prior distribution over $\mathbf{W}$}
+  \label{fig:Q9-prior}
+\end{figure}
 \end{question}
 
 \begin{question}{10}
