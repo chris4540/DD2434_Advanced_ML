@@ -42,15 +42,14 @@ def plot_BVG(mean, covariance, plot_start = [-3, -3], plot_stop = [3, 3],
     fig = plt.figure()
     ax = fig.add_subplot(111)
     fig.subplots_adjust(top=0.85)
-    # ax.set_title('P(W|X,T)')
 
     plt.xlabel('$w_1$')
     plt.ylabel('$w_2$')
-    # plt.contourf(W1, W2, P.pdf(pos), offset= 0.01)
     plt.contourf(W1, W2, P.pdf(pos), cmap='Blues')
+    #cset = ax.contourf(W1, W2, P.pdf(pos), zdir='p(w)', offset=-0.01, cmap=cm.viridis)
+
     fig.tight_layout()
     fig.set_size_inches(5, 5)
-    # plt.show()
 
 
 def estimatePosterior(prior_mu, prior_cov, error_mean, error_variance, X, t, N):
@@ -108,41 +107,60 @@ def generateOutputData(x, w, error_mean, error_variance):
     return [w[0]*x[0] + w[1] + e for (x, e) in zip(x, err)]
 
 
-if __name__ == "__main__":
+np.random.seed(200)
+# Set irreducible error distribution parameters
+error_mean = 0.0
+error_variance = 0.3  # variance of noise
 
 
-    if True:
-        # ============================
-        # plot prior
-        prior_mu = np.zeros(2)
-        prior_cov = 2 * np.identity(2)
+# Generate 2-dimensional input data where the second dimension is always one
+x = np.arange(-2, 2.02, 0.02)
+np.random.shuffle(x)
+x = np.reshape(x, (-1, 1))
+x = np.hstack((x, np.ones(x.shape)))
+# Generate output data
+w = np.asarray([-1.5, -0.5])
+t = np.asarray(generateOutputData(x, w, error_mean, error_variance))
+t = np.reshape(t, (-1, 1))
 
-        plot_BVG(prior_mu, prior_cov)
-        plt.savefig("../fig/Q9-prior.png", dpi=100)
-        # ============================
-    # plt.show()
+# Set parameters for spherical bivariate Gaussian prior
+# prior_variates = 2
+prior_mu = np.zeros(2)
+prior_cov = np.identity(2) * 2
+if False:
+    plot_BVG(prior_mu, prior_cov)
+    plt.savefig("../fig/Q9-prior.png", dpi=100)
+    # ============================
 
-    # # Set the amount of inputs to use in order to estimate the likelihood
-    # N = 25
+# Visualize prior
+# plot_BVG(prior_mu, prior_cov)
 
-    # # Plot the posterior distribution of the parameters given x and t
-    # mean, cov = estimatePosterior(prior_mu, prior_cov, error_mean, error_variance, x, t, N)
-    # # Plot the posterior
-    # plot_BVG(mean, cov)
-    # # Sample parameters from the posterior
-    # w1, w2 = np.random.multivariate_normal(mean, cov, 5).T
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111)
-    # fig.subplots_adjust(top=0.85)
-    # ax.set_title('Function samples')
+# Set the amount of inputs to use in order to estimate the likelihood
+nObs = 5
 
-    # ax.set_xlabel('x')
-    # ax.set_ylabel('y')
-    # # Plot original line
-    # plt.plot(x[:,0], w[0]*x[:,0] + w[1])
+# Plot the posterior distribution of the parameters given x and t
+mean, cov = estimatePosterior(
+    prior_mu, prior_cov, error_mean, error_variance, x, t, nObs)
+# Plot the posterior
+plot_BVG(mean, cov)
+plt.savefig("../fig/Q9-post-s{}-n{}.png".format(error_variance, nObs), dpi=100)
 
-    # for i in range(len(w1)):
-    #     # Plot line based on sampled parameters
-    #     plt.plot(x[:,0], w1[i]*x[:,0] + w2[i], color = "red", linestyle = "-", linewidth = 0.5)
+# Sample parameters from the posterior
+nSample_posterior = 6
+w1, w2 = np.random.multivariate_normal(mean, cov, nSample_posterior).T
+fig = plt.figure()
+ax = fig.add_subplot(111)
+fig.subplots_adjust(top=0.85)
+# ax.set_title('Function samples')
 
-    # plt.show()
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+# Plot original line
+# plt.plot(x[:,0], w[0]*x[:,0] + w[1])
+
+for i in range(len(w1)):
+    # Plot line based on sampled parameters
+    plt.plot(x[:,0], w1[i]*x[:,0] + w2[i], color="blue", linestyle="-", linewidth=0.5)
+fig.tight_layout()
+plt.savefig("../fig/Q9-fun-s{}-n{}.png".format(error_variance, nObs), dpi=100)
+# plt.show()
