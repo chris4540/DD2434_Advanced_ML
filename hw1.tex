@@ -671,11 +671,39 @@ The peak of $M_3$ in
 figure \ref{subfig-2:plotEvidSub} can also be explained by all circles and all crosses. 
 Therefore, the model evidence of all circles or crosses is the highest for $M_3$.
 
-The data set shown in table(\ref{subtable:M3-low}) is not linear sperable.
+The data set shown in table(\ref{subtable:M3-low}) is not linear separable.
 \end{question}
 
-% \begin{question}{24}
-  
-% \end{question}
+\begin{question}{24}
+The effect of the prior $p(\theta)$ controls what parameters we can sample from it.
+
+Consider $M_0$ can be writen as:
+\begin{align*}
+  p(\mathcal{D} \mid M_0, \bm{\theta}_0) &= \frac{1}{2^9} \\
+    &= \prod_{n=0}^{9}\frac{1}{1 + \exp(0)}
+\end{align*}
+
+If we use a extreme small $\sigma^2$, says $\sigma^2 = 10^{-6}$, we would probably
+sample all zeros from it. Therefore, all model will reduce to $M_0$.
+If we use a very large $\sigma^2$, says $\sigma^2 = 10^{6}$, we would probably
+arbitrary large number from the prior. However, the seperation line slope depends
+on the ratio of two of the parameters. Therefore, the evidence plot would not change
+as in our previous case.
+
+If we use a non-diagonal covariance matrix for the prior, we somehow impose
+contrains over parameters. The marginalisation carries the this information to 
+the model evidence $p(\mathcal{D}\mid M_i)$. Therefore, we can consider
+that the models $\{{M_i}\}_{i=1}^3$ becomes restrictive under dependent choice 
+of parameter compared to indepenent choice. Each model covers smaller amount of 
+data set as show in figure \ref{fig:Q24-non-diag-plotEvid}.
+\begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
+  \centering
+  \includegraphics[width=0.5\linewidth]{fig/Q24-non-diag.png}
+  \caption{Plot evidence against data set with a non-diagonal parameter prior}
+  \label{fig:Q24-non-diag-plotEvid}
+\end{figure}
+
+If we use a non-zero mean prior such as $\mu = [5, 5, 5]^T$, 
+\end{question}
 % --------------------------------------------------------------
 \end{document}
