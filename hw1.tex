@@ -102,24 +102,41 @@ $$
 
 % Question 4
 \begin{question}{4}
-The choice of piror distribution reflects the choice of regularizer. Chossing L1 
-norm as regularizer is known as the lasso (least absolute shrinkage and selection operator).
+The choice of the prior distribution reflects the choice of regularizer. 
+Chossing $L_1$ norm as regularizer is known as the lasso (least absolute shrinkage and selection operator).
 The regularizer will force some weighting coefficients $w_j$ to be zero, given 
 a proper choice of model parameter $\tau$. It plays the role of feature selection
 since those zero weighting coefficients indicate that the corresponding features
-are irrelvant to the output. \par
+are irrelvant to the output.
 
 The penalization term or the negative log-prior:
-$$  \frac{\lambda}{2} \left \|\textbf{vec}(\bf{W} - \bf{W}_0)\right \|_{q}  $$
+\begin{align*}
+  \frac{\lambda}{2} \left \|\textbf{vec}(\bf{W} - \bf{W}_0)\right \|_{q}  
+\end{align*}
+If $q = 1$, that is the absolute-value norm.
+If $q = 2$, that is the euclidean norm.
+
+In figure \ref{fig:Q4-min-reg},
+we can see that in the corresponding minimization problem (i.e. least sqare problem).
+The regularization term acts as a constrain in the minimization problem.
+
+In the right head side of the figure, it is a minimization problem using $L_1$
+regularization term.
+If using $L_1$ norm, the minimization result $\mathbf{w}^{*}$ is forced to lay on 
+the $w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and which
+can be understood as feature selection. In the figure, the contrains is a square
+shape contour.
+
+If using $L_2$, the contrain is a circle as the form of the regularization term.
+
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.5\linewidth]{q4_regular.png}
-  \caption{A boat.}
-  \label{fig:boat1}
+  \caption{Plot contours of the error minimization problems}
+  \label{fig:Q4-min-reg}
 \end{figure}
 
-TODO: Discussion
 \end{question}
 % End question 4
 
@@ -228,11 +245,11 @@ The constant $Z$ plays no role in the calculation since only the quadratic and l
 how the function looks like before we consider the data.
 
 We choose the mean function as zero
- since we have forced the data to have zero-mean. We can choose a non-zero mean
- function of the Gaussian process. Indeed, we can use a fixed mean function, but
- the result is trivial that we can obtain the predictive mean function by adding 
- the mean-removal result to the fixed mean function.
- (Rasmussen, C. E., 2004, page 27)
+since we have forced the data to have zero-mean. We can choose a non-zero mean
+function of the Gaussian process. Indeed, we can use a fixed mean function, but
+the result is trivial that we can obtain the predictive mean function by adding 
+the mean-removal result to the fixed mean function.
+(Rasmussen, C. E., 2004, page 27)
 
 The covariance of the prior, is the covariance
 function controlled by the hyperparameter $\bm{\theta}$. The covariance function
