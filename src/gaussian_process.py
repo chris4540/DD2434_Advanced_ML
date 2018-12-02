@@ -61,7 +61,7 @@ def estimate_sqr_exp_prior(sigma, lengthscale, sample_no = 1000):
     X = np.reshape(x, (-1, 1))
 
     # Initialize Gram matrix K
-    K = np.zeros((sample_no, sample_no))
+    # K = np.zeros((sample_no, sample_no))
     # Calculate Gram matrix K
     K = (sigma ** 2) * np.exp(-cdist(X, X, 'sqeuclidean') / (lengthscale ** 2))
 
@@ -133,24 +133,28 @@ def plot_gp(x, mu, K, sample_functions = 1, title = ""):
         sample_functions: number of sampled functions to plot from the prior
         title: title to show on plot
     """
+    fig, ax = plt.subplots()
     mu = mu.flatten()
     x = x.flatten()
 
     #Generate <sample_no> sample functions from the gaussian process
     samples = np.random.multivariate_normal(mu, K, sample_functions)
-
+    print(samples.shape)
     for i in range(sample_functions):
         plt.plot(x, samples[i, :])
 
     # Plot predictive mean
     plt.plot(x, mu, color = "black", linestyle = '--')
     # Get predictive variance as vector
-    var = np.diag(K)
+    # var = np.diag(K)
     # Plot variance
-    plt.fill_between(x, mu - np.sqrt(var), mu + np.sqrt(var), color = 'gray')
+    # plt.fill_between(x, mu - np.sqrt(var), mu + np.sqrt(var), color = 'gray')
 
-    plt.title(title)
-    plt.show()
+    # plt.title(title)
+    fig.tight_layout()
+    fig.set_size_inches(5, 5)
+    ax.set_ylim(-4, 4)
+    # plt.show()
 
 
 
@@ -210,11 +214,15 @@ def noisyCos(x, mean = 0, variance = 0.2):
 
 if __name__ == "__main__":
 
+    # =============================
     # Plot prior function samples
-    lengthscale = 1.5
+    # =============================
+    lengthscale = .05
     sigma = 1
     x, mu, K = estimate_sqr_exp_prior(sigma, lengthscale)
-    plot_gp(x, mu, K, sample_functions = 5, title = "Lengthscale: " + str(lengthscale))
+    plot_gp(x, mu, K, sample_functions=10, title = "Lengthscale: " + str(lengthscale))
+    fname = "../fig/Q10-l{}.png".format("{:.2f}".format(lengthscale).replace('.', ''))
+    plt.savefig(fname, dpi=100)
 
     # observation_no = 7
     # unseen_observation_no = 2000
