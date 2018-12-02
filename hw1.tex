@@ -370,7 +370,44 @@ resulting functions variate more.
 \end{question}
 
 \begin{question}{10}
-  Practical TODO:
+Consider a Gaussian process:
+  \begin{align*}
+    f(\mathbf{x}) \sim GP(\mathbf{0}, k(\mathbf{X}, \mathbf{X'}))
+  \end{align*}
+The kernel function is:
+\begin{align*}
+  k(\mathbf{x}_i, \mathbf{x}_j) = \sigma^2_f \exp(-\frac{||\mathbf{x}_i - \mathbf{x}_j||^2}{l^2})
+\end{align*}
+We choose $\sigma^2_f = 1$, for conventient.
+
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{fig/Q10-l005.png} 
+      \caption{l = 0.05}
+  \end{minipage}\hfill
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{fig/Q10-l050.png} 
+      \caption{l = 0.5}
+  \end{minipage}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{fig/Q10-l100.png} 
+      \caption{l = 1}
+  \end{minipage}\hfill
+  \begin{minipage}{0.45\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{fig/Q10-l1000.png}
+      \caption{l = 10}
+  \end{minipage}
+\end{figure}
+
+TODO: explain with white noise. points correlation etc.
 \end{question}
 
 \begin{question}{11}
