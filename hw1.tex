@@ -411,13 +411,37 @@ TODO: explain with white noise. points correlation etc.
 \end{question}
 
 \begin{question}{11}
-  Practical TODO:
+The posterior and the prior are the same if we do not have any observed data.
+The posterior can be written as $p(f\mid \mathbf{t})$ which means given certain data the
+probability of a random variable $f$. If there is no given data, then obviously
+the probability of a random variable $f$ is $p(f)$ which is the prior.
+
+% The predictive posterior distribution of the model:
 \end{question}
 
 \begin{question}{12}
 This prior encodes that we have no perference on the latent variable. It just 
  shows that we have no information about the latent variable $X$. Therefore, 
  we assume that it is a zero-mean Gaussian and each compoent are indepenent.
+
+ \begin{figure}[h!]
+  \subfloat[1111, $\mathcal{D}$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l005.png}
+  }
+  \hfill
+  \subfloat[222, $\mathcal{D}$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l050.png}
+  }
+  \vskip\baselineskip
+  \subfloat[Plot evident against all data sets, $\mathcal{D}$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l100.png}
+  }
+  \hfill
+  \subfloat[Plot evident against possible data sets, $\mathcal{D}$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l1000.png}
+  }
+  \caption{fixme}
+  \end{figure}
 \end{question}
 
 \begin{question}{13}
