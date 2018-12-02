@@ -221,20 +221,20 @@ The constant $Z$ plays no role in the calculation since only the quadratic and l
 
 % Question 6
 \begin{question}{6}
-\begin{align*}
-  p(f\mid X,\theta) = N(0, k(X, X))  % TODO: fix this equation
-\end{align*}
+% \begin{align*}
+%   p(f\mid X,\theta) = N(0, k(X, X))  % TODO: fix this equation
+% \end{align*}
   The prior distribution over functions expresses our beliefs and knowledge about
 how the function looks like before we consider the data.
 
-We choose the mean function as zero or the instaniation of function to be zero
+We choose the mean function as zero
  since we have forced the data to have zero-mean. We can choose a non-zero mean
  function of the Gaussian process. Indeed, we can use a fixed mean function, but
  the result is trivial that we can obtain the predictive mean function by adding 
  the mean-removal result to the fixed mean function.
  (Rasmussen, C. E., 2004, page 27)
 
-The covariance of the marginal distribution, which is the prior, is the covariance
+The covariance of the prior, is the covariance
 function controlled by the hyperparameter $\bm{\theta}$. The covariance function
 tells that if two input points are similar, then the output should be similar as
 well. The specification of the covariance function indicates a distribution over 
@@ -244,9 +244,8 @@ function evaluated at some input points.
 %TODO: Fix this figure, use python to replot it
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\linewidth]{q6_output_prior.png}
-  \caption{fix me!}
-  \label{fig:fix me!}
+  \includegraphics[width=0.5\linewidth]{fig/Q6-prior.png}
+  \caption{Sample functions sampled from the prior}
 \end{figure}
 \end{question}
 
