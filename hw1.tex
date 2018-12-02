@@ -13,6 +13,8 @@
 \usepackage{amsmath}
 \usepackage{cleveref}
 \usepackage{tikz}
+\usetikzlibrary{bayesnet}
+\usetikzlibrary{arrows}
 \usepackage{graphicx}
 \usetikzlibrary{positioning}
 
@@ -250,12 +252,28 @@ function evaluated at some input points.
 
 % Question 7
 \begin{question}{7}
+  \begin{figure}[h!]
+    \centering
+    \tikz{
+      % nodes
+      \node[latent] (f) {$f$};
+      \node[latent,above=of f,xshift=1cm] (X) {$\mathbf{X}$}; %
+      \node[latent,above=of f,xshift=-1cm] (theta) {$\bm{\theta}$}; %
+      \node[latent,below=of f,xshift=0cm] (T) {$\mathbf{T}$}; %
+      % edges
+      \edge {theta,X} {f}  
+      \edge {f} {T}  
+    }
+  \caption{The graphical model showing the assumption of the joint likelihood}
+  \label{fig:Q7-graphs}
+  \end{figure}
   \begin{align*}
     p(\mathbf{T}, \mathbf{X}, f, \bm{\theta}) 
       = p(\mathbf{T}\mid f)p(f \mid \mathbf{X},\bm{\theta})
       p(\mathbf{X})p(\bm{\theta}) 
   \end{align*}
-  TODO: Add graph model
+
+The graphical model is shown in figure \ref{fig:Q7-graphs}
 \end{question}
 
 \begin{question}{8}
