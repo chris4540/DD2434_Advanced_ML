@@ -789,17 +789,22 @@ The variable usually we are not interested in our model.
 
 The implication of the process is to calculate the weighted average of the model
 likelihood according the prior on the parameters.
+
+The evidence can also be regarded as the probability of generating the data set 
+$\mathcal{D}$ from a model describled by all possible parameters. That is 
+the reason why we average the likelihood weighted by the probability of each parameter.
 \end{question}
 
 \begin{question}{21}
 First, the spherical Gaussian prior implies that all components of the weighting
-vector $\bm{\theta}$ is indepenent.
+vector $\bm{\theta}$ are indepenent.
 
 Second, large variance of the weighting factor allows to sample a weighting vector
 with large L2-norm from the distribution. 
 In the sense of SVM, the margin of the sparation plain is 
 inversely proportional to the L2-norm of the weighting vector. Therefore, we
-allow the speration plane with a large uncertainty or large variation.
+allow the speration plane with a large uncertainty or large variation and high 
+flexiblity.
 \end{question}
 
 \begin{question}{22}
