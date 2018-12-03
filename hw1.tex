@@ -653,8 +653,14 @@ where S is defined as:
 \end{align*}
 \\
 Below is the derive of the gradient in element-wise approach. The Matrix cookbook 2012 Ed.
-is used in the derive. "cookbook Eq.133" means using the equation 133 in the cookbook.\\
+is used in this derive. "cookbook Eq.133" means using the equation 133 in the cookbook.\\
 Consider equation \eqref{eq:q13-matC} in element-wise form:
+
+Obviously, we have:
+\begin{equation}
+  \frac{\partial}{\partial \mathbf{W}}\frac{ND}{2}\log{2\pi} = 0
+  \label{eq:Q15-dL0}
+\end{equation}
 \begin{align*}
   C_{kl} &= (\mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I})_{kl} \\
   &= \sum_{\theta}(W_{k\theta}W_{l\theta}) + \sigma^2\delta_{kl} \\
@@ -687,33 +693,56 @@ Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
       && (\mathbf{C}^{-1} = (\mathbf{C}^{-1})^T) \\
   \frac{\partial}{\partial \mathbf{W}}\frac{N}{2}\log(|\mathbf{C}|)
   &= \frac{N}{2}[2\mathbf{C}^{-1}\mathbf{W}] \\
-  &= N\mathbf{C}^{-1}\mathbf{W}
+  &= N\mathbf{C}^{-1}\mathbf{W} \numberthis \label{eq:Q15-dL1}
 \end{align*}
-For the sake of convenience, we define $(\mathbf{C}^{-1})^T = \mathbf{C}^{-T}$.\\
+For the sake of convenience, we define $\mathbf{C}^{-T} = (\mathbf{C}^{-1})^T$.
+Obviously, we have:
+\begin{align*}
+  \mathbf{C}^{-T} &= (\mathbf{C}^{-1})^T \\
+                  &= (\mathbf{C}^{T})^{-1} \\
+  \mathbf{C}^{-T} &= \mathbf{C}^{-1} \numberthis \label{eq:C^-T}
+\end{align*}
 Consider the derivatives of $\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})$:
 
 \begin{align*}
-  \frac{\partial}{\partial W_{ij}}\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})
+  \frac{\partial}{\partial W_{ij}}&\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S}) \\
   &= \frac{N}{2}[\sum_{k,l} \frac{\partial \text{Tr}(\mathbf{C}^{-1}\mathbf{S})}{\partial C_{kl}}
                             \frac{\partial C_{kl}}{\partial W_{ij}} ]\\
   &= \frac{N}{2}[\sum_{k,l} (-\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{kl}
                             \frac{\partial C_{kl}}{\partial W_{ij}} ]\\
-  &= -\frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{kl}
-                            (W_{lj}\delta_{ik} + W_{kj}\delta_{il}) ]\\
-  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{il}W_{lj}
-                + \sum_{k} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{ki}W_{kj}] \\
-  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{il}W_{lj}
-                + \sum_{k} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{ik}W_{kj}] \\
-  \frac{\partial}{\partial \mathbf{W}}\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})
-  &= -N\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W}
+  &= -\frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-1}\mathbf{S}^{T}\mathbf{C}^{-1})_{kl}
+                            (W_{lj}\delta_{ik} + W_{kj}\delta_{il}) ]       
+      &&(\text{use eq.\eqref{eq:dCdW} and \eqref{eq:C^-T}})  \\
+  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1})_{il}W_{lj}
+                + \sum_{k} (\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1})_{ki}W_{kj}] 
+      &&(\mathbf{S}^T = \mathbf{S})  \\
+  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1})_{il}W_{lj}
+                + \sum_{k} (\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1})_{ik}W_{kj}]
+      &&(\text{See eq.}\eqref{eq:CSC_sym})  \\
 \end{align*}
-Therefore:
+
+In matrix form, we have:
+\begin{equation}
+  \frac{\partial}{\partial \mathbf{W}}\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})
+  = -N\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W}
+  \label{eq:Q15-dL2}
+\end{equation}
+
+$\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}$ is a symmetric matrix since:
+\begin{align*}
+  (\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1})^{T} 
+  &= \mathbf{C}^{-T}\mathbf{S}^T\mathbf{C}^{-T} \\
+  &= \mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}
+  \numberthis \label{eq:CSC_sym}
+\end{align*}
+
+
+Combine eq. \eqref{eq:Q15-dL0}, \eqref{eq:Q15-dL1} and \eqref{eq:Q15-dL2} we have:
 \begin{align*}
   \frac{\partial{\mathcal{L}}}{\partial{\mathbf{W}}} 
     &= N(\mathbf{C}^{-1}\mathbf{W} 
          - \mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W})
 \end{align*}
-
 \end{question}
 
 \begin{question}{16}
