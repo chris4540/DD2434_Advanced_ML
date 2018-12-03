@@ -446,19 +446,14 @@ Therefore, as the correlation increases, the fluctuation of the sample functions
 
 \begin{question}{11}
 The posterior and the prior are the same if we do not have any observed data.
-The posterior can be written as $p(f\mid \mathbf{t})$ which means given certain data the
-probability of a random variable $f$. If there is no given data, then obviously
-the probability of a random variable $f$ is $p(f)$ which is the prior.
+The posterior can be written as $p(f\mid \mathbf{t})$ which means given certain data
+$\mathbf{t}$ the probability of a random variable $f$. 
+If there is no given data, then obviously
+the probability of the random variable $f$ is $p(f)$ which is the prior.
 
 % The predictive posterior distribution of the model:
-\end{question}
 
-\begin{question}{12}
-This prior encodes that we have no perference on the latent variable. It just 
- shows that we have no information about the latent variable $X$. Therefore, 
- we assume that it is a zero-mean Gaussian and each compoent are indepenent.
-
- \begin{figure}[h!]
+\begin{figure}[h!]
   \subfloat[1111, $\mathcal{D}$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l005.png}
   }
@@ -475,7 +470,13 @@ This prior encodes that we have no perference on the latent variable. It just
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l1000.png}
   }
   \caption{fixme}
-  \end{figure}
+\end{figure}
+\end{question}
+
+\begin{question}{12}
+This prior encodes that we have no perference on the latent variable. It just 
+ shows that we have no information about the latent variable $X$. Therefore, 
+ we assume that it is a zero-mean Gaussian and each compoent are indepenent.
 \end{question}
 
 \begin{question}{13}
