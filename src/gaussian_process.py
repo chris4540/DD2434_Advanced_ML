@@ -217,7 +217,8 @@ def noisyCos(x, mean = 0, variance = 0.2):
     return fun(x) + epsilon
 
 def fun(x):
-    return np.sin(3*x)*(2 + (0.5*x - 1)**2)
+    # return np.sin(3*x)*(2 + (0.5*x - 1)**2)
+    return np.sin(3*x) + 2*x
 
 if __name__ == "__main__":
 
@@ -225,7 +226,7 @@ if __name__ == "__main__":
     # =============================
     # Plot prior function samples
     # =============================
-    lengthscale = 10
+    lengthscale = 1.1
     sigma = 1
     # if True:
     #     x, mu, K = estimate_sqr_exp_prior(sigma, lengthscale)
@@ -234,25 +235,25 @@ if __name__ == "__main__":
     #     fname = "../fig/Q6-prior.png".format("{:.2f}".format(lengthscale).replace('.', ''))
     #     plt.savefig(fname, dpi=100)
 
-    observation_no = 9
+    observation_no = 5
     unseen_observation_no = 500
     # Generate input data
     x = np.linspace(-4, 6, observation_no)
     # Generate unseen data
-    z = np.linspace(-12, 18, unseen_observation_no)
+    z = np.linspace(-4, 6, unseen_observation_no)
     # Set mean and variance for error distribution around y
     noise_mean = 0
-    noise_var = 3.5
+    noise_var = 0.01
     # Generate output data
     y = noisyCos(x, noise_mean, noise_var)
 
     X = np.reshape(x, (-1, 1))
     Z = np.reshape(z, (-1, 1))
     # Estimate posterior based on X,Y,Z
-    mu, cov = estimate_sqr_exp_posterior(sigma, lengthscale, X, y, Z, .1)
+    mu, cov = estimate_sqr_exp_posterior(sigma, lengthscale, X, y, Z, 0)
     # Plot posterior samples
     plot_gp_posterior(Z, mu, cov, sample_functions=10, training_x=x, training_y=y,
                         title = "Lengthscale: " + str(lengthscale))
     # fname = "../fig/Q10-post-l{}-nvar4.png".format("{:.2f}".format(lengthscale).replace('.', ''))
-    fname = "../fig/Q10-post-l{}.png".format("{:.2f}".format(lengthscale).replace('.', ''))
+    fname = "../fig/Q6-post-l{}.png".format("{:.2f}".format(lengthscale).replace('.', ''))
     plt.savefig(fname, dpi=100)

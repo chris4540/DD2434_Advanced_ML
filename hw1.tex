@@ -178,7 +178,7 @@ Consider the equation 7 in the question with respect to the parameters $\textbf{
                              [\textbf{vec}(\textbf{T}) - \textbf{vec}(\textbf{WX})] \\
        &-\frac{1}{2\tau^2}[\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)]^T
                           [\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)] \\
-       &+\text{Const.}
+       &+\text{Const.} \numberthis \label{eq:Q5-loglike-RHS}
 \end{align*}
 We ignore those terms which are not functions of $\mathbf{W}$ and say they are constants.
 
@@ -222,9 +222,15 @@ Consider the linear terms on both sides:
        \textbf{vec}(\textbf{T}) + \frac{1}{\tau^2}\textbf{vec}(\textbf{W}_0)]
 \end{equation}
 
+Consider the equation \eqref{eq:Q5-loglike-RHS}, it is the right hand side of the
+log posterior. If we maximize it, the first term corresponds to minimize the
+least square term. And the second term can be viewed as the regularization term.
+Therefore, the first term of the log posterior is related to minimizing 
+the least square error of the linear regression problem.
+
 Consider an infinitely broad prior, which means $\tau \to \infty$, reduces the 
 mean and covariance of the posterior to the mean and covariance of the likelihood
-estimated under maximum likelihood approach. \par
+estimated under maximum likelihood approach.
 
 The constant $Z$ plays no role in the calculation since only the quadratic and linear
  terms are considered.
@@ -253,13 +259,31 @@ function controlled by the hyperparameter $\bm{\theta}$. The covariance function
 tells that if two input points are similar, then the output should be similar as
 well. The specification of the covariance function indicates a distribution over 
 functions. To visualize it, we can draw some smaples from the distribution of 
-function evaluated at some input points.
+function evaluated at some test input points.
+
+Moreover, if we consider the marginal likelihood:
+\begin{align*}
+  p(\mathbf{T}\mid\mathbf{X}, \bm{\theta}) 
+    &= \int p(\mathbf{T}\mid f)p(f\mid \mathbf{X}, \bm{\theta})df
+\end{align*}
+It means we consider all possible functions and average data likelihood over on those functions.
+It also means we aggregate the information from prior and likelihood to estimate the
+probability of evidence.
+
+If we draw some samples from the predictive posterior, we can find that the 
+covariance of the prior allows how to predict the points not observed in bayesian
+view.
 
 %TODO: Fix this figure, use python to replot it
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.5\linewidth]{fig/Q6-prior.png}
   \caption{Sample functions sampled from the prior}
+\end{figure}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{fig/Q6-post-l110.png}
+  \caption{Sample predictive functions, predictive mean, and predictive covariance}
 \end{figure}
 \end{question}
 
