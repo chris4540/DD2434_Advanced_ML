@@ -475,8 +475,6 @@ The sample functions alters a bit compared to the prior since the strong asumpti
 on the correlation of points. In other words, the prior indicate that it is a 
 restrictive model and therefore data can not alter the model too much.
 
-
-
 \begin{figure}[h!]
   \subfloat[$l = 0.05$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l005.png}
@@ -496,6 +494,38 @@ restrictive model and therefore data can not alter the model too much.
   \caption{Sample functions, mean and variance of the prediction posterior with different length scales}
   \label{fig:Q11-predict-post}
 \end{figure}
+
+Consider the covariance matrix in the prior is:
+\begin{align*}
+  k(\mathbf{x}_i, \mathbf{x}_j) + \sigma^2\delta_{ij}
+\end{align*}
+it is equivalent to considing the sample noise. The predictive poesterior will
+move towards to the prior since the likelihood of data becomes less informative.
+
+Consider the noise is Gaussian with zero-mean and the variance is 4 (because $t_i$ is 1-d).
+The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
+\begin{figure}[h!]
+  \subfloat[$l = 0.05$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l005-nvar4.png}
+  }
+  \hfill
+  \subfloat[$l = 0.5$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l050-nvar4.png}
+  }
+  \vskip\baselineskip
+  \subfloat[$l = 1.0$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l100-nvar4.png}
+  }
+  \hfill
+  \subfloat[$l = 10.0$]{%
+  \includegraphics[width=0.4\textwidth]{fig/Q10-post-l1000-nvar4.png}
+  }
+  \caption{Sample functions, mean and variance of the prediction posterior with 
+           different length scales, noise variance = 4}
+  \label{fig:Q11-predict-post-noise4}
+\end{figure}
+
+
 \end{question}
 
 \begin{question}{12}
