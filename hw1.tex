@@ -532,12 +532,15 @@ we are looking for data to provide more information about the representation tra
 
 \begin{question}{13}
 Consider the linear equation of $\mathbf{Y}(\mathbf{X})$:
-  \begin{align*}
-    \mathbf{Y}(\mathbf{X}) = \mathbf{W}\mathbf{X} + \bm{ErrorMatrix}
-  \end{align*}
+\begin{align*}
+  \mathbf{Y}(\mathbf{X}) &= \mathbf{W}\mathbf{X} + \mathbf{M} + \mathbf{E} \\
+  \mathbf{E} &= [\bm{\epsilon}, \bm{\epsilon}, ..., \bm{\epsilon}] \\
+  \mathbf{M} &= [\bm{\mu}, \bm{\mu}, ..., \bm{\mu}] \\  
+\end{align*}
+
 And each column of $\mathbf{Y}$ can be written as:
 \begin{align*}
-  \mathbf{y}_i = \mathbf{W}\mathbf{x}_i + \bm{\epsilon}
+  \mathbf{y}_i = \mathbf{W}\mathbf{x}_i + \bm{\mu} +\bm{\epsilon}
 \end{align*}
 Because $p(\mathbf{X})$ and $p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})$ are Gaussian, 
  the marginal distribution is also Gaussian.
@@ -555,9 +558,8 @@ Notes that $\mathbf{W}$ is given, $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \s
 \begin{align*}
   \mathbb{E}[\mathbf{y}_i] &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\ 
   &= \mathbb{E}[\mathbf{W}\mathbf{x}_i + \bm{\epsilon}] \\
-  &= \mathbf{0} + \mathbf{0} 
-                      && (\text{by the prior }\mathbb{E}[\mathbf{x}_i] = \mathbf{0})\\
-  &= \mathbf{0} \\
+  &= \bm{\mu} + \mathbf{0} \\
+  &= \bm{\mu} \\
   \text{cov}[\mathbf{y}_i] 
   &= \mathbb{E}[(\mathbf{W}\mathbf{x}_i + \bm{\epsilon})
                 (\mathbf{W}\mathbf{x}_i + \bm{\epsilon})^{T}] \\
@@ -571,11 +573,13 @@ Notes that $\mathbf{W}$ is given, $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \s
 \end{align*}
 
 The marginal distribution is:
-\begin{equation}\label{eq:q13-result}
+\begin{align*}
   p(\mathbf{Y}\mid\mathbf{W}) 
-  = \prod_{i=1}^{N} 
-    \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{C})
-\end{equation}
+  &= \prod_{i=1}^{N} 
+    \mathcal{N}(\mathbf{y}_i\mid\bm{\mu}, \mathbf{C}) \\
+  &= \mathcal{N}(\text{vec}(\mathbf{Y})\mid\text{vec}(\mathbf{M}), \mathbf{I}_N\otimes\mathbf{C})
+  \numberthis  \label{eq:q13-result}
+\end{align*}
 where $\mathbf{C}$ is a covariance matrix defined as:
 \begin{equation}\label{eq:q13-matC}
   \mathbf{C} = \mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I}
@@ -585,7 +589,8 @@ where $\mathbf{C}$ is a covariance matrix defined as:
 \begin{question}{14}
 First, let's write down different estimation in log-space.
 
-Consider we have a linear relation $\mathbf{Y}(\mathbf{X})$ mentioned in Question 13.
+Consider we have a linear relation $\mathbf{Y}(\mathbf{X})$ mentioned in Question 13
+and set $\bm{\mu} = \mathbf{0}$.
 \\ 
 Maximum-likelihood estimation:
 \begin{align*}
@@ -642,16 +647,18 @@ The objective function:
 \begin{align*}
   \mathcal{L}(\mathbf{W}) &= -\log(p(\mathbf{Y}\mid\mathbf{W})) \\
   &= -\prod_{i=1}^{N} \mathcal{N}(\mathbf{y}_i\mid\mathbf{0}, \mathbf{C})
-      && \text{(make use of \eqref{eq:q13-result})} \\
+      && \text{(use eq. \eqref{eq:q13-result})} \\
   &= \frac{ND}{2}\log{2\pi} + \frac{N}{2}\log(|\mathbf{C}|) 
-     + \frac{1}{2} \sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i \\
+     + \frac{1}{2} \sum_{i=1}^{N} (\mathbf{y}_i - \bm{\mu})^T \mathbf{C}^{-1}(\mathbf{y}_i - \bm{\mu}) \\
   &= \frac{N}{2}[D\log(2\pi) + \log(|\mathbf{C}|) + \text{Tr}(\mathbf{C}^{-1}\mathbf{S})]
 \end{align*}
-where S is defined as:
+where $\mathbf{S}$ is defined as:
 \begin{align*}
-  \mathbf{S} = \frac{1}{N}\sum_{i=1}^{N} \mathbf{y}_i\mathbf{y}_i^T
+  \mathbf{S} = \frac{1}{N}\sum_{i=1}^{N} (\mathbf{y}_i - \bar{\mathbf{y}})(\mathbf{y}_i - \bar{\mathbf{y}})^T
 \end{align*}
-\\
+Since $\bm{\mu}$ is estimated as $\bar{\mathbf{y}}$ by maximum likelihood method with respect to $\bm{\mu}$.
+We should notice that $\mathbf{S}$ is a symmetric matrix since $\mathbf{S}$ indeed is a data covariance matrix.
+
 Below is the derive of the gradient in element-wise approach. The Matrix cookbook 2012 Ed.
 is used in this derive. "cookbook Eq.133" means using the equation 133 in the cookbook.\\
 Consider equation \eqref{eq:q13-matC} in element-wise form:
