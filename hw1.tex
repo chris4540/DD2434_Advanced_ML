@@ -499,7 +499,7 @@ Consider the covariance matrix in the prior is:
 \begin{align*}
   k(\mathbf{x}_i, \mathbf{x}_j) + \sigma^2\delta_{ij}
 \end{align*}
-it is equivalent to considing the sample noise. The predictive poesterior will
+It is equivalent to considing the sample noise. The predictive posterior will
 move towards to the prior since the likelihood of data becomes less informative.
 
 Consider the noise is Gaussian with zero-mean and the variance is 4 (because $t_i$ is 1-d).
@@ -529,9 +529,9 @@ The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
 \end{question}
 
 \begin{question}{12}
-This prior encodes that we have no perference on the latent variable. It just 
- shows that we have no information about the latent variable $X$. Therefore, 
- we assume that it is a zero-mean Gaussian and each compoent are indepenent.
+This prior encodes that we have no information about the latent variable $X$. 
+Therefore, we assume that it is a zero-mean unit-covariance Gaussian. We do that becasue
+we are looking for data to provide more information about the representation transform.
 \end{question}
 
 \begin{question}{13}
