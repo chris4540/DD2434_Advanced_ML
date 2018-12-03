@@ -451,25 +451,50 @@ $\mathbf{t}$ the probability of a random variable $f$.
 If there is no given data, then obviously
 the probability of the random variable $f$ is $p(f)$ which is the prior.
 
-% The predictive posterior distribution of the model:
+Here, we consider the sample observations are noise free.
+And the prediction posterior distribution can be written as:
+\begin{align*}
+  \mathbf{f}_{*} \mid \mathbf{X}_{*}, \mathbf{X}, \mathbf{t} \sim \mathcal{N}(&
+    K(\mathbf{X}_*, \mathbf{X})K(\mathbf{X}, \mathbf{X})^{-1}\mathbf{t}, \\
+    &K(\mathbf{X}_*, \mathbf{X}_*) 
+      - K(\mathbf{X}_*, \mathbf{X})K(\mathbf{X}, \mathbf{X})^{-1}K(\mathbf{X}, \mathbf{X}_*),
+  )
+\end{align*}
+where $\mathbf{X}_*$ is the test input and $\mathbf{f}_{*}$ is the corresponding output.
+
+Sample functions, predictive mean and variance of the posterior are shown in 
+figure \ref{fig:Q11-predict-post}. The black dash lines are the predictive mean
+functions. The blue shadows are the range from $\mu - \sigma$ to $\mu + \sigma$.
+
+The results are desirable. For $l = 0.05$, the prior indicates that each point 
+are almost uncorrelated. The mean function shows this point. For $l = 0.1$ and $l = 1.0$,
+we can see that the mean function becomes less fluctuating. For $l = 10$, sample
+noise ($\sigma^2 = 0.1$) is added to avoid the invalid inverse of the gram matrix
+$K(\mathbf{X}, \mathbf{X})$ to be zero. 
+The sample functions alters a bit compared to the prior since the strong asumption
+on the correlation of points. In other words, the prior indicate that it is a 
+restrictive model and therefore data can not alter the model too much.
+
+
 
 \begin{figure}[h!]
-  \subfloat[1111, $\mathcal{D}$]{%
+  \subfloat[$l = 0.05$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l005.png}
   }
   \hfill
-  \subfloat[222, $\mathcal{D}$]{%
+  \subfloat[$l = 0.5$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l050.png}
   }
   \vskip\baselineskip
-  \subfloat[Plot evident against all data sets, $\mathcal{D}$]{%
+  \subfloat[$l = 1.0$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l100.png}
   }
   \hfill
-  \subfloat[Plot evident against possible data sets, $\mathcal{D}$]{%
+  \subfloat[$l = 10.0$]{%
   \includegraphics[width=0.4\textwidth]{fig/Q10-post-l1000.png}
   }
-  \caption{fixme}
+  \caption{Sample functions, mean and variance of the prediction posterior with different length scales}
+  \label{fig:Q11-predict-post}
 \end{figure}
 \end{question}
 
