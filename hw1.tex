@@ -803,11 +803,16 @@ Second, large variance of the weighting factor allows to sample a weighting vect
 with large L2-norm from the distribution. 
 In the sense of SVM, the margin of the sparation plain is 
 inversely proportional to the L2-norm of the weighting vector. Therefore, we
-allow the speration plane with a large uncertainty or large variation and high 
+allow the speration plane with a large uncertainty and high 
 flexiblity.
 \end{question}
 
 \begin{question}{22}
+The sum of the evidence over all data sets which belong to $\mathcal{D}$ is 1. 
+It means given a model $M_i$ sum the probability over all possible data sets 
+and it obviously equals to 1. It also means that each
+$p(\mathcal{D}\mid M_i)$ is a valid probability distribution.
+
 The evidence over the whole dataset is shown in figure \ref{fig:PlotEvid}.
 
 Take a look on figure \ref{subfig-2:plotEvidSub}.
