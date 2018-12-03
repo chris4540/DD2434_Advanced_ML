@@ -1,8 +1,3 @@
-% --------------------------------------------------------------
-% This is all preamble stuff that you don't have to worry about.
-% Head down to where it says "Start here"
-% --------------------------------------------------------------
- 
 \documentclass[12pt]{article}
  
 \usepackage[margin=1in]{geometry} 
@@ -705,20 +700,22 @@ And we also have:
   \end{align*}
 
 Therefore, the objective function and the corresponding marginal likelihood
+$p(\mathbf{Y}\mid\mathbf{W})$
 are invariant with respect to chossing a $\widetilde{\mathbf{W}}$ which satisfies
 $\widetilde{\mathbf{W}} = \mathbf{WR}$.
 
-  \begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
-    \centering
-    \includegraphics[width=0.5\linewidth]{fig/Q16-replearn.png}
-    \caption{Plot }
-    \label{fig:q16-replearn}
-  \end{figure}
+The scale of the learned representation is magnified for easier comparsion.
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.5\linewidth]{fig/Q16-replearn.png}
+  \caption{Plot learned and original representations of $\mathbf{X}$}
+  \label{fig:q16-replearn}
+\end{figure}
 \end{question}
 
 \begin{question}{17}
 It is the simplest model since it has zero degree of freedom to change the model.
-It implies that there is a equal probability of generating different kinds of
+The model implies that there is a equal probability of generating different kinds of
 data. To answer whether a model is good bad model, it depends the evidence
 of the data. 
 
@@ -728,7 +725,7 @@ of evidence. However, to $\mathcal{D}_2$, $M_1$ is a bad model since $M_1$ place
 zero probability over $\mathcal{D}_2$ and $M_0$ becomes a good model to $\mathcal{D}_2$.
 \begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
   \centering
-  \includegraphics[width=0.5\linewidth]{q17.jpg}
+  \includegraphics[width=0.5\linewidth]{fig/Q17.jpg}
   \caption{The probability of evidence of each model}
   \label{fig:q17-model-evidence}
 \end{figure}
