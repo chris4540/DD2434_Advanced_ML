@@ -652,7 +652,8 @@ where S is defined as:
   \mathbf{S} = \frac{1}{N}\sum_{i=1}^{N} \mathbf{y}_i\mathbf{y}_i^T
 \end{align*}
 \\
-Below is the derive of the gradient in element-wise approach.\\
+Below is the derive of the gradient in element-wise approach. The Matrix cookbook 2012 Ed.
+is used in the derive. "cookbook Eq.133" means using the equation 133 in the cookbook.\\
 Consider equation \eqref{eq:q13-matC} in element-wise form:
 \begin{align*}
   C_{kl} &= (\mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I})_{kl} \\
@@ -670,10 +671,10 @@ Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
   \frac{\partial}{\partial W_{ij}}\frac{N}{2}\log(|\mathbf{C}|)
   &= \frac{N}{2}[\sum_{k,l} \frac{\partial \log(|\mathbf{C}|)}{\partial C_{kl}}
                            \frac{\partial C_{kl}}{\partial W_{ij}} ]
-      && (\text{matrix cookbook 2012 Eq.133}) \\
+      && (\text{cookbook Eq.133}) \\
   &= \frac{N}{2}[\sum_{k,l} ((\mathbf{C}^T)^{-1})_{kl}
                             \frac{\partial C_{kl}}{\partial W_{ij}} ]
-      && (\text{matrix cookbook 2012 Eq.57}) \\
+      && (\text{cookbook Eq.57}) \\
   &= \frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-1})_{kl}
                  (W_{lj}\delta_{ik} + W_{kj}\delta_{il})]
       && (\text{use eq.\eqref{eq:dCdW} and } \mathbf{C}^T = \mathbf{C}) \\
@@ -684,6 +685,7 @@ Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
   &= \frac{N}{2}[\sum_{l} (\mathbf{C}^{-1})_{il}W_{lj}
         + \sum_{k} (\mathbf{C}^{-1})_{ik}W_{kj}]
       && (\mathbf{C}^{-1} = (\mathbf{C}^{-1})^T) \\
+  \frac{\partial}{\partial \mathbf{W}}\frac{N}{2}\log(|\mathbf{C}|)
   &= \frac{N}{2}[2\mathbf{C}^{-1}\mathbf{W}] \\
   &= N\mathbf{C}^{-1}\mathbf{W}
 \end{align*}
