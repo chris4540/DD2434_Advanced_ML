@@ -689,6 +689,24 @@ Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
   &= \frac{N}{2}[2\mathbf{C}^{-1}\mathbf{W}] \\
   &= N\mathbf{C}^{-1}\mathbf{W}
 \end{align*}
+For the sake of convenience, we define $(\mathbf{C}^{-1})^T = \mathbf{C}^{-T}$.\\
+Consider the derivatives of $\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})$:
+
+\begin{align*}
+  \frac{\partial}{\partial W_{ij}}\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})
+  &= \frac{N}{2}[\sum_{k,l} \frac{\partial \text{Tr}(\mathbf{C}^{-1}\mathbf{S})}{\partial C_{kl}}
+                            \frac{\partial C_{kl}}{\partial W_{ij}} ]\\
+  &= \frac{N}{2}[\sum_{k,l} (-\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{kl}
+                            \frac{\partial C_{kl}}{\partial W_{ij}} ]\\
+  &= -\frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{kl}
+                            (W_{lj}\delta_{ik} + W_{kj}\delta_{il}) ]\\
+  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{il}W_{lj}
+                + \sum_{k} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{ki}W_{kj}] \\
+  &= -\frac{N}{2}[\sum_{l} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{il}W_{lj}
+                + \sum_{k} (\mathbf{C}^{-T}\mathbf{S}^{T}\mathbf{C}^{-T})_{ik}W_{kj}] \\
+  \frac{\partial}{\partial \mathbf{W}}\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})
+  &= -N\mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W}
+\end{align*}
 Therefore:
 \begin{align*}
   \frac{\partial{\mathcal{L}}}{\partial{\mathbf{W}}} 
