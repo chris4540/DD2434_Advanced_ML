@@ -852,11 +852,15 @@ Choosing the form of $M_1$, $M_2$, and $M_3$, we only choose linear separable da
 Therefore, $M_1$, $M_2$, and $M_3$ place probability mass over the linear separable
 dataset.
 
-%TODO: more with graphs
 The linear separable datasets are suitable for the models $M_1, M_2, M_3$.
 
-The uncertainty of models can be considered as model variance. 
-It implies the uncertainty....% TODO
+To the number of data sets each model can explain, $M_3$ is the most, then followed
+by $M_2$, and then $M_1$.
+The uncertainty of models can be considered as ($1 - p(d_i\mid M_i)$),
+where $d_i$ is one of the data sets.
+Since the sum of probability over a random variable space must be one. The more
+data sets a model can explain, the less certainty (i.e. $p(d_i\mid M_i)$)
+the model can have.
 
 In terms of number of model parameters, $M_3$ is more flexible then $M_2$ since
 $M_3$ has three parameters and $M_2$ has two.
