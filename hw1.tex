@@ -57,10 +57,11 @@ Combine these two assumptions, we have the Gaussian form likelihood.
 
 The assumption of gaussian noise is also sensible.
 Consider that we draw a lot of samples from the population.
-If we consider the noise as a random variable, then the sum
+If we consider the noise of each observation as an random variable, then the sum
 (or the average) of noise will be a random variable following a normal distribution 
-by the central limit theorem. Therefore, we can consider the shared noise across 
-all sample as a random variable following a normal distribution.
+by the central limit theorem. Therefore, we can consider the noise across 
+all samples as an independent and identically distributed random variable 
+following a normal distribution.
 
 The unbias noise assumption is correct since if the noise is biased we can move the
 bias term to the function $f(\bf{x}_i)$.
@@ -80,9 +81,9 @@ $$\mathrm {P} \left(\bigcap _{k=1}^{n}A_{k}\right)=
 
 Therefore the likelihood would be:
 $$ 
-  p(\bf{T}\mid f,\bf{X}) =
-  \prod _{i=1}^{N}p(\bf{t}_i \mid \bf{t}_{i-1},...,\bf{t}_{1},
-  f,\bf{X})
+  p(\mathbf{T}\mid f,\mathbf{X}) =
+  \prod _{i=1}^{N}p(\mathbf{t}_i \mid \mathbf{t}_{i-1},...,\mathbf{t}_{1},
+  f,\mathbf{X})
 $$
 
 \end{question} 
@@ -93,8 +94,8 @@ $$
 \begin{question}{3}
 
 $$ 
-  p(\bf{T}\mid \bf{X},\bf{W}) =
-  \prod _{i=1}^{N}\mathcal{N}(\bf{W}\bf{x}_i, \sigma^2\bf{I})
+  p(\mathbf{T}\mid \mathbf{X},\mathbf{W}) =
+  \prod _{i=1}^{N}\mathcal{N}(\mathbf{W}\mathbf{x}_i, \sigma^2\mathbf{I})
 $$
 
 \end{question}
@@ -276,7 +277,7 @@ It also means we aggregate the information from prior and likelihood to estimate
 probability of evidence.
 
 If we draw some samples from the predictive posterior, we can find that the 
-covariance of the prior allows how to predict the points not observed in bayesian
+covariance of the prior controls how to predict the unobserved points in bayesian
 view.
 
 %TODO: Fix this figure, use python to replot it
