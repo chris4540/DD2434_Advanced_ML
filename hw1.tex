@@ -55,9 +55,9 @@ And each components the noise is:
 
 Combine these two assumptions, we have the Gaussian form likelihood.
 
-The assumption of gaussian noise is also sensible.
+The assumption of Gaussian noise is also sensible.
 Consider that we draw a lot of samples from the population.
-If we consider the noise of each observation as an random variable, then the sum
+If we consider the noise of each observation as a random variable, then the sum
 (or the average) of noise will be a random variable following a normal distribution 
 by the central limit theorem. Therefore, we can consider the noise across 
 all samples as an independent and identically distributed random variable 
@@ -104,11 +104,10 @@ $$
 % Question 4
 \begin{question}{4}
 The choice of the prior distribution reflects the choice of regularizer. 
-Chossing $L_1$ norm as regularizer is known as the lasso (least absolute shrinkage and selection operator).
-The regularizer will force some weighting coefficients $w_j$ to be zero, given 
-a proper choice of model parameter $\tau$. It plays the role of feature selection
+Choosing $L_1$ norm as regularizer is known as the lasso (least absolute shrinkage and selection operator).
+The regularizer will force some weighting coefficients $w_j$ to be zero, given a proper choice of the model parameter $\tau$. It plays the role of feature selection
 since those zero weighting coefficients indicate that the corresponding features
-are irrelvant to the output.
+are irrelevant to the output.
 
 The penalization term or the negative log-prior:
 \begin{align*}
@@ -118,17 +117,16 @@ If $q = 1$, that is the absolute-value norm.
 If $q = 2$, that is the euclidean norm.
 
 In figure \ref{fig:Q4-min-reg},
-we can see that in the corresponding minimization problem (i.e. least sqare problem).
-The regularization term acts as a constrain in the minimization problem.
+we can see that in the corresponding minimization problem (i.e. least squares problem).
+The regularization term acts as a constraint in the minimization problem.
 
 In the right head side of the figure, it is a minimization problem using $L_1$
 regularization term.
-If using $L_1$ norm, the minimization result $\mathbf{w}^{*}$ is forced to lay on 
-the $w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and which
-can be understood as feature selection. In the figure, the contrains is a square
+If using $L_1$ norm, the minimization result $\mathbf{w}^{*}$ is forced to lay on the $w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and which
+can be understood as feature selection. In the figure, the constraint is a square
 shape contour.
 
-If using $L_2$ norm, the contrain is a circle as the form of the regularization 
+If using $L_2$ norm, the constraint is a circle as the form of the regularization 
 term.
 
 
@@ -170,7 +168,7 @@ $$
 
 To calculate the mean and covariance of the posterior over the parameters,
 Consider the equation 7 in the question with respect to the parameters $\textbf{W}$
- and compare the quadratic and linear terms of the exponents in both sides:
+ and compare the quadratic and linear terms of the exponents both sides:
 \begin{align*}
   p(\textbf{W}\mid \textbf{X}, \textbf{T}) =&
   \frac{1}{Z}p(\textbf{T}\mid \textbf{X}, \textbf{W})p(\textbf{W})  \\
@@ -228,7 +226,7 @@ Consider the linear terms on both sides:
        \textbf{vec}(\textbf{T}) + \frac{1}{\tau^2}\textbf{vec}(\textbf{W}_0)]
 \end{equation}
 
-Consider the equation \eqref{eq:Q5-loglike-RHS}, it is the right hand side of the
+Consider the equation \eqref{eq:Q5-loglike-RHS}, it is the right-hand side of the
 log posterior. If we maximize it, the first term corresponds to minimize the
 least square term. And the second term can be viewed as the regularization term.
 Therefore, the first term of the log posterior is related to minimizing 
@@ -238,9 +236,8 @@ Consider an infinitely broad prior, which means $\tau \to \infty$, reduces the
 mean and covariance of the posterior to the mean and covariance of the likelihood
 estimated under maximum likelihood approach.
 
-The constant $Z$ plays no role in the calculation since only the quadratic and linear
- terms are considered.
-% Subsitute back \eqref{eq:q5-covar} and \eqref{eq:q5-mean} into the posterior
+The constant $Z$ plays no role in the calculation since only the quadratic and linear terms are considered.
+% Substitute back \eqref{eq:q5-covar} and \eqref{eq:q5-mean} into the posterior
 
 \end{question}
 % End question 5
@@ -254,18 +251,15 @@ The constant $Z$ plays no role in the calculation since only the quadratic and l
 how the function looks like before we consider the data.
 
 We choose the mean function as zero
-since we have forced the data to have zero-mean. We can choose a non-zero mean
+since we have forced the data to have zero mean. We can choose a non-zero mean
 function of the Gaussian process. Indeed, we can use a fixed mean function, but
-the result is trivial that we can obtain the predictive mean function by adding 
-the mean-removal result to the fixed mean function.
+the result is trivial that we can obtain the predictive mean function by adding the mean-removal result to the fixed mean function.
 (Rasmussen, C. E., 2004, page 27)
 
-The covariance of the prior, is the covariance
+The covariance of the prior is the covariance
 function controlled by the hyperparameter $\bm{\theta}$. The covariance function
 tells that if two input points are similar, then the output should be similar as
-well. The specification of the covariance function indicates a distribution over 
-functions. To visualize it, we can draw some smaples from the distribution of 
-function evaluated at some test input points.
+well. The specification of the covariance function indicates a distribution over functions. To visualize it, we can draw some samples from the distribution of function evaluated at some test input points.
 
 Moreover, if we consider the marginal likelihood:
 \begin{align*}
@@ -274,10 +268,10 @@ Moreover, if we consider the marginal likelihood:
 \end{align*}
 It means we consider all possible functions and average data likelihood over on those functions.
 It also means we aggregate the information from prior and likelihood to estimate the
-probability of evidence.
+the probability of evidence.
 
 If we draw some samples from the predictive posterior, we can find that the 
-covariance of the prior controls how to predict the unobserved points in bayesian
+covariance of the prior controls how to predict the unobserved points in Bayesian
 view.
 
 %TODO: Fix this figure, use python to replot it
@@ -324,19 +318,17 @@ The graphical model is shown in figure \ref{fig:Q7-graphs}
   p(\mathbf{T} \mid \mathbf{X}, \bm{\theta}) = \int p(\mathbf{T}\mid f)p(f) df
 \end{align*}
 
-The marginalisation connects the prior and the likelihood of the data. The
-integral is an weighted average averaging the likelihood of the data with the prior
+The marginalization connects the prior and the likelihood of the data. The
+integral is a weighted average averaging the likelihood of the data with the prior
 as weighting.
 
-The uncertainties of the data and the prior are combined or added up into the 
-uncertainty of the marginalisation. The covariance of the marginalisation is
+The uncertainties of the data and the prior are combined or added up into the uncertainty of the marginalization. The covariance of the marginalisation is
 $k(\mathbf{X},\mathbf{X}) + \sigma^2\mathbf{I}$. The first term comes from the
 uncertainty of the prior. 
 The second term comes from the uncertainty of data likelihood.
 
 
-The hyperparameters $\bm{\theta}$ still condition on the part of covariance of the 
- marginalisation from the prior. That part of covariance is the kernel function.
+The hyperparameters $\bm{\theta}$ still condition on the part of covariance of the marginalization from the prior. That part of covariance is the kernel function.
 \end{question}
 
 \begin{question}{9}
@@ -395,14 +387,13 @@ And the figure \ref{fig:Q9-prior} shows the prior distribution over $\mathbf{W}$
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.3$}
 \end{figure}
 
-When more data observed, the posterior become concentrated over the parameter space.
-In general, we can say that the posterior receive more information about data.
-Therefore, the posterior can have more confident to tell what is the underlying 
-parameter behind the data. On the other hand, the posterior gaussian covariance
-could be expressed as 
+When more data observed, the posterior becomes concentrated over the parameter space.
+In general, we can say that the posterior receive more information about the data.
+Therefore, the posterior can have more confidence to tell what is the underlying parameter behind the data. 
+On the other hand, the posterior Gaussian covariance could be expressed as 
 $(\frac{1}{\sigma^2}\mathbf{X}\mathbf{X}^T + \frac{1}{\tau^2}\mathbf{I})^{-1}$.
 The more data observed, the determinant of $\mathbf{X}\mathbf{X}^T$ will be 
-larger and the determinant of covariance matrix will be smaller.
+larger and the determinant of the covariance matrix will be smaller.
 
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
@@ -426,10 +417,8 @@ larger and the determinant of covariance matrix will be smaller.
   \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.7$}
 \end{figure}
 
-Consider the noise with different values of $\sigma$, the spreading of the 
-probability distribution of posterior over $\mathbf{W}$ increases as the sigma
-value increases. As the uncertainty of posterior increases, the models or the 
-resulting functions variate more.
+Consider the noise with different values of $\sigma$, the spreading of the probability distribution of posterior over $\mathbf{W}$ increases as the sigma
+value increases. As the uncertainty of posterior increases, the models or the resulting functions variate more.
 \end{question}
 
 \begin{question}{10}
@@ -465,7 +454,7 @@ We choose $\sigma^2_f = 1$ for the sake of convenience.
 For the case $l = 0.05$, the correlations among points tend to zero. Therefore,
 the prior behaves as white noise.
 
-When the length scale increases, the correlation of each pair of points increases.
+When the length scale increases, the correlation between each pair of points increases.
 If the correlation is strong enough, each sample function will become a straight line.
 Therefore, as the correlation increases, the fluctuation of the sample functions decreases.
 \end{question}
@@ -488,18 +477,18 @@ And the prediction posterior distribution can be written as:
 \end{align*}
 where $\mathbf{X}_*$ is the test input and $\mathbf{f}_{*}$ is the corresponding output.
 
-Sample functions, predictive mean and variance of the posterior are shown in 
-figure \ref{fig:Q11-predict-post}. The black dash lines are the predictive mean
-functions. The blue shadows are the range from $\mu - \sigma$ to $\mu + \sigma$.
+Sample functions, predictive mean and variance of the posterior are shown in figure \ref{fig:Q11-predict-post}. 
+The black dash lines are the predictive mean functions. 
+The blue shadows are the range from $\mu - \sigma$ to $\mu + \sigma$.
 
 The results are desirable. For $l = 0.05$, the prior indicates that each point 
 are almost uncorrelated. The mean function shows this point. For $l = 0.1$ and $l = 1.0$,
 we can see that the mean function becomes less fluctuating. For $l = 10$, sample
 noise ($\sigma^2 = 0.1$) is added to avoid the invalid inverse of the gram matrix
 $K(\mathbf{X}, \mathbf{X})$ to be zero. 
-The sample functions alters a bit compared to the prior since the strong asumption
+The sample functions alter a bit compared to the prior since the strong assumption
 on the correlation of points. In other words, the prior indicate that it is a 
-restrictive model and therefore data can not alter the model too much.
+restrictive model and therefore data cannot alter the model too much.
 
 \begin{figure}[h!]
   \subfloat[$l = 0.05$]{%
@@ -525,10 +514,10 @@ Consider the covariance matrix in the prior is:
 \begin{align*}
   k(\mathbf{x}_i, \mathbf{x}_j) + \sigma^2\delta_{ij}
 \end{align*}
-It is equivalent to considing the sample noise. The predictive posterior will
+It is equivalent to considering the sample noise. The predictive posterior will
 move towards to the prior since the likelihood of data becomes less informative.
 
-Consider the noise is Gaussian with zero-mean and the variance is 4 (because $t_i$ is 1-d).
+Consider the noise is Gaussian with zero mean and the variance is 4 (because $t_i$ is 1-d).
 The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
 \begin{figure}[h!]
   \subfloat[$l = 0.05$]{%
@@ -556,7 +545,7 @@ The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
 
 \begin{question}{12}
 This prior encodes that we have no information about the latent variable $\mathbf{X}$.
-Therefore, we assume that it is a zero-mean unit-covariance Gaussian. We do that becasue
+Therefore, we assume that it is a zero-mean unit-covariance Gaussian. We do that because
 we are looking for data to provide more information about the representation transform.
 \end{question}
 
@@ -574,7 +563,7 @@ And each column of $\mathbf{Y}$ can be written as:
 \end{align*}
 Because $p(\mathbf{X})$ and $p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})$ are Gaussian, 
  the marginal distribution is also Gaussian.
- Furthermore, we can consider each $\mathbf{y}_i$ are indepenent. Therefore, 
+ Furthermore, we can consider each $\mathbf{y}_i$ are independent. Therefore, 
  we can write:
 \begin{align*}
   p(\mathbf{Y}\mid\mathbf{W}) &= \prod_{i=1}^{N} p(\mathbf{y}_i\mid\mathbf{W}) \\
@@ -650,13 +639,13 @@ Type-II Maximum-Likelihood:
     [\sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i
       + N\log{|\mathbf{C}|}]
 \end{align*}
-Type-II maximum likelihood approach does not depends on $\mathbf{X}$ and it is
+Type-II maximum likelihood approach does not depend on $\mathbf{X}$ and it is
 very useful in our case. $N\log{|\mathbf{C}|}$ expresses the model complexity
 and $\sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i$ plays the role of
 goodness of fit. When data become more, the penalty of the model complexity becomes
 more important.
   
-The last two expression of Eq. 25 are equivalent. It is because the denominator:
+The last two expressions of Eq. 25 are equivalent. It is because the denominator:
   \begin{align*}
     \int p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})p(\mathbf{W})d\mathbf{W}
   \end{align*}
@@ -664,10 +653,9 @@ is not a function of $\mathbf{W}$. And we know that that integral gives a possit
 real number. Therefore, when finding the maximum value of $\mathbf{W}$, the denominator 
 can be ignored.
 
-The Type-II Maximum-likelihood is a sensible approach since it consider how to
- choose a parameter $\mathbf{W}$ which maximizes the model evidence. In other words,
- it is in the sense that we choose a parameter to maximize the probability of 
- getting such a set of observations.
+The Type-II Maximum-likelihood is a sensible approach since it considers how to choose a parameter $\mathbf{W}$ which maximizes the model evidence. 
+In other words,
+it is in the sense that we choose a parameter to maximize the probability of getting such a set of observations.
 \end{question}
 
 
@@ -689,7 +677,7 @@ where $\mathbf{S}$ is defined as:
 Since $\bm{\mu}$ is estimated as $\bar{\mathbf{y}}$ by maximum likelihood method with respect to $\bm{\mu}$.
 We should notice that $\mathbf{S}$ is a symmetric matrix since $\mathbf{S}$ indeed is a data covariance matrix.
 
-Below is the derive of the gradient in element-wise approach. The Matrix cookbook 2012 Ed.
+Below is the derive of the gradient in the element-wise approach. The Matrix cookbook 2012 Ed.
 is used in this derive. "cookbook Eq.133" means using the equation 133 in the cookbook.\\
 Consider equation \eqref{eq:q13-matC} in element-wise form:
 
@@ -788,7 +776,7 @@ representation of $\mathbf{x}$.
 The representation is generated from the mapping $f_{non-lin}$.
 
 We can see that there is a rotational symmetry between the learned representation
-and the original representation. It is becasue we have a degree of freedom to choose
+and the original representation. It is because we have a degree of freedom to choose
 a $\widetilde{\mathbf{W}}$ which is related to rotate the latent space coordinates.
 
 Consider $\widetilde{\mathbf{W}} = \mathbf{WR}$. In the linear model 
@@ -825,7 +813,7 @@ $p(\mathbf{Y}\mid\mathbf{W})$
 are invariant with respect to chossing a $\widetilde{\mathbf{W}}$ which satisfies
 $\widetilde{\mathbf{W}} = \mathbf{WR}$.
 
-The scale of the learned representation is magnified for easier comparsion.
+The scale of the learned representation is magnified for easier comparison.
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.5\linewidth]{fig/Q16-replearn.png}
@@ -835,9 +823,9 @@ The scale of the learned representation is magnified for easier comparsion.
 \end{question}
 
 \begin{question}{17}
-It is the simplest model since it has zero degree of freedom to change the model.
-The model implies that there is a equal probability of generating different kinds of
-data. To answer whether a model is good bad model, it depends the evidence
+It is the simplest model since it has zero degrees of freedom to change the model.
+The model implies that there is an equal probability of generating different kinds of
+data. To answer whether a model is a good or bad model, it depends on the evidence
 of the data. 
 
 In the figure \ref{fig:q17-model-evidence}, $M_1$ is a good model and $M_0$ is a 
@@ -868,23 +856,21 @@ of the grid.
 
 Since $M_1$ consider only one coordinate of the grid, we can imagine that only a 
 small subset of data can be captured by this model. 
-For example, If $x^n_1$ represents the column index of the grid, then only whole
-column has the same output can be explained by this model.
+For example, If $x^n_1$ represents the column index of the grid, then only whole column has the same output can be explained by this model.
 Therefore, the model $M_1$ has a small spreading of its probability mass over 
 $\mathcal{D}$.
 \end{question}
 
 \begin{question}{19}
-The terms in the exponent of the logistic equation can be considered as 
-a linear speration plane.
-$M_2$ and $M_3$ are considered as more flexible linear speration planes on the grid.
+The terms in the exponent of the logistic equation can be considered as a linear separation plane.
+$M_2$ and $M_3$ are considered as more flexible linear separation planes on the grid.
 Choosing the form of $M_1$, $M_2$, and $M_3$, we only choose linear separable data.
 Therefore, $M_1$, $M_2$, and $M_3$ place probability mass over the linear separable
 dataset.
 
 The linear separable datasets are suitable for the models $M_1, M_2, M_3$.
 
-To the number of data sets each model can explain, $M_3$ is the most, then followed
+To the number of data sets, each model can explain, $M_3$ is the most, then followed
 by $M_2$, and then $M_1$.
 The uncertainty of models can be considered as ($1 - p(d_i\mid M_i)$),
 where $d_i$ is one of the data sets.
@@ -898,13 +884,11 @@ In addition, $M_3$ can be considered as realization of other models
 ${M_1, M_2}$ by setting some parameters to zero.
 Therefore, $M_3$ is the most flexible among those four models.
 On the other hand, $M_0$ are considered as the most restrictive since
-it have no model parameter.
+it has no model parameter.
 
 In terms of the number of data set a model can explain, $M_0$ is the most
-flexible since it can explain all possible data by the uniform probability 
-distribution.
-$M_3$ is more flexible than $M_2$ and $M_1$. $M_2$ can explain data which can 
-also be explained by $M_3$ except one situation. That situation is all
+flexible since it can explain all possible data by the uniform probability distribution.
+$M_3$ is more flexible than $M_2$ and $M_1$. $M_2$ can explain data which can also be explained by $M_3$ except one situation. That situation is all
 grid are of the same output. It is because of the bias term $\theta^3_3$.
 \end{question}
 
@@ -913,48 +897,44 @@ In marginalization, we can encode our beliefs by setting the prior on a variable
 The variable usually we are not interested in our model.
 
 The implication of the process is to calculate the weighted average of the model
-likelihood according the prior on the parameters.
+likelihood according to the prior on the parameters.
 
 The evidence can also be regarded as the probability of generating the data set 
-$\mathcal{D}$ from a model describled by all possible parameters. That is 
-the reason why we average the likelihood weighted by the probability of each parameter.
+$\mathcal{D}$ from a model described by all possible parameters. That is the reason why we average the likelihood-weighted by the probability of each parameter.
 \end{question}
 
 \begin{question}{21}
 First, the spherical Gaussian prior implies that all components of the weighting
-vector $\bm{\theta}$ are indepenent.
+vector $\bm{\theta}$ are independent.
 
-Second, large variance of the weighting factor allows to sample a weighting vector
+Second, a large variance of the weighting factor allows sampling a weighting vector
 with large L2-norm from the distribution. 
-In the sense of SVM, the margin of the sparation plain is 
-inversely proportional to the L2-norm of the weighting vector. Therefore, we
-allow the speration plane with a large uncertainty and high 
-flexiblity.
+In the sense of SVM, the margin of the separation plain is inversely proportional to the L2-norm of the weighting vector. Therefore, we
+allow the separation plane with a large uncertainty and high flexiblity.
 \end{question}
 
 \begin{question}{22}
-The sum of the evidence over all data sets which belong to $\mathcal{D}$ is 1. 
-It means given a model $M_i$ sum the probability over all possible data sets 
-and it obviously equals to 1. It also means that each
+The sum of the evidence over all possible data sets which belong to $\mathcal{D}$ is 1. 
+It means given a model $M_i$ sum the probability over all possible data sets and it obviously equals to 1. It also means that each
 $p(\mathcal{D}\mid M_i)$ is a valid probability distribution.
 
 The evidence over the whole dataset is shown in figure \ref{fig:PlotEvid}.
 
 Take a look on figure \ref{subfig-2:plotEvidSub}.
 Considering the spreading of probability mass of each model, we can find that
-$M_0$ spreads its probability mass over whole region of data set. And the dataset
-region covered by $M_3$ is greater than $M_2$ and the data set region of $M_2$ 
+$M_0$ spreads its probability mass over the whole region of data set. And the dataset
+region covered by $M_3$ is greater than $M_2$ and the dataset region of $M_2$ 
 is greater than $M_1$.
 
 We can consider the parameterization scheme employed by each model. 
 $M_1$ represents
-a vertical speration plane (if we consider $x_0$ as the column index of the grid).
+a vertical separation plane (if we consider $x_0$ as the column index of the grid).
 The model is simple enough so that the amount of data set can be explained by this
 model is limited. 
-$M_2$ can be viewed as a speration plane passing through the origin and $M_2$ is then 
+$M_2$ can be viewed as a separation plane passing through the origin and $M_2$ is then 
 flexible than $M_1$. Thus the region covered by $M_2$ is larger by $M_1$.
-$M_3$ is more flexible since it is a speration plane allowed to have offset from the
-origin. Hence, $M_3$ can explain all linear speratable data.
+$M_3$ is more flexible since it is a separation plane allowed to have offset from the
+origin. Hence, $M_3$ can explain all linear separable data.
 
 \begin{figure}[h]
   \subfloat[Plot evident against all data sets, $\mathcal{D}$\label{subfig-1:plotEvidAll}]{%
@@ -1005,8 +985,8 @@ origin. Hence, $M_3$ can explain all linear speratable data.
 Since $M_1$ can be considered as a vectical seperation plane passing through the
 origin, it is sensible to see such configuration in table
 (\ref{subtable:M1-high}).
-In table (\ref{subtable:M1-low}), we can see that it is not possible to draw any
-vertical line to seperate crosses and circles.
+In the table (\ref{subtable:M1-low}), we can see that it is not possible to draw any
+vertical line to separate crosses and circles.
 
 \begin{table}[h]
   \centering
@@ -1041,10 +1021,9 @@ vertical line to seperate crosses and circles.
 \end{table}
 For $M_2$, it is a speration line restricted to pass through the origin the 
 center of the grid.
-It is possible to use a left-bottom to up-right diagonal line to sperate crosses
-and circles as shown in table (\ref{subtable:M2-high}). While it is not possible 
-to use any line passing through the middle box to sperate crosses and circles in
-table (\ref{subtable:M2-low}).
+It is possible to use a diagonal line from left-bottom to up-right to sperate crosses
+and circles as shown in the table (\ref{subtable:M2-high}). 
+While it is not possible to use any line passing through the center to sperate crosses and circles in the table (\ref{subtable:M2-low}).
 
 \begin{table}[h]
   \centering
@@ -1081,13 +1060,13 @@ table (\ref{subtable:M2-low}).
 It is noted that $M_3$ is the only model having a bias term (interception term)
 in the logistic regression term. 
 $M_3$ is the only model can explain all circles and crosses
-cases with its bias term. Moreover, the prior has the preference on chossing large
-parameters with its large variance. Therefore, the prior makes the seperate line 
-to have a large intercept and the line most likely seperate the data shown in table 
+cases with its bias term. Moreover, the prior has the preference for choosing large
+parameters with its large variance. Therefore, the prior makes the separate line 
+to have a large intercept and the line most likely separate the data shown in table 
 (\ref{subtable:M3-high}).
 The peak of $M_3$ in 
 figure \ref{subfig-2:plotEvidSub} can also be explained by all circles and all crosses. 
-Therefore, the model evidence of all circles or crosses is the highest for $M_3$.
+Therefore, the model evidence of all circles or crosses is the highest at $M_3$.
 
 The data set shown in table(\ref{subtable:M3-low}) is not linear separable.
 \end{question}
@@ -1101,19 +1080,18 @@ Consider $M_0$ can be writen as:
     &= \prod_{n=0}^{9}\frac{1}{1 + \exp(0)}
 \end{align*}
 
-If we use a extreme small $\sigma^2$, says $\sigma^2 = 10^{-6}$, we would probably
+If we use an extremely small $\sigma^2$, says $\sigma^2 = 10^{-6}$, we would probably
 sample all zeros from it. Therefore, all model will reduce to $M_0$.
 If we use a very large $\sigma^2$, says $\sigma^2 = 10^{6}$, we would probably
-arbitrary large number from the prior. However, the seperation line slope depends
+arbitrary large number from the prior. However, the separation line slope depends
 on the ratio of two of the parameters. Therefore, the evidence plot would not change
 as in our previous case.
 
 If we use a non-diagonal covariance matrix for the prior, we somehow impose
-contrains over parameters. The marginalisation carries the this information to 
+constraints over parameters. The marginalisation carries the this information to 
 the model evidence $p(\mathcal{D}\mid M_i)$. Therefore, we can consider
-that the models $\{{M_i}\}_{i=1}^3$ becomes restrictive under dependent choice 
-of parameter compared to indepenent choice. Each model covers smaller amount of 
-data set as show in figure \ref{fig:Q24-non-diag-plotEvid}.
+that the models $\{{M_i}\}_{i=1}^3$ becomes restrictive under the dependent choice of parameter compared to independent choice. 
+Each model covers a smaller amount of data set as shown in figure \ref{fig:Q24-non-diag-plotEvid}.
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.5\linewidth]{fig/Q24-non-diag.png}
@@ -1123,11 +1101,10 @@ data set as show in figure \ref{fig:Q24-non-diag-plotEvid}.
 
 If we use a non-zero mean prior such as $\mu = [5, 5, 5]^T$, we can see that
 some model favor on specific data sets. It is because there are peaks in figure
-\ref{fig:Q24-non-zero-plotEvid}. Those data sets are diagonal separable since 
-we make a perference on the choice of parameter.
+\ref{fig:Q24-non-zero-plotEvid}. Those data sets are diagonal separable since we make a preference on the choice of parameter.
 
 The region covered by each model should be almost the same as the zero-mean prior.
-It is because the flexiblity of models holds when changing the mean of prior.
+It is because the flexibility of models holds when changing the mean of prior.
   
   \begin{figure}[h] 
     \centering
