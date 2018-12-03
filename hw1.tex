@@ -349,6 +349,17 @@ And the figure \ref{fig:Q9-prior} shows the prior distribution over $\mathbf{W}$
 
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
+  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s1-n5.png}
+  }
+  \hfill
+  \subfloat[Functions with the parameters sampled from the posterior]{%
+  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s1-n5.png}
+  }
+  \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.1$}
+\end{figure}
+
+\begin{figure}[h!]
+  \subfloat[Posterior distribution over $\mathbf{W}$]{%
   \includegraphics[width=0.45\textwidth]{fig/Q9-post-s3-n5.png}
   }
   \hfill
@@ -366,17 +377,6 @@ could be expressed as
 $(\frac{1}{\sigma^2}\mathbf{X}\mathbf{X}^T + \frac{1}{\tau^2}\mathbf{I})^{-1}$.
 The more data observed, the determinant of $\mathbf{X}\mathbf{X}^T$ will be 
 larger and the determinant of covariance matrix will be smaller.
-
-\begin{figure}[h!]
-  \subfloat[Posterior distribution over $\mathbf{W}$]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-post-s1-n5.png}
-  }
-  \hfill
-  \subfloat[Functions with the parameters sampled from the posterior]{%
-  \includegraphics[width=0.45\textwidth]{fig/Q9-fun-s1-n5.png}
-  }
-  \caption{The posterior and the resulting functions with 5 data points, $\sigma = 0.1$}
-\end{figure}
 
 \begin{figure}[h!]
   \subfloat[Posterior distribution over $\mathbf{W}$]{%
