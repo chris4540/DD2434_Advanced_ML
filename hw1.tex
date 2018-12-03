@@ -33,7 +33,7 @@
 
 
 \newcommand\TODO[1]{\textcolor{red}{#1}}
-
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 \begin{document}
  
 % --------------------------------------------------------------
@@ -663,7 +663,7 @@ Consider equation \eqref{eq:q13-matC} in element-wise form:
                  + W_{k\theta}\frac{\partial W_{l\theta}}{\partial W_{ij}}] \\
   &= \sum_{\theta}[W_{l\theta}\delta_{ik}\delta_{\theta j} + W_{k\theta}\delta_{il}\delta_{\theta j}]
     &&(\sum_{\theta}(a_{i\theta}\delta_{\theta j}) = a_{ij}) \\
-  &= W_{lj}\delta_{ik} + W_{kj}\delta_{il}
+  &= W_{lj}\delta_{ik} + W_{kj}\delta_{il} \numberthis \label{eq:dCdW}
 \end{align*}
 
 Therefore:
