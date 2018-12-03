@@ -529,7 +529,7 @@ The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
 \end{question}
 
 \begin{question}{12}
-This prior encodes that we have no information about the latent variable $X$. 
+This prior encodes that we have no information about the latent variable $\mathbf{X}$.
 Therefore, we assume that it is a zero-mean unit-covariance Gaussian. We do that becasue
 we are looking for data to provide more information about the representation transform.
 \end{question}
@@ -589,7 +589,7 @@ where $\mathbf{C}$ is a covariance matrix defined as:
 \begin{question}{14}
 First, let's write down different estimation in log-space.
 
-Consdier we have a linear relation Y(X) mentioned in Q13.
+Consider we have a linear relation $\mathbf{Y}(\mathbf{X})$ mentioned in Question 13.
 \\ 
 Maximum-likelihood estimation:
 \begin{align*}
@@ -622,16 +622,16 @@ Type-II Maximum-Likelihood:
 Type-II maximum likelihood approach does not depends on $\mathbf{X}$ and it is
 very useful in our case. $N\log{|\mathbf{C}|}$ expresses the model complexity
 and $\sum_{i=1}^{N} \mathbf{y}_i^T \mathbf{C}^{-1}\mathbf{y}_i$ plays the role of
-goodness of fit. When data become more, the plenalty of the model complexity becomes
+goodness of fit. When data become more, the penalty of the model complexity becomes
 more important.
   
-The last two expression of Eq. 25 are equivalent. It is because the dominator:
-  \begin{align*} % TODO: input the last two integral of eq. 25
+The last two expression of Eq. 25 are equivalent. It is because the denominator:
+  \begin{align*}
     \int p(\mathbf{Y}\mid\mathbf{X}, \mathbf{W})p(\mathbf{W})d\mathbf{W}
   \end{align*}
 is not a function of $\mathbf{W}$. And we know that that integral gives a possitive
- real number. Therefore, when finding the maximum value of $\mathbf{W}$, the dominator 
- can be ignored.
+real number. Therefore, when finding the maximum value of $\mathbf{W}$, the denominator 
+can be ignored.
 
 The Type-II Maximum-likelihood is a sensible approach since it consider how to
  choose a parameter $\mathbf{W}$ which maximizes the model evidence. In other words,

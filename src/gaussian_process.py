@@ -94,7 +94,7 @@ def estimate_sqr_exp_posterior(sigma, lengthscale, X, y, Z, error_var):
     Returns: A tuple with the mean and the covariance matrix of the posterior.
     """
     tr_set_size = x.shape[0]
-    test_set_size = z.shape[0]
+    test_set_size = Z.shape[0]
     K_X = np.zeros((tr_set_size, tr_set_size))
     K_X_star = np.zeros((test_set_size, test_set_size))
     K_X_X_star = np.zeros((tr_set_size, test_set_size))
@@ -175,7 +175,7 @@ def plot_gp_posterior(x, mu, K, sample_functions = 1, training_x = None, trainin
     """
     mu = mu.flatten()
     x = x.flatten()
-
+    fig, ax = plt.subplots()
     #Generate <sample_no> sample functions from the gaussian process
     samples = np.random.multivariate_normal(mu, K, sample_functions)
 
@@ -186,13 +186,18 @@ def plot_gp_posterior(x, mu, K, sample_functions = 1, training_x = None, trainin
     plt.plot(x, mu, color = "black", linestyle = '--', zorder = 2)
     # Get predictive variance as vector
     var = np.diag(K)
+
     # Plot variance
-    plt.fill_between(x, mu - np.sqrt(var), mu + np.sqrt(var), color = 'gray')
+    plt.fill_between(x, mu - np.sqrt(var), mu +
+                     np.sqrt(var), color='blue', alpha=0.2)
 
     plt.scatter(training_x, training_y, color = 'black', s = 35.0, zorder = 3)
 
-    plt.title(title)
-    plt.show()
+    # plt.title(title)
+    fig.tight_layout()
+    fig.set_size_inches(5, 5)
+    ax.set_ylim(-8, 8)
+    # plt.show()
 
 def noisyCos(x, mean = 0, variance = 0.2):
     """
@@ -209,37 +214,45 @@ def noisyCos(x, mean = 0, variance = 0.2):
     """
     # Generate output error samples
     epsilon = np.random.normal(mean, variance, x.shape[0])
-    return np.cos(x) + epsilon
+    return fun(x) + epsilon
 
+def fun(x):
+    return np.sin(3*x)*(2 + (0.5*x - 1)**2)
 
 if __name__ == "__main__":
 
+    np.random.seed(200)
     # =============================
     # Plot prior function samples
     # =============================
-    lengthscale = .05
+    lengthscale = 10
     sigma = 1
-    x, mu, K = estimate_sqr_exp_prior(sigma, lengthscale)
-    plot_gp(x, mu, K, sample_functions=10, title = "Lengthscale: " + str(lengthscale))
-    fname = "../fig/Q10-l{}.png".format("{:.2f}".format(lengthscale).replace('.', ''))
+    # if True:
+    #     x, mu, K = estimate_sqr_exp_prior(sigma, lengthscale)
+    #     # if False:
+    #     plot_gp(x, mu, K, sample_functions=3, title = "Lengthscale: " + str(lengthscale))
+    #     fname = "../fig/Q6-prior.png".format("{:.2f}".format(lengthscale).replace('.', ''))
+    #     plt.savefig(fname, dpi=100)
+
+    observation_no = 9
+    unseen_observation_no = 500
+    # Generate input data
+    x = np.linspace(-4, 6, observation_no)
+    # Generate unseen data
+    z = np.linspace(-12, 18, unseen_observation_no)
+    # Set mean and variance for error distribution around y
+    noise_mean = 0
+    noise_var = 3.5
+    # Generate output data
+    y = noisyCos(x, noise_mean, noise_var)
+
+    X = np.reshape(x, (-1, 1))
+    Z = np.reshape(z, (-1, 1))
+    # Estimate posterior based on X,Y,Z
+    mu, cov = estimate_sqr_exp_posterior(sigma, lengthscale, X, y, Z, .1)
+    # Plot posterior samples
+    plot_gp_posterior(Z, mu, cov, sample_functions=10, training_x=x, training_y=y,
+                        title = "Lengthscale: " + str(lengthscale))
+    # fname = "../fig/Q10-post-l{}-nvar4.png".format("{:.2f}".format(lengthscale).replace('.', ''))
+    fname = "../fig/Q10-post-l{}.png".format("{:.2f}".format(lengthscale).replace('.', ''))
     plt.savefig(fname, dpi=100)
-
-    # observation_no = 7
-    # unseen_observation_no = 2000
-    # # Generate input data
-    # x = np.linspace(0, 2 * pi, observation_no)
-    # # Generate unseen data
-    # z = np.linspace(-2 * pi, 4 * pi, unseen_observation_no)
-    # # Set mean and variance for error distribution around y
-    # mean = 0
-    # variance = 0.5
-    # # Generate output data
-    # y = noisyCos(x, mean, variance)
-
-    # X = np.reshape(x, (-1, 1))
-    # Z = np.reshape(z, (-1, 1))
-    # # Estimate posterior based on X,Y,Z
-    # mu, K = estimate_sqr_exp_posterior(sigma, lengthscale, X, y, Z, variance)
-    # # Plot posterior samples
-    # plot_gp_posterior(Z, mu, K, sample_functions = 10, training_x = x, training_y = y,
-    #                     title = "Lengthscale: " + str(lengthscale))
