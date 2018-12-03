@@ -15,18 +15,6 @@
 
 \setlength{\parskip}{1em}
 
-% \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-% \newenvironment{lemma}[2][Lemma]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-% \newenvironment{exercise}[2][Exercise]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-% \newenvironment{reflection}[2][Reflection]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-% \newenvironment{proposition}[2][Proposition]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-% \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
-% \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 \newenvironment{question}[2][Question]{\begin{trivlist}
 \kern10pt
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -50,15 +38,32 @@
 
 % Question 1
 \begin{question}{1}
-% TODO: Fix the arguments
-Consider input output pairs are linked by the mapping to have the following
- relation:
-$$ 
-    \bf{t}_i = f(\bf{x}_i) + \bm{\epsilon}
-$$
-where the $\bm{\epsilon}$ is the unbiased random noise. Since we have no piror knowledge
-on the random noise term, the random noise is then assumed as following the normal
-distribution. TODO: More on this \par
+The Gaussian form of likelihood is a sensible choice.
+We have assumed that the observed values $\bf{t}_i$ differ from the function values
+or the mapped input values $f(\bf{x}_i)$ by additive Gaussian noise.
+\begin{align*}
+  \mathbf{t}_i = f(\mathbf{x}_i) + \bm{\epsilon}
+\end{align*}
+The noise is gaussian:
+\begin{align*}
+  \bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2\mathbf{I})
+\end{align*}
+And each components the noise is:
+\begin{align*}
+  \epsilon_j \sim \mathcal{N}(0, \sigma_j^2)
+\end{align*}
+
+Combine these two assumptions, we have the Gaussian form likelihood.
+
+The assumption of gaussian noise is also sensible.
+Consider that we draw a lot of samples from the population.
+If we consider the noise as a random variable, then the sum
+(or the average) of noise will be a random variable following a normal distribution 
+by the central limit theorem. Therefore, we can consider the shared noise across 
+all sample as a random variable following a normal distribution.
+
+The unbias noise assumption is correct since if the noise is biased we can move the
+bias term to the function $f(\bf{x}_i)$.
 
 With the assumption that features are uncorrelated, we choose the spherical
 covariance matrix for the likelihood.
