@@ -94,7 +94,7 @@ $$
 
 $$ 
   p(\bf{T}\mid \bf{X},\bf{W}) =
-  \prod _{i=1}^{N}N(\bf{W}\bf{x}_i, \sigma^2\bf{I})
+  \prod _{i=1}^{N}\mathcal{N}(\bf{W}\bf{x}_i, \sigma^2\bf{I})
 $$
 
 \end{question}
@@ -127,7 +127,8 @@ the $w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and whic
 can be understood as feature selection. In the figure, the contrains is a square
 shape contour.
 
-If using $L_2$, the contrain is a circle as the form of the regularization term.
+If using $L_2$ norm, the contrain is a circle as the form of the regularization 
+term.
 
 
 \begin{figure}[h!]
@@ -298,13 +299,15 @@ The graphical model is shown in figure \ref{fig:Q7-graphs}
 \end{align*}
 
 The marginalisation connects the prior and the likelihood of the data. The
- integral is an weighted average which averages the likelihood of the data.
- The weighting is given by the prior which is the probability distribution of
- the function.
+integral is an weighted average averaging the likelihood of the data with the prior
+as weighting.
 
 The uncertainties of the data and the prior are combined or added up into the 
- uncertainty of the marginalisation. Equation 6.62 of Bishop book (2006 Ed.) shows
- how two uncertainties (covariances) are simplily added up.
+uncertainty of the marginalisation. The covariance of the marginalisation is
+$k(\mathbf{X},\mathbf{X}) + \sigma^2\mathbf{I}$. The first term comes from the
+uncertainty of the prior. 
+The second term comes from the uncertainty of data likelihood.
+
 
 The hyperparameters $\bm{\theta}$ still condition on the part of covariance of the 
  marginalisation from the prior. That part of covariance is the kernel function.
