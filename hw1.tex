@@ -665,7 +665,28 @@ Consider equation \eqref{eq:q13-matC} in element-wise form:
     &&(\sum_{\theta}(a_{i\theta}\delta_{\theta j}) = a_{ij}) \\
   &= W_{lj}\delta_{ik} + W_{kj}\delta_{il} \numberthis \label{eq:dCdW}
 \end{align*}
-
+Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
+\begin{align*}
+  \frac{\partial}{\partial W_{ij}}\frac{N}{2}\log(|\mathbf{C}|)
+  &= \frac{N}{2}[\sum_{k,l} \frac{\partial \log(|\mathbf{C}|)}{\partial C_{kl}}
+                           \frac{\partial C_{kl}}{\partial W_{ij}} ]
+      && (\text{matrix cookbook 2012 Eq.133}) \\
+  &= \frac{N}{2}[\sum_{k,l} ((\mathbf{C}^T)^{-1})_{kl}
+                            \frac{\partial C_{kl}}{\partial W_{ij}} ]
+      && (\text{matrix cookbook 2012 Eq.57}) \\
+  &= \frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-1})_{kl}
+                 (W_{lj}\delta_{ik} + W_{kj}\delta_{il})]
+      && (\text{use eq.\eqref{eq:dCdW} and } \mathbf{C}^T = \mathbf{C}) \\
+  &= \frac{N}{2}[\sum_{k,l} (\mathbf{C}^{-1})_{kl}W_{lj}\delta_{ik}
+        + \sum_{k,l} (\mathbf{C}^{-1})_{kl}W_{kj}\delta_{il}] \\
+  &= \frac{N}{2}[\sum_{l} (\mathbf{C}^{-1})_{il}W_{lj}
+        + \sum_{k} (\mathbf{C}^{-1})_{ki}W_{kj}] \\
+  &= \frac{N}{2}[\sum_{l} (\mathbf{C}^{-1})_{il}W_{lj}
+        + \sum_{k} (\mathbf{C}^{-1})_{ik}W_{kj}]
+      && (\mathbf{C}^{-1} = (\mathbf{C}^{-1})^T) \\
+  &= \frac{N}{2}[2\mathbf{C}^{-1}\mathbf{W}] \\
+  &= N\mathbf{C}^{-1}\mathbf{W}
+\end{align*}
 Therefore:
 \begin{align*}
   \frac{\partial{\mathcal{L}}}{\partial{\mathbf{W}}} 
