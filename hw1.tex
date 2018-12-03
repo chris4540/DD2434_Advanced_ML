@@ -140,7 +140,6 @@ term.
 
 % Question 5
 \begin{question}{5}
-TODO: Add dimension\\
 Consider the regression equation in general:
 $$\textbf{T} = \textbf{WX} + \textbf{ErrorMatrix} $$
 Therefore, the likelihood in terms of matrix normal distribution is:
@@ -178,8 +177,10 @@ Consider the equation 7 in the question with respect to the parameters $\textbf{
   RHS =& -\frac{1}{2\sigma^2}[\textbf{vec}(\textbf{T}) - \textbf{vec}(\textbf{WX})]^T
                              [\textbf{vec}(\textbf{T}) - \textbf{vec}(\textbf{WX})] \\
        &-\frac{1}{2\tau^2}[\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)]^T
-                          [\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)]
+                          [\textbf{vec}(\textbf{W}) - \textbf{vec}(\textbf{W}_0)] \\
+       &+\text{Const.}
 \end{align*}
+We ignore those terms which are not functions of $\mathbf{W}$ and say they are constants.
 
 Consider the quadratic terms on both sides:
 \begin{equation} \label{eq:q5-covar}
@@ -651,14 +652,27 @@ where S is defined as:
   \mathbf{S} = \frac{1}{N}\sum_{i=1}^{N} \mathbf{y}_i\mathbf{y}_i^T
 \end{align*}
 \\
-The gradient of the objective w.r.t the parameters $\mathbf{W}$
-(Tipping and Bishop (1999)):
-% TODO: derive the relation. Complete: 60%
+Below is the derive of the gradient in element-wise approach.\\
+Consider equation \eqref{eq:q13-matC} in element-wise form:
+\begin{align*}
+  C_{kl} &= (\mathbf{W}\mathbf{W}^T + \sigma^2\mathbf{I})_{kl} \\
+  &= \sum_{\theta}(W_{k\theta}W_{l\theta}) + \sigma^2\delta_{kl} \\
+  \frac{\partial C_{kl}}{\partial W_{ij}} 
+  &= \frac{\partial}{\partial W_{ij}}\sum_{\theta}W_{k\theta}W_{l\theta} \\
+  &= \sum_{\theta}[W_{l\theta}\frac{\partial W_{k\theta}}{\partial W_{ij}} 
+                 + W_{k\theta}\frac{\partial W_{l\theta}}{\partial W_{ij}}] \\
+  &= \sum_{\theta}[W_{l\theta}\delta_{ik}\delta_{\theta j} + W_{k\theta}\delta_{il}\delta_{\theta j}]
+    &&(\sum_{\theta}(a_{i\theta}\delta_{\theta j}) = a_{ij}) \\
+  &= W_{lj}\delta_{ik} + W_{kj}\delta_{il}
+\end{align*}
+
+Therefore:
 \begin{align*}
   \frac{\partial{\mathcal{L}}}{\partial{\mathbf{W}}} 
     &= N(\mathbf{C}^{-1}\mathbf{W} 
          - \mathbf{C}^{-1}\mathbf{S}\mathbf{C}^{-1}\mathbf{W})
 \end{align*}
+
 \end{question}
 
 \begin{question}{16}
@@ -997,7 +1011,7 @@ data set as show in figure \ref{fig:Q24-non-diag-plotEvid}.
 \end{figure}
 
 If we use a non-zero mean prior such as $\mu = [5, 5, 5]^T$, we can see that
-some model favor on specific data sets. It is because there are peaks in the plot
+some model favor on specific data sets. It is because there are peaks in figure
 \ref{fig:Q24-non-zero-plotEvid}. Those data sets are diagonal separable since 
 we make a perference on the choice of parameter.
 
