@@ -109,7 +109,7 @@ The regularizer will force some weighting coefficients $w_j$ to be zero, given a
 since those zero weighting coefficients indicate that the corresponding features
 are irrelevant to the output.
 
-The penalization term or the negative log-prior:
+The penalization term in the negative log-prior:
 \begin{align*}
   \frac{\lambda}{2} \left \|\textbf{vec}(\bf{W} - \bf{W}_0)\right \|_{q}  
 \end{align*}
@@ -122,12 +122,13 @@ The regularization term acts as a constraint in the minimization problem.
 
 In the right head side of the figure, it is a minimization problem using $L_1$
 regularization term.
-If using $L_1$ norm, the minimization result $\mathbf{w}^{*}$ is forced to lay on the $w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and which
+If using $L_1$ norm, the minimization result $\mathbf{w}^{*}$ is forced to lay on the 
+$w_2$ axis and the parameter $w_1$ of $\mathbf{w}^{*}$ becomes zero and which
 can be understood as feature selection. In the figure, the constraint is a square
 shape contour.
 
 If using $L_2$ norm, the constraint is a circle as the form of the regularization 
-term.
+term. All components of $\mathbf{w}^{*}$ will be forced to be zeros.
 
 
 \begin{figure}[h!]
@@ -145,7 +146,10 @@ term.
 % Question 5
 \begin{question}{5}
 Consider the regression equation in general:
-$$\textbf{T} = \textbf{WX} + \textbf{ErrorMatrix} $$
+\begin{align*}
+  \textbf{T} &= \textbf{WX} + \textbf{E} \\
+  \textbf{E} &= [\bm{\epsilon}, \bm{\epsilon}, .., \bm{\epsilon}]
+\end{align*}
 Therefore, the likelihood in terms of matrix normal distribution is:
 \begin{align*}
 p(\bf{T}\mid \bf{X}, \bf{W}) &= 
@@ -449,7 +453,10 @@ We choose $\sigma^2_f = 1$ for the sake of convenience.
   \includegraphics[width=0.4\textwidth]{fig/Q10-l1000.png}
   }
   \caption{Samples from priors with different length scales}
+  \label{fig:Q10-prior}
 \end{figure}
+
+We draw 10 samples from this prior for 4 different length scales in figure \ref{fig:Q10-prior}.
 
 For the case $l = 0.05$, the correlations among points tend to zero. Therefore,
 the prior behaves as white noise.
@@ -485,9 +492,9 @@ The results are desirable. For $l = 0.05$, the prior indicates that each point
 are almost uncorrelated. The mean function shows this point. For $l = 0.1$ and $l = 1.0$,
 we can see that the mean function becomes less fluctuating. For $l = 10$, sample
 noise ($\sigma^2 = 0.1$) is added to avoid the invalid inverse of the gram matrix
-$K(\mathbf{X}, \mathbf{X})$ to be zero. 
+$K(\mathbf{X}, \mathbf{X})$ to be a zero matrix. 
 The sample functions alter a bit compared to the prior since the strong assumption
-on the correlation of points. In other words, the prior indicate that it is a 
+on the correlation of points. In other words, the prior indicates that it is a 
 restrictive model and therefore data cannot alter the model too much.
 
 \begin{figure}[h!]
@@ -544,7 +551,9 @@ The results are shown in figure \ref{fig:Q11-predict-post-noise4}.
 \end{question}
 
 \begin{question}{12}
-This prior encodes that we have no information about the latent variable $\mathbf{X}$.
+This prior encodes that the mean of $\mathbf{X}$ is a zero matrix and each element
+in $\mathbf{X}$ are independent.
+It is because we have no information about the latent variable $\mathbf{X}$.
 Therefore, we assume that it is a zero-mean unit-covariance Gaussian. We do that because
 we are looking for data to provide more information about the representation transform.
 \end{question}
@@ -697,7 +706,7 @@ Obviously, we have:
     &&(\sum_{\theta}(a_{i\theta}\delta_{\theta j}) = a_{ij}) \\
   &= W_{lj}\delta_{ik} + W_{kj}\delta_{il} \numberthis \label{eq:dCdW}
 \end{align*}
-Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
+Consider the derivative of $\frac{N}{2}\log(|\mathbf{C}|)$:
 \begin{align*}
   \frac{\partial}{\partial W_{ij}}\frac{N}{2}\log(|\mathbf{C}|)
   &= \frac{N}{2}[\sum_{k,l} \frac{\partial \log(|\mathbf{C}|)}{\partial C_{kl}}
@@ -720,14 +729,14 @@ Consider the derivatives of $\frac{N}{2}\log(|\mathbf{C}|)$:
   &= \frac{N}{2}[2\mathbf{C}^{-1}\mathbf{W}] \\
   &= N\mathbf{C}^{-1}\mathbf{W} \numberthis \label{eq:Q15-dL1}
 \end{align*}
-For the sake of convenience, we define $\mathbf{C}^{-T} = (\mathbf{C}^{-1})^T$.
+For the sake of convenience, we define $\mathbf{C}^{-T} = (\mathbf{C}^{-1})^T$.\\
 Obviously, we have:
 \begin{align*}
   \mathbf{C}^{-T} &= (\mathbf{C}^{-1})^T \\
                   &= (\mathbf{C}^{T})^{-1} \\
   \mathbf{C}^{-T} &= \mathbf{C}^{-1} \numberthis \label{eq:C^-T}
 \end{align*}
-Consider the derivatives of $\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})$:
+Consider the derivative of $\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S})$:
 
 \begin{align*}
   \frac{\partial}{\partial W_{ij}}&\frac{N}{2}\text{Tr}(\mathbf{C}^{-1}\mathbf{S}) \\
@@ -771,7 +780,7 @@ Combine eq. \eqref{eq:Q15-dL0}, \eqref{eq:Q15-dL1} and \eqref{eq:Q15-dL2} we hav
 \end{question}
 
 \begin{question}{16}
-Figure \ref{fig:q16-replearn} shows both the learned and the origal 
+Figure \ref{fig:q16-replearn} shows both the learned and the original 
 representation of $\mathbf{x}$.
 The representation is generated from the mapping $f_{non-lin}$.
 
@@ -835,7 +844,7 @@ zero probability over $\mathcal{D}_2$ and $M_0$ becomes a good model to $\mathca
 \begin{figure}[h!] %TODO: fix the figure. model1 -> model 100
   \centering
   \includegraphics[width=0.5\linewidth]{fig/Q17.jpg}
-  \caption{The probability of evidence of each model}
+  \caption{Explanation of a good model and a bad model}
   \label{fig:q17-model-evidence}
 \end{figure}
 \end{question}
@@ -870,10 +879,10 @@ dataset.
 
 The linear separable datasets are suitable for the models $M_1, M_2, M_3$.
 
-To the number of data sets, each model can explain, $M_3$ is the most, then followed
-by $M_2$, and then $M_1$.
-The uncertainty of models can be considered as ($1 - p(d_i\mid M_i)$),
-where $d_i$ is one of the data sets.
+To the number of data sets each model can explain, $M_3$ can explain the most, 
+then $M_2$ and then $M_1$.
+The uncertainty of a model can be considered as ($1 - p(d_i\mid M_i)$),
+where $d_i$ is a data sets.
 Since the sum of probability over a random variable space must be one. The more
 data sets a model can explain, the less certainty (i.e. $p(d_i\mid M_i)$)
 the model can have.
@@ -881,7 +890,7 @@ the model can have.
 In terms of number of model parameters, $M_3$ is more flexible then $M_2$ since
 $M_3$ has three parameters and $M_2$ has two.
 In addition, $M_3$ can be considered as realization of other models 
-${M_1, M_2}$ by setting some parameters to zero.
+($\{M_1, M_2\}$) by setting some parameters to zero.
 Therefore, $M_3$ is the most flexible among those four models.
 On the other hand, $M_0$ are considered as the most restrictive since
 it has no model parameter.
@@ -894,13 +903,14 @@ grid are of the same output. It is because of the bias term $\theta^3_3$.
 
 \begin{question}{20}
 In marginalization, we can encode our beliefs by setting the prior on a variable.
-The variable usually we are not interested in our model.
+That variable usually is what we are not interested in our model.
 
 The implication of the process is to calculate the weighted average of the model
 likelihood according to the prior on the parameters.
 
 The evidence can also be regarded as the probability of generating the data set 
-$\mathcal{D}$ from a model described by all possible parameters. That is the reason why we average the likelihood-weighted by the probability of each parameter.
+$\mathcal{D}$ from a model described by all possible parameters. 
+That is the reason why we do weighted average on the likelihood.
 \end{question}
 
 \begin{question}{21}
