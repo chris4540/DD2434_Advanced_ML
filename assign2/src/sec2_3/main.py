@@ -48,10 +48,26 @@ class Tree(tree_helper.Tree):
     # #         for c in reversed(node.descendants):
     # #             node_stack.append(c)
 
-    # def pre_order(self):
+    # def _pre_order(self, node):
     #     """
     #     Preorder in recursion way
     #     """
+
+    def pre_order(self, node=None):
+
+        if node is None:
+            node = self.root
+
+        # visiting
+        print("Node Name:", node.name)
+        # print("Node Cat:", node.cat)
+        # print("Node Sample:", node.sample)
+
+        for c in node.descendants:
+            self.pre_order(c)
+
+
+
 
 if __name__ == '__main__':
 
@@ -70,5 +86,5 @@ if __name__ == '__main__':
     t.load_sample(sample)
 
     t.print_tree(print_sample=True)
-    # t.pre_order()
+    t.pre_order()
 
