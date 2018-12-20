@@ -11,22 +11,6 @@ class Tree(tree_helper.Tree):
     def load_sample(self, sample):
         ex_2_3.load_sample(self.root, sample)
 
-    def pre_order(self, node=None):
-
-        if node is None:
-            node = self.root
-
-        # visiting
-        print("--------------------------")
-        print("Node Name:", node.name)
-        print("Node Cat:", node.cat)
-        print("Node Sample:", node.sample)
-        print("Is leaf:", self.is_leaf(node))
-        print("--------------------------")
-
-        for c in node.descendants:
-            self.pre_order(c)
-
     def s_fun(self, node, value):
         """
         TODO: rename this function
@@ -97,7 +81,7 @@ if __name__ == '__main__':
     t.load_sample(sample)
 
     t.print_tree(print_sample=True)
-    t.pre_order()
+    # t.pre_order()
 
     print(t.s_fun(t.root, 0))
     # print(t.get_obs_prob())
