@@ -8,10 +8,10 @@ class Tree(tree_helper.Tree):
     Inherit from the tree helper
     TODO: class documentation
     """
-
+    st_evids = dict()  # subtree evidences dictionary
 
     def load_sample(self, sample):
-        self.s_values = dict()
+        self.st_evids = dict()
         ex_2_3.load_sample(self.root, sample)
 
     def s_fun(self, node, value):
@@ -28,17 +28,18 @@ class Tree(tree_helper.Tree):
         # for each child of this node, consider all its possible values
         ret = 1
         for c in node.descendants:
-            key = "({},{})".format(c.name, value)
-            if key in self.s_values:
-                node_evidence = self.s_values[key]
-            else:
-                node_evidence = 0    # the sum of the blanket
-                for i, w in enumerate(c.cat[value][:]):
-                    node_evidence += w * self.s_fun(node=c, value=i)
-                # save the node_evidence
-                self.s_values[key] = node_evidence
+            key = "{},{},{}".format(node.name, c.name, value)
 
-            ret *= node_evidence
+            if key in self.st_evids:
+                st_evid = self.st_evids[key]
+            else:
+                st_evid = 0    # the sum of the blanket
+                for i, w in enumerate(c.cat[value][:]):
+                    st_evid += w * self.s_fun(node=c, value=i)
+                # save the node_evidence
+                self.st_evids[key] = st_evid
+
+            ret *= st_evid
         return ret
 
     @staticmethod
@@ -62,7 +63,7 @@ class Tree(tree_helper.Tree):
         Return:
             return the probability of the set observations (samples)
         """
-        self.s_values = dict()
+        self.st_evids = dict()
         # consider all posible value of the root
         # prob: the probability of the root has that i-th catagory
         #    i: the label of a catagory
