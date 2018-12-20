@@ -42,34 +42,42 @@ class Tree(tree_helper.Tree):
         for c in node.descendants:
             tmp = 0
             for i, w in enumerate(c.cat[value][:]):
-                # print(w)
                 tmp += w * self.s_fun(node=c, value=i)
 
             ret *= tmp
-            # print("=====================================")
 
         return ret
 
     @staticmethod
     def is_leaf(node):
+        """
+        Test if the node is a leaf node
+
+        Return:
+            return true if the input node is a leaf node, vice verse.
+        """
         if not node.descendants:
             return True
 
         return False
 
     def get_obs_prob(self):
-        # consider all posible value of the root
+        """
+        Get the probability of the obserations (samples) set by
+        the instance method: load_sample
 
+        Return:
+            return the probability of the set observations (samples)
+        """
+
+        # consider all posible value of the root
         # prob: the probability of the root has that i-th catagory
         #    i: the label of a catagory
-
         ret = 0
         for i, prob in enumerate(self.root.cat[0]):
             ret += prob * self.s_fun(self.root, i)
 
         return ret
-
-
 
 
 if __name__ == '__main__':
