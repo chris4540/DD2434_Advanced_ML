@@ -11,9 +11,7 @@ class Tree(tree_helper.Tree):
 
 
     def load_sample(self, sample):
-
         self.s_values = dict()
-
         ex_2_3.load_sample(self.root, sample)
 
     def s_fun(self, node, value):
@@ -30,14 +28,13 @@ class Tree(tree_helper.Tree):
         # for each child of this node, consider all its possible values
         ret = 1
         for c in node.descendants:
-            key = "s_fun({}, {})".format(node.name, value)
+            key = "({},{})".format(c.name, value)
             if key in self.s_values:
                 node_evidence = self.s_values[key]
             else:
                 node_evidence = 0    # the sum of the blanket
                 for i, w in enumerate(c.cat[value][:]):
                     node_evidence += w * self.s_fun(node=c, value=i)
-
                 # save the node_evidence
                 self.s_values[key] = node_evidence
 
@@ -90,23 +87,4 @@ if __name__ == '__main__':
             t.load_sample(samples[sample_name])
             print(sample_name)
             print(t.get_obs_prob())
-
-    # build a tree
-    # t = Tree()
-    # key = params.keys()[0]
-    # #   Load params into tree
-    # t.load_params(params[key])
-    # # t.print_tree()
-
-    # # ========================================================
-    # # set a sample to a tree
-    # sample = samples[key + '_sample_1']
-    # t.load_sample(sample)
-
-    # t.print_tree(print_sample=True)
-    # # t.pre_order()
-
-
-    # # print(t.get_obs_prob())
-
 
