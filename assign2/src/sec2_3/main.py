@@ -6,6 +6,7 @@ import ex_2_3_tree_helper as tree_helper
 class Tree(tree_helper.Tree):
     """
     Inherit from the tree helper
+    TODO: class documentation
     """
 
     def load_sample(self, sample):
@@ -24,11 +25,11 @@ class Tree(tree_helper.Tree):
         # for each child of this node, consider all its possible values
         ret = 1
         for c in node.descendants:
-            tmp = 0
+            node_evidence = 0    # the sum of the blanket
             for i, w in enumerate(c.cat[value][:]):
-                tmp += w * self.s_fun(node=c, value=i)
+                node_evidence += w * self.s_fun(node=c, value=i)
 
-            ret *= tmp
+            ret *= node_evidence
 
         return ret
 
@@ -66,24 +67,35 @@ class Tree(tree_helper.Tree):
 
 if __name__ == '__main__':
 
-    # build a tree from parameters
-    t = Tree()
+    # Load parameters and samples
     params = np.load("./tree_params.npy").tolist()
-    key = params.keys()[0]
-    #   Load params into tree
-    t.load_params(params[key])
-    # t.print_tree()
-
-    # ========================================================
-    # set a sample to a tree
     samples = np.load("./tree_samples.npy").tolist()
-    sample = samples[key + '_sample_1']
-    t.load_sample(sample)
 
-    t.print_tree(print_sample=True)
-    # t.pre_order()
+    for param_k, param_v in params.items():
+        t = Tree()
+        t.load_params(param_v)
+        for s in range(1, 4):
+            sample_name = "{}_sample_{}".format(param_k, s)
+            t.load_sample(samples[sample_name])
+            print(sample_name)
+            print(t.get_obs_prob())
 
-    print(t.s_fun(t.root, 0))
-    # print(t.get_obs_prob())
+    # build a tree
+    # t = Tree()
+    # key = params.keys()[0]
+    # #   Load params into tree
+    # t.load_params(params[key])
+    # # t.print_tree()
+
+    # # ========================================================
+    # # set a sample to a tree
+    # sample = samples[key + '_sample_1']
+    # t.load_sample(sample)
+
+    # t.print_tree(print_sample=True)
+    # # t.pre_order()
+
+
+    # # print(t.get_obs_prob())
 
 
