@@ -9,8 +9,9 @@
 \usepackage{amsmath}
 \usepackage{cleveref}
  
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
+% \newcommand{\N}{\mathbb{N}}
+% \newcommand{\Z}{\mathbb{Z}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
  
 \newenvironment{problem}[2][Problem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -59,11 +60,13 @@ of each grid point:
         + \log p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
     =& \frac{\log \lambda_1}{2} + \frac{\log \lambda_0}{2} + \frac{\log \lambda}{2} 
        - \frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 - \frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2 \\
-     & - \frac{\lambda}{2}(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j})) + \text{const}
+     & - \frac{\lambda}{2}(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2 + \text{const}
 \end{align*}
 By mean field approximation, we can assume the form of the estimated posterior as:
 \begin{align*}
-    q(\Theta, M) = \prod_{r \in [R], c\in [C]} q(\theta_{r,c})q(\mu_{r,c})
+    q(\Theta, M) &= q(\Theta)q(M) \\
+                 &= \prod_{r \in [R], c\in [C]} q(\theta_{r,c}, \mu_{r,c}) \\
+                 &= \prod_{r \in [R], c\in [C]} q(\theta_{r,c})q(\mu_{r,c})
 \end{align*}
 By inspection, we can assume that $q(\theta_{r,c})$ and $q(\mu_{r,c})$ are Gaussians
 since the joint probability is a product of Gaussian distributions.
@@ -75,7 +78,58 @@ Therefore, we can safely consider:
     q(\mu_{r,c}) &= \mathcal{N}(\mu_{r,c} 
                 \mid \tilde{m}^{\mu}_{r,c}, \tilde{\lambda^{\mu}}^{-1}_{r,c})
 \end{align*}
-\end{problem}
+
+It is convenient to first consider a Gaussian distribution in log space.
+\begin{align*}
+    z &\sim \mathcal{N}(z\mid \alpha, \beta^{-1}) \\
+    \log p(z) &= -\frac{\beta}{2}(z - \alpha)^2 +\text{const} \\
+    \log p(z) &= -\frac{\beta}{2}z^2 + \alpha\beta z + \text{const} \numberthis \label{eq:logspaceNormal}
+\end{align*}
+
+We get $q(\mu_{r,c})$ by averaging out all the variables except for $\mu_{r,c}$:
+\begin{align*}
+    \log q(\mu_{r,c}) &= 
+        \mathbb{E}_{q(\Theta)q(M\backslash\mu_{r,c})}[\log p(M, \Theta, x)] 
+        + \text{const} \\
+    &= \mathbb{E}_{q(\theta_{r,c})q(\{\mu_{i,j}: i, j \in N(r,c)\})}[\log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})]
+    + \text{const} \numberthis \label{eq:q29_indep_asumpt} \\
+    &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2
+    -\frac{\lambda}{2}\mathbb{E}[(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2] + \text{const} \\
+    &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 
+    -\frac{\lambda}{2}\mathbb{E}[-2x_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j})\mu_{r,c}]
+    + \text{const} \\
+    &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 
+    -\frac{\lambda}{2}[-2x_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})\mu_{r,c}]
+    + \text{const} \\
+    &= (-\frac{\lambda_0}{2} -\frac{\lambda}{2})\mu_{r,c}^2
+    + (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))\mu_{r,c}
+    + \text{const} \\
+\end{align*}
+
+In eq.\eqref{eq:q29_indep_asumpt}, we do the mean field approximation and 
+assume that $p(\theta_{r,c}, \mu_{r,c}, x_{r,c})$ only depends on the 
+estimated values for simplicity. 
+
+Make use of eq. \eqref{eq:logspaceNormal}, the parameters of $q(\mu_{r,c})$ are:
+\begin{align*}
+    -\frac{\tilde{\lambda^{\mu}}_{r,c}}{2} &= -\frac{\lambda_0}{2} -\frac{\lambda}{2} \\
+    \tilde{\lambda^{\mu}}_{r,c} &= \lambda_0 + \lambda \\
+    % mu
+    \tilde{m^{\mu}}_{r,c} &= 
+    \frac{1}{\tilde{\lambda^{\mu}}_{r,c}}
+    (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})) \\
+    &= \frac{1}{\lambda_0 + \lambda}
+    (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))
+\end{align*}
+Therefore, the update equations are:
+\begin{align}
+    \tilde{\lambda^{\mu}}_{r,c}^{(t+1)} &= \lambda_0 + \lambda \\
+    % mu
+    \tilde{m^{\mu}}_{r,c}^{(t+1)}  &= \frac{1}{\lambda_0 + \lambda}
+    (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m^{\mu}}_{r,c}^{(t)}))
+\end{align}
+
+\end{problem} % 2.9.25
 
 % \begin{proof}
 %     Proof goes here. Repeat as needed
