@@ -32,13 +32,24 @@
 % part 2.9
 \begin{problem}{2.9.25}
 By the graph, we can easy write down the joint probability as:
-    \begin{align*}
-        P(M, \Theta, x) = p(\Theta)p(M)p(x \mid M, \Theta)
-    \end{align*}
+\begin{align*}
+    p(M, \Theta, x) = p(\Theta)p(M)p(x \mid M, \Theta)
+\end{align*}
 And each term as:
 \begin{align*}
-    P(\Theta) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\theta_{r,c}\mid \mu_{1}, \lambda_{1}) \\
-    P(M) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\mu_{r,c}\mid \mu_{0}, \lambda_{0})
+    p(\Theta) &= \prod_{r \in [R], c\in [C]} p(\theta_{r,c}) \\
+        &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\theta_{r,c}\mid \mu_{1}, \lambda_{1}) \\
+    p(M) &= \prod_{r \in [R], c\in [C]} p(\mu_{r,c}) \\
+    p(M) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\mu_{r,c}\mid \mu_{0}, \lambda_{0}) \\
+    p(x \mid M, \Theta) &= \prod_{r \in [R], c\in [C]} 
+                p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\})\\
+        &= \prod_{r \in [R], c\in [C]} \mathcal{N}(x_{r,c} \mid  
+            (\mu_{r,c} + \theta_{r,c}\sum_{N(r,c)}\mu_{i,j}), \lambda_{0})
+\end{align*}
+Therefore, the log joint probability is:
+\begin{align*}
+    \log p(M, \Theta, x) &= \log p(\Theta) + \log p(M) + \log p(x \mid M, \Theta) \\
+        &= \sum_{r \in [R], c\in [C]} \log p()
 \end{align*}
 \end{problem}
 
