@@ -59,7 +59,21 @@ of each grid point:
         + \log p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
     =& -\frac{\log \lambda_1}{2} -\frac{\log \lambda_0}{2} -\frac{\log \lambda}{2} 
        - \frac{(\mu_{r,c} - \mu_0)^2}{2\lambda_0} - \frac{(\theta_{r,c} - \mu_1)^2}{2\lambda_1} \\
-     & - \frac{(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))}{2\lambda}
+     & - \frac{(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))}{2\lambda} + \text{const}
+\end{align*}
+By mean field approximation, we can assume the form of the estimated posterior as:
+\begin{align*}
+    q(\Theta, M) = \prod_{r \in [R], c\in [C]} q(\theta_{r,c})q(\mu_{r,c})
+\end{align*}
+By inspection, we can assume that $q(\theta_{r,c})$ and $q(\mu_{r,c})$ are Gaussians
+since the joint probability is a product of Gaussian distributions.
+
+Therefore, we can safely consider:
+\begin{align*}
+    q(\theta_{r,c}) &= \mathcal{N}(\theta_{r,c} 
+                \mid \tilde{m}^{\theta}_{r,c}, \tilde{\lambda}^{\theta}_{r,c}) \\
+    q(\mu_{r,c}) &= \mathcal{N}(\mu_{r,c} 
+                \mid \tilde{m}^{\mu}_{r,c}, \tilde{\lambda}^{\mu}_{r,c})
 \end{align*}
 \end{problem}
 
