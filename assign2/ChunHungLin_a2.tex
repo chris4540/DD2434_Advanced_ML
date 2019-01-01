@@ -44,12 +44,22 @@ And each term as:
     p(x \mid M, \Theta) &= \prod_{r \in [R], c\in [C]} 
                 p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\})\\
         &= \prod_{r \in [R], c\in [C]} \mathcal{N}(x_{r,c} \mid  
-            (\mu_{r,c} + \theta_{r,c}\sum_{N(r,c)}\mu_{i,j}), \lambda_{0})
+            (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}), \lambda)
 \end{align*}
 Therefore, the log joint probability is:
 \begin{align*}
     \log p(M, \Theta, x) &= \log p(\Theta) + \log p(M) + \log p(x \mid M, \Theta) \\
-        &= \sum_{r \in [R], c\in [C]} \log p()
+        & = \sum_{r \in [R], c\in [C]} \log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})
+\end{align*}
+,where $\log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})$ is the unnormalized log posterior
+of each grid point:
+\begin{align*}
+    \log p(\theta_{r,c}, \mu_{r,c}, x_{r,c}) =& 
+    \log p(\theta_{r,c}) + \log p(\mu_{r,c}) 
+        + \log p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
+    =& -\frac{\log \lambda_1}{2} -\frac{\log \lambda_0}{2} -\frac{\log \lambda}{2} 
+       - \frac{(\mu_{r,c} - \mu_0)^2}{2\lambda_0} - \frac{(\theta_{r,c} - \mu_1)^2}{2\lambda_1} \\
+     & - \frac{(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))}{2\lambda}
 \end{align*}
 \end{problem}
 
