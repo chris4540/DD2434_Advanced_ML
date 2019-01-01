@@ -1,6 +1,13 @@
 \documentclass[12pt]{article}
- \usepackage[margin=1in]{geometry} 
-\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+% packages
+\usepackage[margin=1in]{geometry}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{subfig}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{cleveref}
  
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -20,13 +27,24 @@
 \title{DD2434 Machine Learning, Advanced Course Assignment 2}
 \author{Lin Chun Hung, chlin3@kth.se}
 \maketitle
- 
-\begin{problem}{x.yz}
-Statement of problem goes here
-\end{problem}
- 
-\begin{proof}
-Proof goes here. Repeat as needed
-\end{proof}
 
+%  ===============================================================================
+% part 2.9
+\begin{problem}{2.9.25}
+By the graph, we can easy write down the joint probability as:
+    \begin{align*}
+        P(M, \Theta, x) = p(\Theta)p(M)p(x \mid M, \Theta)
+    \end{align*}
+And each term as:
+\begin{align*}
+    P(\Theta) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\theta_{r,c}\mid \mu_{1}, \lambda_{1}) \\
+    P(M) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\mu_{r,c}\mid \mu_{0}, \lambda_{0})
+\end{align*}
+\end{problem}
+
+% \begin{proof}
+%     Proof goes here. Repeat as needed
+% \end{proof}
+
+%  ===============================================================================
 \end{document}
