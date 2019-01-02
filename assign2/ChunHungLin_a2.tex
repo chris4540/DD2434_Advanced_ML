@@ -8,11 +8,12 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{cleveref}
- 
+
 % \newcommand{\N}{\mathbb{N}}
 % \newcommand{\Z}{\mathbb{Z}}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
- 
+% \newcommand*\descriptionlabel[1]{\hspace\leftmargin$#1$}
+
 \newenvironment{problem}[2][Problem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 %If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
@@ -29,6 +30,38 @@
 \author{Lin Chun Hung, chlin3@kth.se}
 \maketitle
 
+\begin{problem}{2.8.24}
+By the graph, we can see the joint probability as:
+\begin{align*}
+    p(X, Z, C, \Theta, \pi) = p(X, Z \mid \Theta, C) p(C\mid \pi) p(\pi) p(\Theta)
+\end{align*}
+And the log probability:
+\begin{align*}
+    \log p(X, Z, C, \Theta, \pi) = 
+    \log p(X, Z \mid \Theta, C) + \log p(C\mid \pi) +\log p(\pi) + \log p(\Theta)
+\end{align*}
+From the question description, we can write down:
+\begin{align*}
+    p(\pi) &= \prod_{k} \mathrm{Dir}(\pi_k\mid \alpha) \\
+    p(A) &= \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R},\mid \alpha_A) \\
+    p(B) &= \prod_{k,r} \mathrm{Dir}(e^k_{r,r-\Delta}, e^k_{r,r-\Delta +1}, ..., e^k_{r,r+\Delta}\mid \alpha_e) \\
+    p(C\mid \pi) &= \prod_{n,k} \pi_k^{c_{nk}} \\
+    p(X, Z\mid \Theta, C) &= 
+        \prod_{n,k}(\lambda^k_{Z^n_{1}}
+        \prod_{m=2}^{M} A^k_{Z^n_{m}Z^n_{m+1}}
+        \prod_{m=1}^{M} e^k_{Z^n_{m}X^n_{m}})^{c_{nk}}
+\end{align*}
+where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
+      $\lambda^k_{Z^n_{1}}$ is the initial-state probability,
+      $A^k_{Z^n_{m}Z^n_{m+1}} = p(Z^n_{m+1}\mid Z^n_{m})$ is the transition probability,
+  and $e^k_{Z^n_{m}X^n_{m}} = p(X^n_{m}\mid Z^n_{m})$ is the emission probability.
+
+% \medskip
+% Consider $\log q(A)$
+% \begin{align*}
+%     \log q(A) &= \mathbb{E}_{Z,X,\pi, e}[]
+% \end{align*}
+\end{problem}
 %  ===============================================================================
 % part 2.9
 \begin{problem}{2.9.25}
