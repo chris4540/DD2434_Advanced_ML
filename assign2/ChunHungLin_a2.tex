@@ -61,6 +61,10 @@ where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
   and $e^k_{Z^n_{m}X^n_{m}} = p(X^n_{m}\mid Z^n_{m})$ is the emission probability.
 
 \medskip
+Assuming the following factorization.
+\begin{align*}
+    q(X, Z, C, A, e, \pi) = q(X, Z)q(C)q(A)q(e)q(\pi)
+\end{align*}
 Consider $q(A)$
 \begin{align*}
     \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
