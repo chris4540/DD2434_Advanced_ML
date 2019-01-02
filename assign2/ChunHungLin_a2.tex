@@ -74,7 +74,7 @@ Assuming the following factorization.
 \begin{align*}
     \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
-    &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}(\lambda^k_{Z^n_{1}}\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})] 
+    &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})] 
         + \log p(A)+ \text{const} \\
     &= \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] 
         + \log p(A)+ \text{const} \\
@@ -147,7 +147,7 @@ Therefore,
 \end{align*}
 Obviously, $q(e)$ is also a Dirichlet distribution.
 \begin{align*}
-    q(e) = \prod_{k,r} \mathrm{Dir}(e^k_{r,-\Delta}, e^k_{r,-\Delta+1}, ..., e^k_{r,\Delta}
+    q(e) = \prod_{k,r} \mathrm{Dir}(e^k_{r,r-\Delta}, e^k_{r,r-\Delta+1}, ..., e^k_{r,r+\Delta}
         \mid \tilde{\alpha_{e}}^k_{r,-\Delta},\tilde{\alpha_{e}}^k_{r,-\Delta+1},...,\tilde{\alpha_{e}}^k_{r,\Delta}) \\
 \end{align*}
 with the parameters:
@@ -161,7 +161,7 @@ with the parameters:
 \end{flushleft}
 
 \begin{align*}
-    \log q(\pi) &= \mathbb{E}_{q(Z,X)q(e)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    \log q(\pi) &= \mathbb{E}_{q(Z,X)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \log p(\pi) + \mathbb{E}_{q(C)}[\log p(C \mid \pi)] + \text{const} \\
     &= \sum_{k}(\alpha_k - 1)\log \pi_k + \mathbb{E}_{q(C)}[\sum_{n,k}c_{nk}\log\pi_k] + \text{const} \\
     &= \sum_{k}(\alpha_k + \sum_{n}\mathbb{E}_{q(C)}[c_{nk}] - 1)\log \pi_k + \text{const} \\
@@ -176,6 +176,44 @@ with parameters:
 \begin{equation}
     \tilde{\alpha_{\pi}}_k = \alpha_k + \sum_{n=1}^{N}r_{nk}
 \end{equation}
+% Update Q(X, Z)
+\begin{flushleft}
+    \textbf{\underline{Update $q(X, Z)$}}
+\end{flushleft}
+\begin{align*}
+    \log q(X, Z) &= \mathbb{E}_{q(\pi)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \mathbb{E}_{q(e)}[\log p(X \mid Z, C, e)] + \mathbb{E}_{q(A)}[\log p(Z \mid C, A)]
+       + \text{const} \\
+    &= \mathbb{E}_{q(e)q(C)}[\sum_{n,k}c_{nk}\sum_{m=1}^{M}\log e^k_{Z^n_m X^n_m}] \\
+    &\hspace{0.5cm}  + \mathbb{E}_{q(A)q(C)}[\sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})]
+       + \text{const} \\
+    &= \sum_{n,k}r_{nk}\sum_{m=1}^{M}\log \tilde{e}^k_{Z^n_m X^n_m}
+        + \sum_{n,k}r_{nk}(\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}})
+        + \text{const} \\
+    &= \sum_{n,k}r_{nk}(
+        (\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}}
+        +\log \tilde{e}^k_{Z^n_m X^n_m})
+        + \text{const} \\
+\end{align*}
+where we define $\tilde{A}^k_{Z^n_{m}Z^n_{m+1}}$ as:
+\begin{align*}
+    \log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}} &= \mathbb{E}_{q(A)}[\log A^k_{Z^n_{m}Z^n_{m+1}}] \\
+    &= \sum_{i,j}\mathbb{I}(Z^n_{m} = i, Z^n_{m+1}=j)\mathbb{E}_{q(A)}[\log A^k_{i,j}] \\
+    &= \sum_{i,j}\mathbb{I}(Z^n_{m} = i, Z^n_{m+1}=j)
+    (\phi(\tilde{\alpha_{A}}^k_{i,j}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{i,l})) \\
+    &= \phi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l}) \\
+    \tilde{A}^k_{Z^n_{m}Z^n_{m+1}} &= 
+    \exp[\phi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l})] \\
+\end{align*}
+Simularly, we can define $\tilde{e}^k_{Z^n_m X^n_m}$:
+\begin{align*}
+    % log b_tilde
+    \log \tilde{e}^k_{Z^n_m X^n_m} 
+    &= \phi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\phi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})\\
+    \tilde{e}^k_{Z^n_m X^n_m} &= 
+    \exp[\phi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\phi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})\\
+\end{align*}
+
 \end{problem}
 \pagebreak
 
