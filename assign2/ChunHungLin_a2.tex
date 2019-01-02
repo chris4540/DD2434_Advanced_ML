@@ -43,7 +43,7 @@ And the log probability:
 \end{align*}
 From the question description, we can write down:
 \begin{align*}
-    p(\pi) &= \prod_{k} \mathrm{Dir}(\pi_k\mid \alpha) \\
+    p(\pi) &= \mathrm{Dir}(\pi_1, \pi_2, ..., \pi_K \mid \alpha_1, \alpha_2, ..., \alpha_K) \\
     p(A) &= \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R},\mid \alpha_A) \\
     p(B) &= \prod_{k,r} \mathrm{Dir}(e^k_{r,r-\Delta}, e^k_{r,r-\Delta +1}, ..., e^k_{r,r+\Delta}\mid \alpha_e) \\
     p(C\mid \pi) &= \prod_{n,k} \pi_k^{c_{nk}} \\
@@ -155,8 +155,29 @@ with the parameters:
     \tilde{\alpha_{e}}^k_{r,l} = \alpha_{e,l} + \sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk} q(Z^n_{m}=r, X^n_{m}=r+l)
 \end{equation}
 
-\end{problem}
+% Update Q(pi)
+\begin{flushleft}
+    \textbf{\underline{Update $q(\pi)$}}
+\end{flushleft}
 
+\begin{align*}
+    \log q(\pi) &= \mathbb{E}_{q(Z,X)q(e)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \log p(\pi) + \mathbb{E}_{q(C)}[\log p(C \mid \pi)] + \text{const} \\
+    &= \sum_{k}(\alpha_k - 1)\log \pi_k + \mathbb{E}_{q(C)}[\sum_{n,k}c_{nk}\log\pi_k] + \text{const} \\
+    &= \sum_{k}(\alpha_k + \sum_{n}\mathbb{E}_{q(C)}[c_{nk}] - 1)\log \pi_k + \text{const} \\
+    &= \sum_{k}(\alpha_k + \sum_{n}r_{nk} - 1)\log \pi_k + \text{const} \\
+\end{align*}
+Therefore, $q(\pi)$ is a Dirichlet distribution 
+\begin{align*}
+    q(\pi) = \mathrm{Dir}(\pi_1, \pi_2, ..., \pi_K \mid 
+    \tilde{\alpha_{\pi}}_1,\tilde{\alpha_{\pi}}_2,...,\tilde{\alpha_{\pi}}_K)
+\end{align*}
+with parameters:
+\begin{equation}
+    \tilde{\alpha_{\pi}}_k = \alpha_k + \sum_{n=1}^{N}r_{nk}
+\end{equation}
+\end{problem}
+\pagebreak
 
 
 %  ===============================================================================
