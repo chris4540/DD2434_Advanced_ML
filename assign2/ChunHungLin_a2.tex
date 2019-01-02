@@ -60,12 +60,17 @@ where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
       $A^k_{Z^n_{m}Z^n_{m+1}} = p(Z^n_{m+1}\mid Z^n_{m})$ is the transition probability,
   and $e^k_{Z^n_{m}X^n_{m}} = p(X^n_{m}\mid Z^n_{m})$ is the emission probability.
 
-\medskip
 Assuming the following factorization.
 \begin{align*}
     q(X, Z, C, A, e, \pi) = q(X, Z)q(C)q(A)q(e)q(\pi)
 \end{align*}
-Consider $q(A)$
+
+
+% Update Q(A)
+\begin{flushleft}
+\textbf{\underline{Update $q(A)$}}
+\end{flushleft}
+
 \begin{align*}
     \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
@@ -105,8 +110,11 @@ with the parameters:
     \tilde{\alpha_{A}}^k_{r,j} = \alpha_{A,j} + \sum_{n=1}^{N}\sum_{m=2}^{M}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j)
 \end{equation}
 
-% q(e)
-Consider $q(e)$:
+% Update Q(e)
+\begin{flushleft}
+    \textbf{\underline{Update $q(e)$}}
+\end{flushleft}
+% Consider $q(e)$:
 \begin{align*}
     \log q(e) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(A)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \log p(e) + \mathbb{E}_{q(Z)q(X)q(C)}[\log p(X\mid Z, C, e)] + \text{const} \\
