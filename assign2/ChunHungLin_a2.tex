@@ -37,8 +37,8 @@ By the graph, we can see the joint probability as:
 \end{align*}
 And the log probability:
 \begin{align*}
-    \log p(X, Z, C, \Theta, \pi) = 
-    \log p(X, Z \mid \Theta, C) + \log p(C\mid \pi) +\log p(\pi) + \log p(\Theta)
+    \log p(X, Z, C, \Theta, \pi) = \log p(X \mid Z, e, C)
+    \log p(Z \mid A, C) + \log p(C\mid \pi) +\log p(\pi) + \log p(\Theta)
 \end{align*}
 From the question description, we can write down:
 \begin{align*}
