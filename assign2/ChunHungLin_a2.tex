@@ -61,7 +61,7 @@ where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
   and $e^k_{Z^n_{m}X^n_{m}} = p(X^n_{m}\mid Z^n_{m})$ is the emission probability.
 
 \medskip
-Consider $\log q(A)$
+Consider $q(A)$
 \begin{align*}
     \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
@@ -93,13 +93,56 @@ Therefore,
 \end{align*}
 Therefore, we can see that $q(A)$ is a Dirichlet Distribution.
 \begin{align*}
-    q(A) = \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R},
+    q(A) = \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R}
         \mid \tilde{\alpha_{A}}^k_{r,1},\tilde{\alpha_{A}}^k_{r,2},...,\tilde{\alpha_{A}}^k_{r,R}) \\
 \end{align*}
 with the parameters:
 \begin{equation}
     \tilde{\alpha_{A}}^k_{r,j} = \alpha_{A,j} + \sum_{n=1}^{N}\sum_{m=2}^{M}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j)
 \end{equation}
+
+% q(e)
+Consider $q(e)$:
+\begin{align*}
+    \log q(e) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(A)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \log p(e) + \mathbb{E}_{q(Z)q(X)q(C)}[\log p(X\mid Z, C, e)] + \text{const} \\
+    &= \log p(e) 
+        + \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}] 
+        + \text{const} \\
+\end{align*}
+Term by Term:
+\begin{align*}
+    \log p(e) &= \sum_{k,r}\sum_{l=-\Delta}^{\Delta} (\alpha_{e,l} - 1)\log e^k_{r,r+l} \\
+    &= \sum_{k=1}^{K}\sum_{r=1}^{R}\sum_{l=-\Delta}^{\Delta} (\alpha_{e,l} - 1)\log e^k_{r,r+l}
+\end{align*}
+We can use the same skill as what we do in calculating $q(A)$
+\begin{align*}
+    \mathbb{E}_{q(Z)q(X)}[\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)] = q(Z^n_{m}=i, X^n_{m}=r+l)
+\end{align*}
+Then, we have:
+\begin{align*}
+    \mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}] 
+    &= \mathbb{E}_{q(Z)q(X)}[\sum_{i,j}\mathbb{I}(Z^n_{m}=i, X^n_{m}=j)\log e^k_{i,j}] \\
+    &= \mathbb{E}_{q(Z)q(X)}[\sum_{i,l}\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)\log e^k_{i,r+l}] \\
+    &= \sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(Z^n_{m}=i, X^n_{m}=r+l)\log e^k_{i,r+l} \\
+\end{align*}
+Therefore,
+\begin{align*}
+    &\sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}]\\
+    &= \sum_{n,k}r_{nk}\sum_{m=1}^{M}\sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(Z^n_{m}=i, X^n_{m}=r+l)\log e^k_{i,r+l} \\
+    &= \sum_{k=1}^{K}\sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}
+        (\sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk}q(Z^n_{m}=i, X^n_{m}=r+l))\log e^k_{i,r+l}
+\end{align*}
+Obviously, $q(e)$ is also a Dirichlet distribution.
+\begin{align*}
+    q(e) = \prod_{k,r} \mathrm{Dir}(e^k_{r,-\Delta}, e^k_{r,-\Delta+1}, ..., e^k_{r,\Delta}
+        \mid \tilde{\alpha_{e}}^k_{r,-\Delta},\tilde{\alpha_{e}}^k_{r,-\Delta+1},...,\tilde{\alpha_{e}}^k_{r,\Delta}) \\
+\end{align*}
+with the parameters:
+\begin{equation}
+    \tilde{\alpha_{e}}^k_{r,l} = \alpha_{e,l} + \sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk} q(Z^n_{m}=r, X^n_{m}=r+l)
+\end{equation}
+
 \end{problem}
 
 
