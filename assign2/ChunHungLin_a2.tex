@@ -37,8 +37,9 @@ By the graph, we can see the joint probability as:
 \end{align*}
 And the log probability:
 \begin{align*}
-    \log p(X, Z, C, \Theta, \pi) = \log p(X \mid Z, e, C)
-    \log p(Z \mid A, C) + \log p(C\mid \pi) +\log p(\pi) + \log p(\Theta)
+    \log p(X, Z, C, \Theta, \pi) = 
+    &\log p(X \mid Z, e, C) + \log p(Z \mid A, C) + \log p(C\mid \pi)  \\
+    & + \log p(\pi) + \log p(A)  + \log p(e)
 \end{align*}
 From the question description, we can write down:
 \begin{align*}
@@ -46,10 +47,13 @@ From the question description, we can write down:
     p(A) &= \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R},\mid \alpha_A) \\
     p(B) &= \prod_{k,r} \mathrm{Dir}(e^k_{r,r-\Delta}, e^k_{r,r-\Delta +1}, ..., e^k_{r,r+\Delta}\mid \alpha_e) \\
     p(C\mid \pi) &= \prod_{n,k} \pi_k^{c_{nk}} \\
-    p(X, Z\mid \Theta, C) &= 
-        \prod_{n,k}(\lambda^k_{Z^n_{1}}
-        \prod_{m=2}^{M} A^k_{Z^n_{m}Z^n_{m+1}}
-        \prod_{m=1}^{M} e^k_{Z^n_{m}X^n_{m}})^{c_{nk}}
+    p(Z\mid C, A) &= \prod_{n,k}(\lambda^k_{Z^n_{1}}
+        \prod_{m=2}^{M} A^k_{Z^n_{m}Z^n_{m+1}})^{c_{nk}} \\
+    p(X\mid Z, C, e) &= \prod_{n,k} (\prod_{m=1}^{M} e^k_{Z^n_{m}X^n_{m}})^{c_{nk}}
+    % p(X, Z\mid \Theta, C) &= 
+    %     \prod_{n,k}(\lambda^k_{Z^n_{1}}
+    %     \prod_{m=2}^{M} A^k_{Z^n_{m}Z^n_{m+1}}
+    %     \prod_{m=1}^{M} e^k_{Z^n_{m}X^n_{m}})^{c_{nk}}
 \end{align*}
 where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
       $\lambda^k_{Z^n_{1}}$ is the initial-state probability,
@@ -59,9 +63,47 @@ where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
 \medskip
 Consider $\log q(A)$
 \begin{align*}
-    \log q(A) &= \mathbb{E}_{Z,X,\pi, e}[]
+    \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
+    &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] 
+        + \log p(A)+ \text{const} \\
+    &= \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] 
+        + \log p(A)+ \text{const} \\
 \end{align*}
+We look the equation above term-by term:
+\begin{align*}
+    \log p(A) &= \sum_{k,r}\sum_{j=1}^{R} (\alpha_{A,j} - 1)\log A^k_{r,j} \\
+    &= \sum_{k=1}^{K}\sum_{r=1}^{R}\sum_{j=1}^{R} (\alpha_{A,j} - 1)\log A^k_{r,j}
+\end{align*}
+\begin{align*}
+    \mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] &=
+    \sum_{Z}q(Z)\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}} \\
+    &= \sum_{Z}q(Z)\sum_{m=2}^{M}\sum_{r=1}^{R}\sum_{j=1}^{R}\mathbb{I}(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j} \\
+    &= \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j}
+\end{align*}
+For simplicity, define $r_{nk}$ as:
+\begin{equation}
+    r_{nk} = \mathbb{E}_{q(C)}[c_{nk}] 
+\end{equation}
+Therefore,
+\begin{align*}
+    &\sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] \\
+    &= \sum_{n,k} r_{nk} \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j} \\
+    &= \sum_{k}\sum_{r}\sum_{j}(\sum_{n}\sum_{m=2}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j))\log A^k_{r,j}
+\end{align*}
+Therefore, we can see that $q(A)$ is a Dirichlet Distribution.
+\begin{align*}
+    q(A) = \prod_{k,r} \mathrm{Dir}(A^k_{r,1}, A^k_{r,2}, ..., A^k_{r,R},
+        \mid \tilde{\alpha_{A}}^k_{r,1},\tilde{\alpha_{A}}^k_{r,2},...,\tilde{\alpha_{A}}^k_{r,R}) \\
+\end{align*}
+with the parameters:
+\begin{equation}
+    \tilde{\alpha_{A}}^k_{r,j} = \alpha_{A,j} + \sum_{n=1}^{N}\sum_{m=2}^{M}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j)
+\end{equation}
 \end{problem}
+
+
+
 %  ===============================================================================
 % part 2.9
 \begin{problem}{2.9.25}
