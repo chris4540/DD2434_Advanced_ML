@@ -74,7 +74,7 @@ Assuming the following factorization.
 \begin{align*}
     \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
-    &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] 
+    &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}(\lambda^k_{Z^n_{1}}\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})] 
         + \log p(A)+ \text{const} \\
     &= \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] 
         + \log p(A)+ \text{const} \\
