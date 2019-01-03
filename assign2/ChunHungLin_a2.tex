@@ -212,20 +212,21 @@ where we define $\tilde{A}^k_{Z^n_{m}Z^n_{m+1}}$ as:
     \log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}} &= \mathbb{E}_{q(A)}[\log A^k_{Z^n_{m}Z^n_{m+1}}] - \log Z_{A}\\
     &= \sum_{i,j}\mathbb{I}(Z^n_{m} = i, Z^n_{m+1}=j)\mathbb{E}_{q(A)}[\log A^k_{i,j}] - \log Z_{A}\\
     &= \sum_{i,j}\mathbb{I}(Z^n_{m} = i, Z^n_{m+1}=j)
-    (\phi(\tilde{\alpha_{A}}^k_{i,j}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{i,l}))- \log Z_{A}\\
-    &= \phi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l}) - \log Z_{A}\\
+    (\psi(\tilde{\alpha_{A}}^k_{i,j}) -\psi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{i,l}))- \log Z_{A}\\
+    &= \psi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\psi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l}) - \log Z_{A}\\
     \tilde{A}^k_{Z^n_{m}Z^n_{m+1}} &= \frac{1}{Z_{A}}
-    \exp[\phi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\phi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l})] \\
+    \exp[\psi(\tilde{\alpha_{A}}^k_{Z^n_{m},Z^n_{m+1}}) -\psi(\sum_{l=1}^{R}\tilde{\alpha_{A}}^k_{Z^n_{m},l})] \\
 \end{align*}
 Simularly, we can define $\tilde{e}^k_{Z^n_m X^n_m}$:
 \begin{align*}
     % log b_tilde
     \log \tilde{e}^k_{Z^n_m X^n_m} 
-    &= \phi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\phi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})
+    &= \psi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\psi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})
     - \log Z_{e}\\
     \tilde{e}^k_{Z^n_m X^n_m} &= \frac{1}{Z_{e}}
-    \exp[\phi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\phi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})]\\
+    \exp[\psi(\tilde{\alpha_{e}}^k_{Z^n_{m},X^n_{m}}) -\psi(\sum_{l=-\Delta}^{\Delta}\tilde{\alpha_{e}}^k_{Z^n_{m},Z^n_{m}+l})]\\
 \end{align*}
+where $\psi(.)$ is the digamma function as well as
 $Z_{A}$ and $Z_{e}$ are normalization constants to make sure that $\tilde{A}^{k}_{i,j}$
 and $\tilde{e}^{k}_{i,l}$ are stochastic matrices.
 
@@ -257,23 +258,16 @@ because:
     q(Z^n_{m}=i, Z^n_{m+1}=j) &\approx p(Z^n_{m}=i, Z^n_{m+1}=j\mid X, \tilde{A}, \tilde{e})
 \end{align*}
 
-
-% which is similar to the joint probability of K HMMs of N vehicles with a optimal
-% parameter set.
-% For updating $q(A)$ and $q(e)$, we can use $q(X,Z)$ to iterativly compute
-% $q(Z^n_{m+1} \mid Z^n_{m})$ and $q(X^n_{m} \mid Z^n_{m})$.
-
-% % Update q(C)
-% \begin{flushleft}
-%     \textbf{\underline{Update $q(C)$}}
-% \end{flushleft}
-
-% \begin{align*}
-%     \log q(C) &= \mathbb{E}_{...}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
-%     &= \mathbb{E}_{q(\pi)}[\log p(C \mid \pi)]
-%         + \mathbb{E}_{q(X,Z)q(e)q(A)}[\log p(X,Z \mid A, e, C)] 
-%         + \text{const} \\
-% \end{align*}
+% Update q(C)
+\begin{flushleft}
+    \textbf{\underline{Update $q(C)$}}
+\end{flushleft}
+\begin{align*}
+    \log q(C) &= \mathbb{E}_{q(Z)q(A)q(e)q(\pi)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \mathbb{E}_{q(\pi)}[\log p(C \mid \pi)]
+        + \mathbb{E}_{q(X,Z)q(e)q(A)}[\log p(X,Z \mid A, e, C)] 
+        + \text{const} \\
+\end{align*}
 \end{problem}
 \pagebreak
 
