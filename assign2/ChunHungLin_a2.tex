@@ -109,7 +109,6 @@ we can find $\bm{\mu}^{(t+1)}$ and $\bm{\Sigma}^{(t+1)}$
 by setting the first derivatives of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$
 to zero.
 
-% Update Q(pi)
 \begin{flushleft}
     \textbf{\underline{Update $\mu_s$}}
 \end{flushleft}
@@ -119,6 +118,17 @@ to zero.
     &= \sum_{r=1}^{R} \gamma_{rs}(\frac{x_r - \mu_s}{\Sigma_s}) = 0 \\
     \mu_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}x_r}{\sum_{r=1}^{R}\gamma_{rs}}
 \end{align*}
+
+\begin{flushleft}
+    \textbf{\underline{Update $\Sigma_s$}}
+\end{flushleft}
+
+\begin{align*}
+    \frac{\partial}{\partial {\Sigma_s}^{-1}}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+    &= \sum_{r=1}^{R} \gamma_{rs}(\frac{1}{2{\Sigma_s}^{-1}} - \frac{1}{2}(x_r - \mu_s)^2) = 0 \\
+    \Sigma_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}(x_r - \mu_s)^2}{\sum_{r=1}^{R}\gamma_{rs}}
+\end{align*}
+
 \end{problem}
 \pagebreak
 
