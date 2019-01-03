@@ -8,6 +8,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{cleveref}
+\usepackage[makeroom]{cancel}
 
 \setlength{\parindent}{0em}
 \setlength{\parskip}{.3em}
@@ -32,7 +33,61 @@
 \title{DD2434 Machine Learning, Advanced Course Assignment 2}
 \author{Lin Chun Hung, chlin3@kth.se}
 \maketitle
+% 2.5
+\begin{problem}{2.5.15}
 
+We have:
+\begin{align*}
+    s(u, i) = p(x_{L(T_u)} \mid X_u = i)
+\end{align*}
+$s(u,i)$ can be regarded as the evidence of the leaves of subtree $T_u$ given that
+the value of this vertex $u$ is $i$.
+
+Given the tree structure and the parameters of each vertex, the posterior is:
+\begin{align*}
+    p(X\mid \beta) = p(X_r\mid \beta)\prod_{v\in V(T)} p(X_v\mid X_{pa(v)}, \beta)
+\end{align*}
+where $X_r$ is the value of root.
+
+The sampling distribution of the value of root is:
+\begin{align*}
+    p(X_r = i\mid \beta) &= \frac{p(X_r = i, \beta)}{p(\beta)} \\
+    &= \frac{p(\beta \mid X_r =i)p(X_r =i)}{p(\beta)} \\
+    &= \frac{s(r,i)p(X_r =i)}{p(\beta)} \\
+    &= \frac{s(r,i)p(X_r =i)}{p(\beta)} \\
+    &= \frac{s(r,i)p(X_r =i)}{\sum_{i}s(r,i)p(X_r =i)} \\
+\end{align*}
+
+Here we would like to introduce some symbols. 
+$\beta^{-}_{v} = \{X_{v^{-}}: v^{-} \in L(T_v)\}$ is the values of the leaves
+under the subtree $T_v$.
+$\beta^{+}_{v} = \{X_{v^{+}}: v^{+} \in V(T) \setminus L(T_v)\}$ is the values of
+the leaves not under the subtree $T_v$.
+
+Then, the sampling distribution of vertex except the root node is given by:
+\begin{align*}
+    p(X_v = i\mid X_{pa(v)}, \beta) 
+    &= p(X_v = i\mid X_{pa(v)}, \beta^{-}_{v}, \beta^{+}_{v}) \\
+    &= p(X_v = i\mid X_{pa(v)}, \beta^{-}_{v}, \cancel{\beta^{+}_{v}}) && \text{(By d-speration rule)}\\
+    &= \frac{p(X_v = i, X_{pa(v)}, \beta^{-}_{v})}{p(X_{pa(v)}, \beta^{-}_{v})} \\
+    &= \frac{p(\beta^{-}_{v}\mid X_v = i, \cancel{X_{pa(v)}})p(X_v = i, X_{pa(v)})}
+        {p(X_{pa(v)}, \beta^{-}_{v})} && \text{(By d-speration rule)}\\
+    &= \frac{p(\beta^{-}_{v}\mid X_v = i)p(X_v = i\mid X_{pa(v)})p(X_{pa(v)})}
+        {p(\beta^{-}_{v}\mid X_{pa(v)})p(X_{pa(v)})} \\
+    &= \frac{s(v,i)p(X_v = i\mid X_{pa(v)})}
+            {\sum_{i}s(v,i)p(X_v = i\mid X_{pa(v)})}
+\end{align*}
+
+Therefore, we should first compute $s(u, i)$ for each vertex and each value 
+from bottom to top and then sampling from the posterior from top to bottom
+recursively.
+\begin{align}
+    X_r &\sim \frac{s(r,i)p(X_r =i)}{\sum_{i}s(r,i)p(X_r =i)} \\
+    X_v &\sim \frac{s(v,i)p(X_v = i\mid X_{pa(v)}^{s})}
+                {\sum_{i}s(v,i)p(X_v = i\mid X_{pa(v)}^{s})}
+\end{align}
+\end{problem}
+\pagebreak
 % 2.6
 \begin{problem}{2.6.18}
 Notices that the each observation is the sum of two Gaussian random variables.
