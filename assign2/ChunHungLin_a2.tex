@@ -265,8 +265,59 @@ because:
 \begin{align*}
     \log q(C) &= \mathbb{E}_{q(Z)q(A)q(e)q(\pi)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(\pi)}[\log p(C \mid \pi)]
-        + \mathbb{E}_{q(X,Z)q(e)q(A)}[\log p(X,Z \mid A, e, C)] 
-        + \text{const} \\
+        + \mathbb{E}_{q(Z)q(e)}[\log p(X \mid Z, C, e)]  \\
+        &+ \mathbb{E}_{q(Z)q(A)}[\log p(Z \mid C, A)] + \text{const} \\
+\end{align*}
+
+The first term $\mathbb{E}_{q(\pi)}[\log p(C \mid \pi)]$:
+\begin{align*}
+    \mathbb{E}_{q(\pi)}[\log p(C \mid \pi)] 
+    &= \mathbb{E}_{q(\pi)}[\sum_{n,k} c_{nk} \log \pi_k] \\
+    &= \sum_{n,k} c_{nk}\mathbb{E}_{q(\pi)}[\log \pi_k] \\
+    &= \sum_{n,k} c_{nk}(\psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)) \\
+\end{align*}
+
+The second term $\mathbb{E}_{q(Z)q(e)}[\log p(X \mid Z, C, e)]$:
+\begin{align*}
+    \mathbb{E}_{q(Z)q(e)}[\log p(X \mid Z, C, e)]
+    &= \mathbb{E}_{q(Z)q(e)}[\sum_{n,k}c_{nk}\sum_{m=1}^{M}\log e^k_{Z^n_m X^n_m}] \\
+    &= \sum_{n,k}c_{nk}\mathbb{E}_{q(Z)q(e)}[\sum_{m=1}^{M}\log e^k_{Z^n_m X^n_m}] \\
+    &= \sum_{n,k}c_{nk}\mathbb{E}_{q(Z)}[\sum_{m=1}^{M}\log \tilde{e}^k_{Z^n_m X^n_m}]
+\end{align*}
+
+The third term $\mathbb{E}_{q(Z)q(A)}[\log p(Z \mid C, A)]$:
+\begin{align*}
+    \mathbb{E}_{q(Z)q(A)}[\log p(Z \mid C, A)]
+    &= \mathbb{E}_{q(Z)q(A)}[
+        \sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})] \\
+    &= \sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} 
+        + \mathbb{E}_{q(Z)q(A)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}]) \\
+    &= \sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} 
+        + \mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}}]) \\
+\end{align*}
+Combining the second term and the third term, we can get an entropy-like term
+of the mixture of HMMs. That term can be computed by a recursive algorithm.
+Define:
+\begin{align*}
+    \tilde{H}_{nk}(q(Z)) &= -\mathbb{E}_{q(Z)}[
+            \log\lambda^k_{Z^n_{1}} 
+            + \sum_{m=2}^{M}\log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}}
+            + \sum_{m=1}^{M}\log \tilde{e}^k_{Z^n_m X^n_m}] \\
+    &= - \log\lambda^k_{Z^n_{1}} -\mathbb{E}_{q(Z)}[            
+            \sum_{m=2}^{M}\log \tilde{A}^k_{Z^n_{m}Z^n_{m+1}}
+            + \sum_{m=1}^{M}\log \tilde{e}^k_{Z^n_m X^n_m}]
+\end{align*}
+Consider $q(C)$ is actually a categorical distribution and the defined relation
+$\mathbb{E}_{q(C)}[c_{nk}] = r_{nk}$. Therefore, we have:
+\begin{align*}
+    q(C) = \prod_{n,k} r_{nk}^{c_{nk}}
+\end{align*}
+and 
+\begin{align*}
+    \log r_{nk} &= \psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
+                    - \tilde{H}_{nk}(q(Z)) \\
+         r_{nk} &= \exp[\psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
+                        - \tilde{H}_{nk}(q(Z))]
 \end{align*}
 \end{problem}
 \pagebreak
