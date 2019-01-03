@@ -33,6 +33,57 @@
 \author{Lin Chun Hung, chlin3@kth.se}
 \maketitle
 
+% 2.6
+\begin{problem}{2.6.18}
+Notices that the each observation is the sum of two Gaussian random variables.
+Therefore, we can first estimated the parameters of the observation model of 
+a pair of players and then solve the linear equations to get each model parameters.
+\begin{align*}
+    p(x_r^{(n,n')}\mid z_r^{(n,n')} = s) = \mathcal{N}(x_r^{(n,n')} \mid \mu^{n}_s + \mu^{n'}_s, 2\beta)
+\end{align*}
+where $z_r^{(n,n')} = s$ means the pair of player $(n, n')$ visting 
+subfield $s$ at sequence index $r$ and $z$ means hidden state.
+
+First we will derive an EM algorithm for a HMM with Gaussian observation model 
+and then extend it to our case.
+
+Consider the joint probability of a HMM where the initial state probaility and 
+the transition matrix is given and the observation model is a conditional
+Gaussian.
+\begin{align*}
+    p(z_{1:R}, x_{1:R}) &= p(z_1) \prod_{r=2}^{R}p(z_r\mid z_{r-1})
+            \prod_{r=1}^{R}p(x_r\mid z_r) \\
+    p(x_r\mid z_r=s) &= \mathcal{N}(x_r \mid \mu_s, \Sigma_k)
+\end{align*}
+
+The expected complete log likelihood (Q term):
+\begin{align*}
+    Q(\theta, \theta^{t}) &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[
+        \log p(z_{1:R}, x_{1:R}\mid \theta)]
+\end{align*}
+where $\theta$ is a set of parameters for this HMM model.
+\begin{align*}
+    \theta = \{\bm{\pi}, \bm{A}, \bm{\mu}, \bm{\Sigma}\}
+\end{align*}
+where $\bm{\pi}$ is the initial state probability vector, $\bm{A}$ is the transition
+matrix, $\bm{\mu} = \{ \mu_s: s \in S\}$ and $\bm{\Sigma} = \{ \Sigma_s: s \in S\}$.
+
+\begin{align*}
+    Q(\theta, \theta^{t}) &= 
+    \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[
+        \log p(z_1) + \sum_{r=2}^{R} \log p(z_r \mid z_{r-1}) 
+        + \sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
+    &= \mathbb{E}[\log p(z_1)] 
+        + \mathbb{E}[\sum_{r=2}^{R} \log p(z_r \mid z_{r-1})] 
+        + \mathbb{E}[\sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
+    &= Q_{\pi}(\bm{\pi}) + Q_{A}(\bm{A}) + Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})
+\end{align*}
+When $\bm{\pi}$ and $\bm{A}$ are given, $Q_{\pi}(\bm{\pi})$ and $Q_{A}(\bm{A})$ 
+are not change in each iteration. Therefore, we only need to maximize 
+$Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ to update $\bm{\mu}$ and $\bm{\Sigma}$.
+\end{problem}
+\pagebreak
+
 \begin{problem}{2.8.24}
 Consider the full joint distribution can be factorized as:
 \begin{align*}
