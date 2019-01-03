@@ -31,6 +31,13 @@
 \maketitle
 
 \begin{problem}{2.8.24}
+Consider the full joint distribution can be factorized as:
+\begin{align*}
+    p(X, Z, C, \Theta, \pi) = p(Z, C, \Theta, \pi \mid X)p(X)
+\end{align*}
+And the posterior $p(Z, C, \Theta, \pi \mid X)$ can be approximated by VI.
+
+\medskip
 By the graph, we can see the joint probability as:
 \begin{align*}
     p(X, Z, C, \Theta, \pi) = p(X, Z \mid \Theta, C) p(C\mid \pi) p(\pi) p(\Theta)
@@ -62,8 +69,7 @@ where $c_{nk}=1$ if sequence ~$X^n$ belongs to cluster k otherwise $c_{nk}=0$,
 
 Assuming the following factorization.
 \begin{align*}
-    q(X, Z, C, A, e, \pi) &= q(X, Z)q(C)q(A)q(e)q(\pi) \\
-    q(X, Z) &= q(Z_{1})\prod_{m}q(Z_{m+1}\mid Z_{m})\prod_{m}q(X_{m}\mid Z_{m})
+    q(Z, C, A, e, \pi) &= q(Z)q(C)q(A)q(e)q(\pi)
 \end{align*}
 
 
@@ -227,8 +233,17 @@ parameter set.
 For updating $q(A)$ and $q(e)$, we can use $q(X,Z)$ to iterativly compute
 $q(Z^n_{m+1} \mid Z^n_{m})$ and $q(X^n_{m} \mid Z^n_{m})$.
 
-% q(C)
+% % Update q(C)
+% \begin{flushleft}
+%     \textbf{\underline{Update $q(C)$}}
+% \end{flushleft}
 
+% \begin{align*}
+%     \log q(C) &= \mathbb{E}_{...}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+%     &= \mathbb{E}_{q(\pi)}[\log p(C \mid \pi)]
+%         + \mathbb{E}_{q(X,Z)q(e)q(A)}[\log p(X,Z \mid A, e, C)] 
+%         + \text{const} \\
+% \end{align*}
 \end{problem}
 \pagebreak
 
