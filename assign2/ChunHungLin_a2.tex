@@ -582,8 +582,8 @@ Consider $a_{r,c}$ is a sum of random variables and each of them has a posterior
 Therefore:
 \begin{align*}
     \mathbb{E}_{q(M)}[a_{r,c}] &= \sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j} \\
-    \mathbb{E}_{q(M)}[a_{r,c}^2] &= \mathrm{Var}_{q(M)}[a_{r,c}] + \mathbb{E}_{q(M)}[a_{r,c}] \\
-    &= \sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + \tilde{m}^{\mu}_{i,j})
+    \mathbb{E}_{q(M)}[a_{r,c}^2] &= \mathrm{Var}_{q(M)}[a_{r,c}] + \mathbb{E}_{q(M)}[a_{r,c}]^2 \\
+    &= \sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + (\tilde{m}^{\mu}_{i,j})^2)
 \end{align*}
 
 Making use of eq.\eqref{eq:logspaceNormal}, we have:
@@ -592,7 +592,7 @@ Making use of eq.\eqref{eq:logspaceNormal}, we have:
     -\frac{\tilde{\lambda^{\theta}}_{r,c}}{2} 
     &= -\frac{\lambda_1}{2} -\frac{\lambda\mathbb{E}_{q(M)}[a_{r,c}^2]}{2} \\
     \tilde{\lambda^{\theta}}_{r,c}
-    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + \tilde{m}^{\mu}_{i,j}) \\
+    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + (\tilde{m}^{\mu}_{i,j})^2) \\
     % mu of theta given x
     \tilde{m^{\theta}}_{r,c} 
     &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}}
@@ -605,7 +605,7 @@ Therefore, the update equations of $q(\theta_{r,c})$ are:
 \begin{align*}
     % lambda of theta given x
     \tilde{\lambda^{\theta}}_{r,c}^{(t+1)}
-    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}((\tilde{\lambda^{\mu}}^{(t)}_{i,j})^{-1} + \tilde{m^{\mu}}_{i,j}^{(t)}) \\
+    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}((\tilde{\lambda^{\mu}}^{(t)}_{i,j})^{-1} + (\tilde{m^{\mu}}_{i,j}^{(t)})^2) \\
     % mu of theta given x
     \tilde{m^{\theta}}_{r,c}^{(t+1)}
     &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}}
