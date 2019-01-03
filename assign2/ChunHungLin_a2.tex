@@ -314,10 +314,35 @@ $\mathbb{E}_{q(C)}[c_{nk}] = r_{nk}$. Therefore, we have:
 \end{align*}
 and 
 \begin{align*}
-    \log r_{nk} &= \psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
+    \log \rho_{nk} &= \psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
                     - \tilde{H}_{nk}(q(Z)) \\
-         r_{nk} &= \exp[\psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
-                        - \tilde{H}_{nk}(q(Z))]
+         \rho_{nk} &= \exp[\psi(\tilde{\alpha_\pi}_k) - \psi(\sum_{j=1}^{K}\tilde{\alpha_\pi}_j)
+                        - \tilde{H}_{nk}(q(Z))] \\
+         r_{nk} &= \frac{\rho_{nk}}{\sum_{j=1}^{K}\rho_nk}
+\end{align*}
+where $\rho_{nk}$ is a unnormalized posterior responsibility of class k for data sequence n and
+$r_{nk}$ is a normalized posterior responsibility.
+
+We now have an approximated posterior of the model. $p(X)$ is hard to have an analytical expression
+but one can estimated its lower bound $\mathcal{L}(q)$.
+
+We have:
+\begin{align*}
+    \log p(X) &= \mathrm{KL}(q||p) + \mathcal{L}(q) \\
+    \mathrm{KL}(q||p) &= 
+        \sum_{Z,C,\pi,\Theta} q(Z,C,\pi,\Theta) 
+        \log\frac{q(Z,C,\pi,\Theta)}{p(Z,C,\pi,\Theta\mid X)} \\
+    \mathcal{L}(q) &= 
+        \sum_{Z,C,\pi,\Theta} q(Z,C,\pi,\Theta) 
+        \log\frac{p(Z,C,\pi,\Theta, X)}{q(Z,C,\pi,\Theta)} \\
+\end{align*}
+
+When we have a good approximation of $p(Z,C,\pi,\Theta\mid X)$, $\mathrm{KL}(q||p)$
+will tend to zero and $\log p(X)$ can be estimated as $\mathcal{L}(q)$. 
+
+Therefore, we have:
+\begin{align*}
+    p(X) \approx \exp[\mathcal{L}(q)]
 \end{align*}
 \end{problem}
 \pagebreak
