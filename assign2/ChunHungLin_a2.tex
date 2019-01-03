@@ -82,7 +82,7 @@ Assuming the following factorization.
 \end{flushleft}
 
 \begin{align*}
-    \log q(A) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    \log q(A) &= \mathbb{E}_{q(Z)q(\pi)q(C)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\log p(Z\mid A, C)] + \log p(A)+ \text{const} \\
     &= \mathbb{E}_{q(Z)q(C)}[\sum_{n,k}c_{nk}(\log\lambda^k_{Z^n_{1}} + \sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}})] 
         + \log p(A)+ \text{const} \\
@@ -98,7 +98,7 @@ We look at the equation above term-by term:
     \mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] &=
     \sum_{Z}q(Z)\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}} \\
     &= \sum_{Z}q(Z)\sum_{m=2}^{M}\sum_{r=1}^{R}\sum_{j=1}^{R}\mathbb{I}(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j} \\
-    &= \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m+1}=j \mid Z^n_{m}=r)\log A^k_{r,j}
+    &= \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j}
 \end{align*}
 For simplicity, define $r_{nk}$ as:
 \begin{equation}
@@ -107,8 +107,8 @@ For simplicity, define $r_{nk}$ as:
 Therefore,
 \begin{align*}
     &\sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\mathbb{E}_{q(Z)}[\sum_{m=2}^{M}\log A^k_{Z^n_{m}Z^n_{m+1}}] \\
-    &= \sum_{n,k} r_{nk} \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m+1}=j \mid Z^n_{m}=r)\log A^k_{r,j} \\
-    &= \sum_{k}\sum_{r}\sum_{j}(\sum_{n}\sum_{m=2}r_{nk} q(Z^n_{m+1}=j \mid Z^n_{m}=r))\log A^k_{r,j}
+    &= \sum_{n,k} r_{nk} \sum_{r=1}^{R}\sum_{j=1}^{R}\sum_{m=2}^{M}q(Z^n_{m}=r, Z^n_{m+1}=j)\log A^k_{r,j} \\
+    &= \sum_{k}\sum_{r}\sum_{j}(\sum_{n}\sum_{m=2}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j))\log A^k_{r,j}
 \end{align*}
 Therefore, we can see that $q(A)$ is a Dirichlet Distribution.
 \begin{align*}
@@ -117,7 +117,7 @@ Therefore, we can see that $q(A)$ is a Dirichlet Distribution.
 \end{align*}
 with the parameters:
 \begin{equation}
-    \tilde{\alpha_{A}}^k_{r,j} = \alpha_{A,j} + \sum_{n=1}^{N}\sum_{m=2}^{M}r_{nk} q(Z^n_{m+1}=j \mid Z^n_{m}=r)
+    \tilde{\alpha_{A}}^k_{r,j} = \alpha_{A,j} + \sum_{n=1}^{N}\sum_{m=2}^{M}r_{nk} q(Z^n_{m}=r, Z^n_{m+1}=j)
 \end{equation}
 
 % Update Q(e)
@@ -126,10 +126,10 @@ with the parameters:
 \end{flushleft}
 % Consider $q(e)$:
 \begin{align*}
-    \log q(e) &= \mathbb{E}_{q(Z)q(X)q(\pi)q(C)q(A)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
-    &= \log p(e) + \mathbb{E}_{q(Z)q(X)q(C)}[\log p(X\mid Z, C, e)] + \text{const} \\
+    \log q(e) &= \mathbb{E}_{q(Z)q(\pi)q(C)q(A)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    &= \log p(e) + \mathbb{E}_{q(Z)q(C)}[\log p(X\mid Z, C, e)] + \text{const} \\
     &= \log p(e) 
-        + \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}] 
+        + \sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)}[\log e^k_{Z^n_{m}X^n_{m}}] 
         + \text{const} \\
 \end{align*}
 Term by Term:
@@ -139,21 +139,23 @@ Term by Term:
 \end{align*}
 We can use the same skill as what we do in calculating $q(A)$
 \begin{align*}
-    \mathbb{E}_{q(Z, X)}[\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)] = q(X^n_{m}=r+l \mid Z^n_{m}=i)
+    \mathbb{E}_{q(Z)}[\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)] 
+    &= \mathbb{E}_{q(Z)}[\mathbb{I}(Z^n_{m}=i)]\mathbb{I}(X^n_{m}=r+l) \\
+    &= q(Z^n_{m}=i)\mathbb{I}(X^n_{m}=r+l)
 \end{align*}
 Then, we have:
 \begin{align*}
-    \mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}] 
-    &= \mathbb{E}_{q(Z)q(X)}[\sum_{i,j}\mathbb{I}(Z^n_{m}=i, X^n_{m}=j)\log e^k_{i,j}] \\
-    &= \mathbb{E}_{q(Z)q(X)}[\sum_{i,l}\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)\log e^k_{i,r+l}] \\
-    &= \sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(X^n_{m}=r+l \mid Z^n_{m}=i)\log e^k_{i,r+l} \\
+    \mathbb{E}_{q(Z)}[\log e^k_{Z^n_{m}X^n_{m}}] 
+    &= \mathbb{E}_{q(Z)}[\sum_{i,j}\mathbb{I}(Z^n_{m}=i, X^n_{m}=j)\log e^k_{i,j}] \\
+    &= \mathbb{E}_{q(Z)}[\sum_{i,l}\mathbb{I}(Z^n_{m}=i, X^n_{m}=r+l)\log e^k_{i,r+l}] \\
+    &= \sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(Z^n_{m}=i)\mathbb{I}(X^n_{m}=r+l)\log e^k_{i,r+l} \\
 \end{align*}
 Therefore,
 \begin{align*}
-    &\sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)q(X)}[\log e^k_{Z^n_{m}X^n_{m}}]\\
-    &= \sum_{n,k}r_{nk}\sum_{m=1}^{M}\sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(X^n_{m}=r+l \mid Z^n_{m}=i)\log e^k_{i,r+l} \\
+    &\sum_{n,k}\mathbb{E}_{q(C)}[c_{nk}]\sum_{m=1}^{M}\mathbb{E}_{q(Z)}[\log e^k_{Z^n_{m}X^n_{m}}]\\
+    &= \sum_{n,k}r_{nk}\sum_{m=1}^{M}\sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}q(Z^n_{m}=i)\mathbb{I}(X^n_{m}=r+l)\log e^k_{i,r+l} \\
     &= \sum_{k=1}^{K}\sum_{i=1}^{R}\sum_{l=-\Delta}^{\Delta}
-        (\sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk}q(X^n_{m}=r+l \mid Z^n_{m}=i))\log e^k_{i,r+l}
+        (\sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk}q(Z^n_{m}=i)\mathbb{I}(X^n_{m}=r+l))\log e^k_{i,r+l}
 \end{align*}
 Obviously, $q(e)$ is also a Dirichlet distribution.
 \begin{align*}
