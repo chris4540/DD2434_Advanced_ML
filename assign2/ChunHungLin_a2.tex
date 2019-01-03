@@ -10,7 +10,7 @@
 \usepackage{cleveref}
 
 \setlength{\parindent}{0em}
-\setlength{\parskip}{1em}
+\setlength{\parskip}{.3em}
 
 % \newcommand{\N}{\mathbb{N}}
 % \newcommand{\Z}{\mathbb{Z}}
@@ -87,12 +87,38 @@ Let's go back to see the details of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$
     Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
     &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[\sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
     &= \sum_{z_{1:R}}p(z_{1:R}\mid x_{1:R}, \theta^{t})\sum_{r=1}^{R} \log p(x_r\mid z_r) \\
-    &= \sum_{s\in S}\sum_{r=1}^{R} p(z_{t} = s\mid x_{1:R}, \theta^{t})\log p(x_r\mid z_r = s) \\
-    &= \sum_{s\in S}\sum_{r=1}^{R} \gamma_{ts}
+    &= \sum_{s\in S}\sum_{r=1}^{R} p(z_{r} = s\mid x_{1:R}, \theta^{t})\log p(x_r\mid z_r = s) \\
+    &= \sum_{s\in S}\sum_{r=1}^{R} \gamma_{rs}
         (-\frac{1}{2}\log 2\pi -\frac{1}{2}\log \Sigma_s - \frac{(x_r - \mu_s)^2}{2\Sigma_s})
 \end{align*}
+where $\gamma_{rs} = p(z_{r} = s\mid x_{1:R}, \theta^{t})$ and it can be computed
+by forward-backward algorithm.
+
 The third step is just marginalzing out unrelated variables.
 
+In M step, we have:
+\begin{align*}
+    \bm{\mu}^{(t+1)} 
+        &= \underset{\bm{\mu}}{\mathrm{argmin}} ~ Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})  \\
+    \bm{\Sigma}^{(t+1)} 
+        &= \underset{\bm{\Sigma}}{\mathrm{argmin}} ~ Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+\end{align*}
+By inspection, we can see that $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ 
+is a convex function and therefore
+we can find $\bm{\mu}^{(t+1)}$ and $\bm{\Sigma}^{(t+1)}$ 
+by setting the first derivatives of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$
+to zero.
+
+% Update Q(pi)
+\begin{flushleft}
+    \textbf{\underline{Update $\mu_s$}}
+\end{flushleft}
+
+\begin{align*}
+    \frac{\partial}{\partial \mu_s}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+    &= \sum_{r=1}^{R} \gamma_{rs}(\frac{x_r - \mu_s}{\Sigma_s}) = 0 \\
+    \mu_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}x_r}{\sum_{r=1}^{R}\gamma_{rs}}
+\end{align*}
 \end{problem}
 \pagebreak
 
@@ -314,7 +340,7 @@ the parameters $\tilde{A}$ and $\tilde{e}$.
 The data likelihood can be found by forward algorithm of HMM. 
 
 In updating $q(A)$ and $q(e)$, we can use 
-the forward–backward algorithm to calculate $q(Z^n_{m}=i)$ and $q(Z^n_{m}=r, Z^n_{m+1}=j)$
+the forward-backward algorithm to calculate $q(Z^n_{m}=i)$ and $q(Z^n_{m}=r, Z^n_{m+1}=j)$
 because:
 \begin{align*}
     q(Z^n_{m}=i) &\approx p(Z^n_{m}=i \mid X, \tilde{A}, \tilde{e}) \\
