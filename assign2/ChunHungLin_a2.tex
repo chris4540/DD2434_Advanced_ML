@@ -129,8 +129,10 @@ to zero.
     \Sigma_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}(x_r - \mu_s)^2}{\sum_{r=1}^{R}\gamma_{rs}}
 \end{align*}
 
-For each pair of players, we estimate $\mu_s^{n,n'}$ and $\Sigma_s^{n,n'}$.
-$\mu_s^{n}$ can be obtained by solving the system of linear equations.
+For each pair of players, we estimate $\mu_s^{n,n'}$ and $\Sigma_s^{n,n'}$ by the
+EM algorithm.
+As what we have discussed in the begining, we have $\mu_s^{n,n'} = \mu_s^{n} + \mu_s^{n'}$.
+Hence, $\mu_s^{n}$ can be obtained by solving the system of linear equations.
 
 \begin{align*}
     \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
