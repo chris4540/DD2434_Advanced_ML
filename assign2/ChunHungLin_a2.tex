@@ -164,7 +164,7 @@ Obviously, $q(e)$ is also a Dirichlet distribution.
 \end{align*}
 with the parameters:
 \begin{equation}
-    \tilde{\alpha_{e}}^k_{r,l} = \alpha_{e,l} + \sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk} q(X^n_{m}=r+l \mid Z^n_{m}=i)
+    \tilde{\alpha_{e}}^k_{r,l} = \alpha_{e,l} + \sum_{n=1}^{N}\sum_{m=1}^{M}r_{nk} q(Z^n_{m}=i)\mathbb{I}(X^n_{m}=r+l)
 \end{equation}
 
 % Update Q(pi)
@@ -173,7 +173,7 @@ with the parameters:
 \end{flushleft}
 
 \begin{align*}
-    \log q(\pi) &= \mathbb{E}_{q(Z,X)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    \log q(\pi) &= \mathbb{E}_{q(Z)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \log p(\pi) + \mathbb{E}_{q(C)}[\log p(C \mid \pi)] + \text{const} \\
     &= \sum_{k}(\alpha_k - 1)\log \pi_k + \mathbb{E}_{q(C)}[\sum_{n,k}c_{nk}\log\pi_k] + \text{const} \\
     &= \sum_{k}(\alpha_k + \sum_{n}\mathbb{E}_{q(C)}[c_{nk}] - 1)\log \pi_k + \text{const} \\
@@ -188,12 +188,12 @@ with parameters:
 \begin{equation}
     \tilde{\alpha_{\pi}}_k = \alpha_k + \sum_{n=1}^{N}r_{nk}
 \end{equation}
-% Update Q(X, Z)
+% Update Q(Z)
 \begin{flushleft}
-    \textbf{\underline{Update $q(X, Z)$}}
+    \textbf{\underline{Update $q(Z)$}}
 \end{flushleft}
 \begin{align*}
-    \log q(X, Z) &= \mathbb{E}_{q(\pi)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
+    \log q(Z) &= \mathbb{E}_{q(\pi)q(C)q(A)q(e)}[\log p(X, Z, C, \Theta, \pi)] + \text{const} \\
     &= \mathbb{E}_{q(e)}[\log p(X \mid Z, C, e)] + \mathbb{E}_{q(A)}[\log p(Z \mid C, A)]
        + \text{const} \\
     &= \mathbb{E}_{q(e)q(C)}[\sum_{n,k}c_{nk}\sum_{m=1}^{M}\log e^k_{Z^n_m X^n_m}] \\
@@ -229,14 +229,39 @@ Simularly, we can define $\tilde{e}^k_{Z^n_m X^n_m}$:
 $Z_{A}$ and $Z_{e}$ are normalization constants to make sure that $\tilde{A}^{k}_{i,j}$
 and $\tilde{e}^{k}_{i,l}$ are stochastic matrices.
 
+Take antilogarithm on $\log q(Z)$, we have:
 \begin{align*}
-    q(X, Z) = \prod_{n,k}(\lambda^k_{Z^n_{1}}
-        \prod_{m=2}^{M}\tilde{A}^k_{Z^n_{m}Z^n_{m+1}}\prod_{m=1}^{M}\tilde{e}^k_{Z^n_m X^n_m})^{r_nk}
+    q(Z) = \frac{1}{Z_{*}}\prod_{n,k}(\lambda^k_{Z^n_{1}}
+        \prod_{m=2}^{M}\tilde{A}^k_{Z^n_{m}Z^n_{m+1}}\prod_{m=1}^{M}\tilde{e}^k_{Z^n_m X^n_m})^{r_{nk}}
 \end{align*}
-which is similar to the joint probability of K HMMs of N vehicles with a optimal
-parameter set.
-For updating $q(A)$ and $q(e)$, we can use $q(X,Z)$ to iterativly compute
-$q(Z^n_{m+1} \mid Z^n_{m})$ and $q(X^n_{m} \mid Z^n_{m})$.
+where $Z_{*}$ is a normalization constant.
+
+Consider:
+\begin{align*}
+    p(Z\mid X) &\approx q(Z) \\
+    &= \frac{1}{Z_{*}}\prod_{n,k}p(Z^n_{1:M}, X^n_{1:M} \mid \tilde{A}^k, \tilde{e}^k)^{r_{nk}} \\
+    &= \frac{\prod_{n,k}p(Z^n_{1:M}, X^n_{1:M} \mid \tilde{A}^k, \tilde{e}^k)^{r_{nk}}}
+            {\prod_{n,k}p(X^n_{1:M} \mid \tilde{A}^k, \tilde{e}^k)^{r_{nk}}}
+\end{align*}
+
+In the above equation, we can consider that the numerator is a joint probability of
+a mixture of HMMs. The dominator is the approximated data likelihood given 
+the parameters $\tilde{A}$ and $\tilde{e}$.
+The data likelihood can be found by forward algorithm of HMM. 
+
+In updating $q(A)$ and $q(e)$, we can use 
+the forward–backward algorithm to calculate $q(Z^n_{m}=i)$ and $q(Z^n_{m}=r, Z^n_{m+1}=j)$
+because:
+\begin{align*}
+    q(Z^n_{m}=i) &\approx p(Z^n_{m}=i \mid X, \tilde{A}, \tilde{e}) \\
+    q(Z^n_{m}=i, Z^n_{m+1}=j) &\approx p(Z^n_{m}=i, Z^n_{m+1}=j\mid X, \tilde{A}, \tilde{e})
+\end{align*}
+
+
+% which is similar to the joint probability of K HMMs of N vehicles with a optimal
+% parameter set.
+% For updating $q(A)$ and $q(e)$, we can use $q(X,Z)$ to iterativly compute
+% $q(Z^n_{m+1} \mid Z^n_{m})$ and $q(X^n_{m} \mid Z^n_{m})$.
 
 % % Update q(C)
 % \begin{flushleft}
