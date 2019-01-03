@@ -81,6 +81,18 @@ matrix, $\bm{\mu} = \{ \mu_s: s \in S\}$ and $\bm{\Sigma} = \{ \Sigma_s: s \in S
 When $\bm{\pi}$ and $\bm{A}$ are given, $Q_{\pi}(\bm{\pi})$ and $Q_{A}(\bm{A})$ 
 are not change in each iteration. Therefore, we only need to maximize 
 $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ to update $\bm{\mu}$ and $\bm{\Sigma}$.
+
+Let's go back to see the details of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ 
+\begin{align*}
+    Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+    &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[\sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
+    &= \sum_{z_{1:R}}p(z_{1:R}\mid x_{1:R}, \theta^{t})\sum_{r=1}^{R} \log p(x_r\mid z_r) \\
+    &= \sum_{s\in S}\sum_{r=1}^{R} p(z_{t} = s\mid x_{1:R}, \theta^{t})\log p(x_r\mid z_r = s) \\
+    &= \sum_{s\in S}\sum_{r=1}^{R} \gamma_{ts}
+        (-\frac{1}{2}\log 2\pi -\frac{1}{2}\log \Sigma_s - \frac{(x_r - \mu_s)^2}{2\Sigma_s})
+\end{align*}
+The third step is just marginalzing out unrelated variables.
+
 \end{problem}
 \pagebreak
 
