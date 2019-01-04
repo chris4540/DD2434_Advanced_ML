@@ -275,6 +275,35 @@ Notice that
             {\sum_{k'=1}^{K}\pi_{k'}^{(t)} p(X^n \mid \theta^{(t)}_{k'})}
         \numberthis \label{eq:Q27_tau}
 \end{align*}
+This result is the same as in the GMM EM algorithm.
+
+\begin{align*}
+    Q_{\pi^{t}}(\pi) &= \sum_{n=1}^{N} 
+        \tau_{nk} \mathbb{E}_{p(Z, C\mid X, \bm{\theta}^{(t)})}[\log \pi_k]  \\
+    &=  \sum_{n=1}^{N} \tau_{nk} \log \pi_k && \text{(Since $\pi_k$ is not a random variable)}\\
+\end{align*}
+Maximize the above equation with respect to $\pi_k$ with the constraint $\sum_{k=1}^{K}\pi_k = 1$.
+\begin{align*}
+    \mathcal{L} = \sum_{n=1}^{N} \tau_{nk} \log \pi_k - g(\sum_{k=1}^{K} \pi_k - 1)
+\end{align*}
+where $g$ is the Lagrange multiplier.
+
+After some calculation, we can find that
+\begin{align*}
+    \pi_k = \frac{\sum_{n=1}^{N} \tau_{nk}}{g}
+\end{align*}
+Make use of the constraint $\sum_{k=1}^{K}\pi_k = 1$, we can find the multiplier 
+is given by:
+\begin{align*} 
+    \sum_{k=1}^{K}\pi_k &= \sum_{k=1}^{K} \frac{\sum_{n=1}^{N} \tau_{nk}}{g} = 1 \\
+    g &= \sum_{n=1}^{N} \sum_{k=1}^{K}\tau_{nk} = \sum_{n=1}^{N} (1) = N
+\end{align*}
+
+Therefore the update equation for $\pi_k$ is given by:
+\begin{equation}
+    \pi_k = \frac{\sum_{n=1}^{N} \tau_{nk}}{N}
+\end{equation}
+
 \end{problem}
 \pagebreak
 
