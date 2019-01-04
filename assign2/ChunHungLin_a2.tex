@@ -217,6 +217,12 @@ $A^k$ is the transition matrix and $e^k$ is the emission matrix.
 
 $c_{nk} = \mathbb{I}(C^n = k)$ is a indicate variable showing that $n$th sequence
 belongs to $k$th group of cars.
+
+\begin{align*}
+    p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})
+    &= p(Z^n_1)\prod_{m=2}^{M}p(Z^n_m\mid Z^n_{m-1})\prod_{m=1}^{M}p(X^{n}_m\mid Z^n_m) \\
+    &= \lambda^k_{Z^n_1}\prod_{m=2}^{M}A^k_{Z^n_{m-1},Z^n_m}\prod_{m=1}^{M}e^k_{Z^n_{m},X^n_m}\\
+\end{align*}
 \end{problem}
 \pagebreak
 
