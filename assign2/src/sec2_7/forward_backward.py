@@ -40,7 +40,6 @@ def forward(get_init, get_transition, get_emission, observations):
                 emission = get_emission(r2, observations[m])
                 alpha[m, r2] += alpha[m - 1, r1] * transition * emission
 
-
     return (alpha, np.sum(alpha[M - 1, :]))
 
 
@@ -67,10 +66,10 @@ def backward(get_init, get_transition, get_emission, observations):
     return beta, np.sum(pi * O[:] * beta[0, :])
 
 
-
-# test examples
-print(forward(get_init, get_transition, get_emission, [0, 0, 1, 1, 1, 1]))
-print(backward(get_init, get_transition, get_emission, [0, 0, 1, 1, 1, 1]))
+if __name__ == "__main__":
+    # test examples
+    print(forward(get_init, get_transition, get_emission, [0, 0, 1, 1, 1, 1]))
+    print(backward(get_init, get_transition, get_emission, [0, 0, 1, 1, 1, 1]))
 
 
 
