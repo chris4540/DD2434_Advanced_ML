@@ -207,10 +207,11 @@ Consider the joint probability of this model:
 \begin{align*}
     p(C, X, Z \mid \pi, \lambda, A, e) 
     &= \prod_{n=1}^{N} p(C^{n}, X^n_{1:M}, Z^n_{1:M} \mid \pi, \lambda, A, e) \\
-    &= \prod_{n=1}^{N} [\pi_k p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})]^{c_{nk}} \\
+    &= \prod_{n=1}^{N} \prod_{k=1}^{K} [\pi_k p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})]^{c_{nk}} \\
 \end{align*}
 where $p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})$ is the $k$th HMM joint probability
 for $n$th sequence data.
+
 
 To the $k$th HMM model, $\lambda^k$ is the initial state probability vector,
 $A^k$ is the transition matrix and $e^k$ is the emission matrix.
@@ -230,9 +231,11 @@ Define the parameter set for this model as $\bm{\theta} = \{ \pi, \lambda, A, e\
 The complete data log-likelihood is given by:
 \begin{align*}
     l_c(\bm{\theta}) &= \log [p(C, X, Z \mid \pi, \lambda, A, e)] \\
-    &= \sum_{n=1}^{N} \log [(\pi_k p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k}))^{c_{nk}}] \\
-    &= \sum_{n=1}^{N} [c_{nk}\log \pi_k + c_{nk}\log p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})]  \\
-    &= \sum_{n=1}^{N} 
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} 
+        \log [(\pi_k p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k}))^{c_{nk}}] \\
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} 
+        [c_{nk}\log \pi_k + c_{nk}\log p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})]  \\
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K}
         [c_{nk}\log \pi_k 
         + c_{nk} \log \lambda^k_{Z^n_1}
         + c_{nk} \sum_{m=2}^{M} \log A^k_{Z^n_{m-1},Z^n_m}
@@ -245,19 +248,19 @@ With these results, we can write down the expected complete data log likelihood
 \begin{align*}
     Q(\bm{\theta}, \bm{\theta}^{(t)}) 
     &= \mathbb{E}_{p(Z, C\mid X, \bm{\theta}^{(t)})}[l_c(\bm{\theta})]\\
-    &= \sum_{n=1}^{N}  \mathbb{E}[
+    &= \sum_{n=1}^{N}  \sum_{k=1}^{K} \mathbb{E}[
             c_{nk}\log \pi_k + c_{nk} \log \lambda^k_{Z^n_1}
             + c_{nk} \sum_{m=2}^{M} \log A^k_{Z^n_{m-1},Z^n_m}
             + c_{nk} \sum_{m=1}^{M} \log e^k_{Z^n_{m},X^n_m}
             ]\\
-    &= \sum_{n=1}^{N} \biggl(
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \biggl(
             \tau_{nk} \mathbb{E}[\log \pi_k] 
             + \tau_{nk} \mathbb{E}[\log \lambda^k_{Z^n_1}]
             + \tau_{nk} \sum_{m=2}^{M} \mathbb{E}[\log A^k_{Z^n_{m-1},Z^n_m}] \\
             & \hspace{1.5cm} 
             + \tau_{nk} \sum_{m=1}^{M} \mathbb{E}[\log e^k_{Z^n_{m},X^n_m}]
             \biggl)\\
-    &= Q_{\pi^{t}}(\pi) + Q_{\lambda^{t}}(\lambda) + Q_{A^{t}}(A) + Q_{e^{t}}(e)
+    &= Q_{\pi^{(t)}}(\pi) + Q_{\lambda^{(t)}}(\lambda) + Q_{A^{(t)}}(A) + Q_{e^{(t)}}(e)
 \end{align*}
 where $\tau_{nk} = \mathbb{E}[c_{nk}] = p(C^n = k \mid X^n, \theta^{(t)})$ is the
 responsibility that cluster $k$ takes for data sequence $n$.
@@ -278,14 +281,18 @@ Notice that
 This result is the same as in the GMM EM algorithm.
 
 \begin{align*}
-    Q_{\pi^{t}}(\pi) &= \sum_{n=1}^{N} 
+    Q_{\pi^{(t)}}(\pi) &= \sum_{n=1}^{N} \sum_{k=1}^{K}
         \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log \pi_k]  \\
-    &=  \sum_{n=1}^{N} \tau_{nk} \log \pi_k && \text{(Since $\pi_k$ is not a random variable)}\\
+    &=  \sum_{n=1}^{N} \sum_{k=1}^{K} 
+        \tau_{nk} \log \pi_k\\
 \end{align*}
+The expectation operator does not take effect since $\pi_k$ is a parameter and 
+not a random variable.
+
 Maximize the above equation with respect to $\pi_k$ with the constraint $\sum_{k=1}^{K}\pi_k = 1$.
 Then, the Lagrangian function is given by:
 \begin{align*}
-    \mathcal{L} = \sum_{n=1}^{N} \tau_{nk} \log \pi_k - g(\sum_{k=1}^{K} \pi_k - 1)
+    \mathcal{L} = \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \log \pi_k - g(\sum_{k=1}^{K} \pi_k - 1)
 \end{align*}
 where $g$ is the Lagrange multiplier.
 
@@ -306,13 +313,13 @@ Therefore the update equation for $\pi_k$ is given by:
 \end{equation}
 
 \begin{align*}
-    Q_{\lambda^{(t)}}(\lambda) &= \sum_{n=1}^{N} 
+    Q_{\lambda^{(t)}}(\lambda) &= \sum_{n=1}^{N} \sum_{k=1}^{K}
         \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log \lambda^k_{Z^n_1}] \\
-    &= \sum_{n=1}^{N} \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
         [\sum_{r=1}^{R}\mathbb{I}(Z^n_1 = r)\log \lambda^k_{r}] \\
-    &= \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{r=1}^{R} 
         p(Z^n_1 = r\mid X^n_{1:M}, \bm{\theta}^{(t)}_k) \log \lambda^k_{r} \\
-    &= \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{r=1}^{R} 
         \gamma^{n;k}_{1}(r) \log \lambda^k_{r} \\
 \end{align*}
 where
@@ -327,7 +334,7 @@ $\sum_{r=1}^{R} \lambda_r^k = 1$.
 The Lagrangian function is given by:
 \begin{align*}
     \mathcal{L} &= 
-        \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+        \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{r=1}^{R} 
             \gamma^{n;k}_{1}(r) \log \lambda^k_{r} 
         - g(\sum_{r=1}^{R} \lambda_r^k - 1)\\
 \end{align*}
@@ -343,14 +350,14 @@ $\lambda^k_{r}$:
 
 For updating $A$:
 \begin{align*}
-    Q_{A^{(t)}}(A) &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+    Q_{A^{(t)}}(A) &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=2}^{M} 
         \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log A^k_{Z^n_{m-1},Z^n_m}] \\
-    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=2}^{M} 
         \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
         [\sum_{i,j=1}^{R} \mathbb{I}(Z^n_{m-1} = i, Z^n_m = j) \log A^k_{i,j}] \\
-    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=2}^{M} 
         \sum_{i,j=1}^{R} p(Z^n_{m-1} = i, Z^n_m = j \mid X^n_{1:M}, \bm{\theta}^{(t)}_k) \log A^k_{i,j} \\
-    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
 \end{align*}
 where
 \begin{align*}
@@ -360,9 +367,11 @@ We have the constraint $\sum_{j=1}^{R} A^k_{i,j} - 1$.
 Therefore the Lagrangian function is given by:
 \begin{align*}
     \mathcal{L} = 
-        \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
+        \sum_{n=1}^{N} \sum_{k=1}^{K} 
+        \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
         - g(\sum_{j=1}^{R} A^k_{i,j} - 1)
 \end{align*}
+
 Maximize the above equation with respect to $A^k_{i,j}$, we can get:
 \begin{align*}
     A^k_{i,j}&= \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
@@ -381,7 +390,7 @@ The update equation of $A$ is:
 
 Finally, we derive the update equation of $e$.
 \begin{align*}
-    Q_{e^{(t)}}(e) &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M} 
+    Q_{e^{(t)}}(e) &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
         \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log e^k_{Z^n_{m},X^n_m}] \\
 \end{align*}
 \end{problem}
