@@ -167,32 +167,105 @@ class HiddenMarkovModel(object):
 
 class MixtureHMMs(object):
 
-    def __init__(self, num_models):
-        pass
+    models = []
 
-    def classify(self):
-        pass
+    def __init__(self, n_models, p_init, p_trans, p_emis):
+        self.models = []
+        self.n_models = n_models
 
+        for k in range(n_models):
+            self.models.append(
+                HiddenMarkovModel(p_init, p_trans[k], p_emis[k]))
 
-# _____________________________________________________________________________________________________________________________________
+    @staticmethod
+    def renormalize_prob_vec(probs):
+        """
+        """
+        return probs / np.sum(probs)
+
+    def set_obs_seqs(self, obs_seqs):
+        """
+        Args:
+        obs_seqs (np.ndarray): a set of observation sequences. The size should be
+            N x L, where N is the number of observation sequences and L is the
+            length of each observation sequence.
+        """
+        self.obs_seqs = obs_seqs
+
+    def get_obs_probs(self):
+        num_obs = self.obs_seqs.shape[0]
+
+        self.obs_probs = np.zeros((num_obs, self.n_models))
+        for n in range(num_obs):
+            for k in range(self.n_models):
+                model = self.models[k]
+                model.set_obs_seq(self.obs_seqs[n])
+                p = model.get_obs_seq_prob()
+                self.obs_probs[n, k] = p
+
+    @staticmethod
+    def get_L2_norm(x, y):
+        return np.sqrt(np.sum((x-y)**2))
+
+    def cluster_data(self):
+        num_obs = self.obs_seqs.shape[0]
+
+        # cls_prob: \pi_k in our problem
+        cls_prob = self.renormalize_prob_vec(np.random.rand(self.n_models))
+
+        tau = np.zeros((num_obs, self.n_models))
+
+        for iter_ in range(100): # iteration
+            # estimate tau
+            for n in range(num_obs):
+                for k in range(self.n_models):
+                    p_obs = self.obs_probs[n, k]
+                    tau[n, k] = p_obs * cls_prob[k]
+                # renormalize
+                tau[n, :] = self.renormalize_prob_vec(tau[n, :])
+
+            # update class prob
+            # for k in range(self.n_models):
+            new_cls_prob = np.mean(tau, axis=0)
+            if self.get_L2_norm(new_cls_prob, cls_prob) < 1e-6:
+                print("Iteration:", iter_)
+                break
+            else:
+                # update class prob
+                cls_prob = new_cls_prob
+
+        # save down estimated results
+        self.cls_prob = cls_prob
+        self.tau = tau
+
+    def get_estimated_classes(self):
+        est_classes = np.argmax(self.tau, axis=1)
+        return est_classes
+# ___________________________________________________________________________________________________________________
 
 if __name__ == "__main__":
-    # nr_vehicles = 10
-    # nr_classes = 10
-    # nr_rows = 10
-    # nr_columns = 10
+    nr_vehicles = 100
+    nr_classes = 5
+    nr_rows = 10
+    nr_columns = 10
 
-
-
-    # class_prob, start_prob, transition_prob, emission_prob = define_HMMs(nr_classes, nr_rows, nr_columns)
+    class_prob, start_prob, transition_prob, emission_prob = define_HMMs(
+        nr_classes, nr_rows, nr_columns)
     # print(type(emission_prob))
     # print(emission_prob.shape)
-    # print("Class probabilities\n", class_prob)
+    print("Class probabilities\n", class_prob)
     # print("\nStart probabilities\n", start_prob)
     # print("\nTransition probabilities\n", transition_prob)
     # print("\nEmission probabilities\n", emission_prob)
 
-    # targets, data = generate_data(nr_vehicles, nr_classes, nr_rows, nr_columns)
+    targets, data = generate_data(nr_vehicles, nr_classes, nr_rows, nr_columns)
     # print("\nObserved sequences\n",data)
-    # print("\nTrue classes\n", targets)
+    print("\nTrue classes\n", targets)
 
+    mix_HMMs = MixtureHMMs(nr_classes, start_prob,
+                           transition_prob, emission_prob)
+    mix_HMMs.set_obs_seqs(data)
+    mix_HMMs.get_obs_probs()
+    mix_HMMs.cluster_data()
+    est = mix_HMMs.get_estimated_classes()
+    print(est)
