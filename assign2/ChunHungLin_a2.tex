@@ -302,7 +302,7 @@ is given by:
 
 Therefore the update equation for $\pi_k$ is given by:
 \begin{equation}
-    \pi_k = \frac{\sum_{n=1}^{N} \tau_{nk}}{N} \label{eq:Q27-update_pi_k}
+    \pi_k^{(t+1)} = \frac{\sum_{n=1}^{N} \tau_{nk}}{N} \label{eq:Q27-update_pi_k}
 \end{equation}
 
 \begin{align*}
@@ -337,8 +337,45 @@ use the same trick as in finding the update equation of $\pi_k$ and the fact tha
 $\sum_{r=1}^{R}\gamma^{n;k}_{1}(r) = 1$. We can get the update equation of 
 $\lambda^k_{r}$:
 \begin{equation}
-    \lambda^k_{r} = \frac{\sum_{n=1}^{N}\tau_{nk} \gamma^{n;k}_{1}(r)}
-                         {\sum_{n=1}^{N}\tau_{nk}}
+    {\lambda^k_{r}}^{(t+1)} = \frac{\sum_{n=1}^{N}\tau_{nk} \gamma^{n;k}_{1}(r)}
+                                   {\sum_{n=1}^{N}\tau_{nk}}
+\end{equation}
+
+For updating $A$:
+\begin{align*}
+    Q_{A^{(t)}}(A) &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+        \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log A^k_{Z^n_{m-1},Z^n_m}] \\
+    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+        \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
+        [\sum_{i,j=1}^{R} \mathbb{I}(Z^n_{m-1} = i, Z^n_m = j) \log A^k_{i,j}] \\
+    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} 
+        \sum_{i,j=1}^{R} p(Z^n_{m-1} = i, Z^n_m = j \mid X^n_{1:M}, \bm{\theta}^{(t)}_k) \log A^k_{i,j} \\
+    &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
+\end{align*}
+where
+\begin{align*}
+    \xi_{m}^{n;k}(i,j) = p(Z^n_{m-1} = i, Z^n_m = j \mid X^n_{1:M}, \bm{\theta}^{(t)}_k)
+\end{align*}
+We have the constraint $\sum_{j=1}^{R} A^k_{i,j} - 1$.
+Therefore the Lagrangian function is given by:
+\begin{align*}
+    \mathcal{L} = 
+        \sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \sum_{i,j=1}^{R} \xi_{m}^{n;k}(i,j)\log A^k_{i,j}
+        - g(\sum_{j=1}^{R} A^k_{i,j} - 1)
+\end{align*}
+Maximize the above equation with respect to $A^k_{i,j}$, we can get:
+\begin{align*}
+    A^k_{i,j}&= \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
+                     {\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \sum_{j=1}^{R} \xi_{m}^{n;k}(i,j)} \\
+             &= \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
+                     {\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \gamma_{m-1}^{n;k}(i)} \\
+             &= \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
+                     {\sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M-1} \gamma_{m}^{n;k}(i)} \\
+\end{align*}
+The update equation of $A$ is:
+\begin{equation}
+    A^k_{i,j} = \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
+                     {\sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M-1} \gamma_{m}^{n;k}(i)}
 \end{equation}
 
 \end{problem}
