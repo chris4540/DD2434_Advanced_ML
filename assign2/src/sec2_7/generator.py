@@ -99,23 +99,57 @@ def generate_data(N,K,R,M):
     return classes, observations
 
 # SOLUTION FUNCTIONS _______________________________________________________________________________________________________________________
+class HiddenMarkovModel(object):
 
-# Fill in
+    p_init = None
+    p_trans = None
+    p_emis = None
+
+    def __init__(self, p_init, p_trans, p_emis):
+        """
+        Args:
+        p_init (np.ndarray): initial state probability vector
+        p_trans (np.ndarray): Transition matrix,
+        p_emis (np.ndarray): Emission probability matrix
+        """
+        self.num_state = p_emis.shape[0]
+        self.obs_state = p_emis.shape[1]
+
+    def get_obs_seq_prob(self):
+        """
+        Get the probability of observation sequence p(O_{1:T})
+
+        Return:
+            the probability of observation sequence
+        """
+        return 0
+
+class MixtureHMMs(object):
+
+    def __init__(self, num_models):
+        pass
+
+    def classify(self):
+        pass
+
 
 # _____________________________________________________________________________________________________________________________________
 
-nr_vehicles = 10;
-nr_classes = 10;
-nr_rows = 10;
-nr_columns = 10;
+if __name__ == "__main__":
+    nr_vehicles = 10
+    nr_classes = 10
+    nr_rows = 10
+    nr_columns = 10
 
-class_prob, start_prob, transition_prob, emission_prob = define_HMMs(nr_classes, nr_rows, nr_columns)
-print("Class probabilities\n", class_prob)
-print("\nStart probabilities\n", start_prob)
-print("\nTransition probabilities\n", transition_prob)
-print("\nEmission probabilities\n", emission_prob)
+    class_prob, start_prob, transition_prob, emission_prob = define_HMMs(nr_classes, nr_rows, nr_columns)
+    print(type(emission_prob))
+    print(emission_prob.shape)
+    # print("Class probabilities\n", class_prob)
+    # print("\nStart probabilities\n", start_prob)
+    # print("\nTransition probabilities\n", transition_prob)
+    # print("\nEmission probabilities\n", emission_prob)
 
-targets, data = generate_data(nr_vehicles, nr_classes, nr_rows, nr_columns)
-print("\nObserved sequences\n",data)
-print("\nTrue classes\n", targets)
+    # targets, data = generate_data(nr_vehicles, nr_classes, nr_rows, nr_columns)
+    # print("\nObserved sequences\n",data)
+    # print("\nTrue classes\n", targets)
 
