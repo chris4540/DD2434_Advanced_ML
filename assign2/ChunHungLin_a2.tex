@@ -259,7 +259,7 @@ With these results, we can write down the expected complete data log likelihood
             \biggl)\\
     &= Q_{\pi^{t}}(\pi) + Q_{\lambda^{t}}(\lambda) + Q_{A^{t}}(A) + Q_{e^{t}}(e)
 \end{align*}
-where $\tau_{nk} = \mathbb{E}[c_nk] = p(C^n = k \mid X^n, \theta^{(t)})$ is the
+where $\tau_{nk} = \mathbb{E}[c_{nk}] = p(C^n = k \mid X^n, \theta^{(t)})$ is the
 responsibility that cluster $k$ takes for data sequence $n$.
 
 There are 4 Q-terms in the above equation and therefore we can maximize 
@@ -279,7 +279,7 @@ This result is the same as in the GMM EM algorithm.
 
 \begin{align*}
     Q_{\pi^{t}}(\pi) &= \sum_{n=1}^{N} 
-        \tau_{nk} \mathbb{E}_{p(Z, C\mid X, \bm{\theta}^{(t)})}[\log \pi_k]  \\
+        \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log \pi_k]  \\
     &=  \sum_{n=1}^{N} \tau_{nk} \log \pi_k && \text{(Since $\pi_k$ is not a random variable)}\\
 \end{align*}
 Maximize the above equation with respect to $\pi_k$ with the constraint $\sum_{k=1}^{K}\pi_k = 1$.
@@ -306,9 +306,41 @@ Therefore the update equation for $\pi_k$ is given by:
 \end{equation}
 
 \begin{align*}
-    Q_{\lambda^{t}}(\lambda) &= \sum_{n=1}^{N} 
-        \tau_{nk} \mathbb{E}_{p(Z, C\mid X, \bm{\theta}^{(t)})}[\log \lambda^k_{Z^n_1}] \\
+    Q_{\lambda^{(t)}}(\lambda) &= \sum_{n=1}^{N} 
+        \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log \lambda^k_{Z^n_1}] \\
+    &= \sum_{n=1}^{N} \tau_{nk} \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
+        [\sum_{r=1}^{R}\mathbb{I}(Z^n_1 = r)\log \lambda^k_{r}] \\
+    &= \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+        p(Z^n_1 = r\mid X^n_{1:M}, \bm{\theta}^{(t)}_k) \log \lambda^k_{r} \\
+    &= \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+        \gamma^{n;k}_{1}(r) \log \lambda^k_{r} \\
 \end{align*}
+where
+\begin{align*}
+    \gamma^{n;k}_{m}(r) = p(Z^n_m = r\mid X^n_{1:M}, \bm{\theta}^{(t)}_k)
+\end{align*}
+which can be found by the forward-backward algorithm.
+
+Then we maximize $Q_{\lambda^{(t)}}(\lambda)$ with the constraint 
+$\sum_{r=1}^{R} \lambda_r^k = 1$.
+
+The Lagrangian function is given by:
+\begin{align*}
+    \mathcal{L} &= 
+        \sum_{n=1}^{N} \tau_{nk} \sum_{r=1}^{R} 
+            \gamma^{n;k}_{1}(r) \log \lambda^k_{r} 
+        - g(\sum_{r=1}^{R} \lambda_r^k - 1)\\
+\end{align*}
+
+Calculate $\partial_{\lambda^k_{r}}\mathcal{L} = 0$, 
+use the same trick as in finding the update equation of $\pi_k$ and the fact that
+$\sum_{r=1}^{R}\gamma^{n;k}_{1}(r) = 1$. We can get the update equation of 
+$\lambda^k_{r}$:
+\begin{equation}
+    \lambda^k_{r} = \frac{\sum_{n=1}^{N}\tau_{nk} \gamma^{n;k}_{1}(r)}
+                         {\sum_{n=1}^{N}\tau_{nk}}
+\end{equation}
+
 \end{problem}
 \pagebreak
 
