@@ -216,16 +216,12 @@ class MixtureHMMs(object):
         tau = np.zeros((num_obs, self.n_models))
 
         for iter_ in range(100): # iteration
-            # estimate tau
             for n in range(num_obs):
-                for k in range(self.n_models):
-                    p_obs = self.obs_probs[n, k]
-                    tau[n, k] = p_obs * cls_prob[k]
+                tau[n, :] = self.obs_probs[n, :] * cls_prob
                 # renormalize
                 tau[n, :] = self.renormalize_prob_vec(tau[n, :])
 
             # update class prob
-            # for k in range(self.n_models):
             new_cls_prob = np.mean(tau, axis=0)
             if self.get_L2_norm(new_cls_prob, cls_prob) < 1e-6:
                 print("Iteration:", iter_)
@@ -244,8 +240,8 @@ class MixtureHMMs(object):
 # ___________________________________________________________________________________________________________________
 
 if __name__ == "__main__":
-    nr_vehicles = 100
-    nr_classes = 5
+    nr_vehicles = 10
+    nr_classes = 10
     nr_rows = 10
     nr_columns = 10
 
@@ -269,3 +265,4 @@ if __name__ == "__main__":
     mix_HMMs.cluster_data()
     est = mix_HMMs.get_estimated_classes()
     print(est)
+    print(targets - est)
