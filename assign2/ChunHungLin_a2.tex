@@ -392,7 +392,36 @@ Finally, we derive the update equation of $e$.
 \begin{align*}
     Q_{e^{(t)}}(e) &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
         \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log e^k_{Z^n_{m},X^n_m}] \\
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
+        \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}
+            [\sum_{i=1}^{R}\sum_{l=1}^{R}
+            \mathbb{I}(Z^n_{m} = i)\mathbb{I}(X^n_{m} = l)\log e^k_{i,l}] \\
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
+        [\sum_{i=1}^{R}\sum_{l=1}^{R} p(Z^n_{m} = i\mid X^{n}_{1:M}, \bm{\theta}^{(t)}_k)
+        \mathbb{I}(X^n_{m} = l)\log e^k_{i,l}] \\
+    &= \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
+        [\sum_{i=1}^{R}\sum_{l=1}^{R} \gamma_{m}^{n;k}(i)
+        \mathbb{I}(X^n_{m} = l)\log e^k_{i,l}] \\
 \end{align*}
+Here we assume that the number of observation states is $R$ since the noise can
+be very large.
+
+The Lagrangian function is:
+\begin{align*}
+    \mathcal{L} = 
+        \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
+            [\sum_{i=1}^{R}\sum_{l=1}^{R} \gamma_{m}^{n;k}(i)
+            \mathbb{I}(X^n_{m} = l)\log e^k_{i,l}] 
+        - g(\sum_{l'=1}^{R}e^k_{i,l'} - 1)\\
+\end{align*}
+Maximize the Lagrangian function and we can get:
+\begin{equation}
+    e^k_{i,l} = 
+    \frac{\sum_{n=1}^{N}\tau_{nk} \sum_{m=1}^{M} \gamma_{m}^{n;k}(i)\mathbb{I}(X^n_{m} = l)}
+        {\sum_{n=1}^{N}\tau_{nk} \sum_{m=1}^{M} \gamma_{m}^{n;k}(i)}
+\end{equation}
+
+These update equations can be reduced to one model N data case by setting $K = 1$.
 \end{problem}
 \pagebreak
 
