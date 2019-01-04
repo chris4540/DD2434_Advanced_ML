@@ -115,6 +115,16 @@ class HiddenMarkovModel(object):
         self.num_state = p_emis.shape[0]
         self.obs_state = p_emis.shape[1]
 
+        self.p_init = p_init
+        self.p_trans = p_trans
+        self.p_emis = p_emis
+
+    def set_obs_seq(self, sequence):
+        """
+        Set observation sequecne to the model
+        """
+        self.obs_seq = sequence
+
     def get_obs_seq_prob(self):
         """
         Get the probability of observation sequence p(O_{1:T})
@@ -122,7 +132,62 @@ class HiddenMarkovModel(object):
         Return:
             the probability of observation sequence
         """
-        return 0
+        self.forward_pass()
+        return self.prob_obs
+
+    def forward_pass(self):
+        """
+        Copy from the provided code in forward_backward.py
+        Modifiy to fit into this class
+        """
+        # def forward(get_init, get_transition, get_emission, observations):
+        # pi, R = get_init()
+
+        M = len(self.obs_seq)
+        alpha = np.zeros((M, self.num_state))
+
+        # base case
+        O = []
+        for r in range(self.num_state):
+            O.append(self.p_emis[r, self.obs_seq[0]])
+        alpha[0, :] = self.p_init * O[:]
+
+        # recursive case
+        for m in range(1, M):
+            for r2 in range(self.num_state):
+                for r1 in range(self.num_state):
+                    # transition = get_transition(r1, m, r2)
+                    transition = self.p_trans[r1, r2]
+                    emission = self.p_emis[r2, self.obs_seq[m]]
+                    alpha[m, r2] += alpha[m-1, r1] * transition * emission
+
+        # save down the alpha values
+        self.alpha = alpha
+        self.prob_obs = np.sum(alpha[M-1, :])
+
+def test_HMM():
+    A_str = "0.0 0.8 0.1 0.1 0.1 0.0 0.8 0.1 0.1 0.1 0.0 0.8 0.8 0.1 0.1 0.0"
+    e_str = "0.9 0.1 0.0 0.0 0.0 0.9 0.1 0.0 0.0 0.0 0.9 0.1 0.1 0.0 0.0 0.9"
+    pi_str = "1.0 0.0 0.0 0.0"
+    obs_seq_str = "0 1 2 3 0 1 2 3"
+    n_state = 4
+    n_obs_type = 4
+
+    p_trans = np.fromstring(A_str, dtype=float, sep=' ').reshape((n_state, n_state))
+    p_emis = np.fromstring(e_str, dtype=float, sep=' ').reshape(
+        (n_state, n_obs_type))
+    p_init = np.fromstring(
+        pi_str, dtype=float, sep=' ').reshape((1, n_state))
+    obs_seq = np.fromstring(obs_seq_str, dtype=int, sep=' ')
+
+    model = HiddenMarkovModel(p_init, p_trans, p_emis)
+    model.set_obs_seq(obs_seq)
+
+    p_obs = model.get_obs_seq_prob()
+
+    ans = 0.090276
+    assert (np.abs(p_obs - ans) < 1e-6)
+    print("test_HMM: Pass")
 
 class MixtureHMMs(object):
 
@@ -136,14 +201,18 @@ class MixtureHMMs(object):
 # _____________________________________________________________________________________________________________________________________
 
 if __name__ == "__main__":
-    nr_vehicles = 10
-    nr_classes = 10
-    nr_rows = 10
-    nr_columns = 10
 
-    class_prob, start_prob, transition_prob, emission_prob = define_HMMs(nr_classes, nr_rows, nr_columns)
-    print(type(emission_prob))
-    print(emission_prob.shape)
+    test_HMM()
+    # nr_vehicles = 10
+    # nr_classes = 10
+    # nr_rows = 10
+    # nr_columns = 10
+
+
+
+    # class_prob, start_prob, transition_prob, emission_prob = define_HMMs(nr_classes, nr_rows, nr_columns)
+    # print(type(emission_prob))
+    # print(emission_prob.shape)
     # print("Class probabilities\n", class_prob)
     # print("\nStart probabilities\n", start_prob)
     # print("\nTransition probabilities\n", transition_prob)
