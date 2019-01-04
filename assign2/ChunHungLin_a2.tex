@@ -218,10 +218,62 @@ $A^k$ is the transition matrix and $e^k$ is the emission matrix.
 $c_{nk} = \mathbb{I}(C^n = k)$ is a indicate variable showing that $n$th sequence
 belongs to $k$th group of cars.
 
+The joint probability for the $n$th sequence data and the $k$th HMM is given by:
 \begin{align*}
     p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})
     &= p(Z^n_1)\prod_{m=2}^{M}p(Z^n_m\mid Z^n_{m-1})\prod_{m=1}^{M}p(X^{n}_m\mid Z^n_m) \\
     &= \lambda^k_{Z^n_1}\prod_{m=2}^{M}A^k_{Z^n_{m-1},Z^n_m}\prod_{m=1}^{M}e^k_{Z^n_{m},X^n_m}\\
+\end{align*}
+
+Define the parameter set for this model as $\bm{\theta} = \{ \pi, \lambda, A, e\}$.
+
+The complete data log-likelihood is given by:
+\begin{align*}
+    l_c(\bm{\theta}) &= \log [p(C, X, Z \mid \pi, \lambda, A, e)] \\
+    &= \sum_{n=1}^{N} \log [(\pi_k p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k}))^{c_{nk}}] \\
+    &= \sum_{n=1}^{N} [c_{nk}\log \pi_k + c_{nk}\log p(X^n_{1:M}, Z^n_{1:M}\mid \lambda^k, A^{k}, e^{k})]  \\
+    &= \sum_{n=1}^{N} 
+        [c_{nk}\log \pi_k 
+        + c_{nk} \log \lambda^k_{Z^n_1}
+        + c_{nk} \sum_{m=2}^{M} \log A^k_{Z^n_{m-1},Z^n_m}
+        + c_{nk} \sum_{m=1}^{M} \log e^k_{Z^n_{m},X^n_m}
+        ]  \\
+\end{align*}
+
+With these results, we can write down the expected complete data log likelihood
+(Q-term) easily:
+\begin{align*}
+    Q(\bm{\theta}, \bm{\theta}^{(t)}) 
+    &= \mathbb{E}_{p(Z, C\mid X, \bm{\theta}^{(t)})}[l_c(\bm{\theta})]\\
+    &= \sum_{n=1}^{N}  \mathbb{E}[
+            c_{nk}\log \pi_k + c_{nk} \log \lambda^k_{Z^n_1}
+            + c_{nk} \sum_{m=2}^{M} \log A^k_{Z^n_{m-1},Z^n_m}
+            + c_{nk} \sum_{m=1}^{M} \log e^k_{Z^n_{m},X^n_m}
+            ]\\
+    &= \sum_{n=1}^{N} \biggl(
+            \tau_{nk} \mathbb{E}[\log \pi_k] 
+            + \tau_{nk} \mathbb{E}[\log \lambda^k_{Z^n_1}]
+            + \tau_{nk} \sum_{m=2}^{M} \mathbb{E}[\log A^k_{Z^n_{m-1},Z^n_m}] \\
+            & \hspace{1.5cm} 
+            + \tau_{nk} \sum_{m=1}^{M} \mathbb{E}[\log e^k_{Z^n_{m},X^n_m}]
+            \biggl)\\
+    &= Q_{\pi^{t}}(\pi) + Q_{\lambda^{t}}(\lambda) + Q_{A^{t}}(A) + Q_{e^{t}}(e)
+\end{align*}
+where $\tau_{nk} = \mathbb{E}[c_nk] = p(C^n = k \mid X^n, \theta^{(t)})$ is the
+responsibility that cluster $k$ takes for data sequence $n$.
+
+There are 4 Q-terms in the above equation and therefore we can maximize 
+$Q(\bm{\theta}, \bm{\theta}^{t})$ term-by-term.
+
+Notice that
+\begin{align*}
+    \tau_{nk} &= p(C^n = k \mid X^n, \theta^{(t)})  \\
+    & \propto p(C^n = k, X^n \mid \theta^{(t)}) \\
+    & = p(C^n = k\mid \theta^{(t)})p(X^n \mid \theta^{(t)}, C^n = k) \\
+    \tau_{nk}
+    &= \frac{\pi_k^{(t)} p(X^n \mid \theta^{(t)}_k)}
+            {\sum_{k'=1}^{K}\pi_{k'}^{(t)} p(X^n \mid \theta^{(t)}_{k'})}
+        \numberthis \label{eq:Q27_tau}
 \end{align*}
 \end{problem}
 \pagebreak
