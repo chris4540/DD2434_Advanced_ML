@@ -166,6 +166,9 @@ class HiddenMarkovModel(object):
         self.prob_obs = np.sum(alpha[M-1, :])
 
 def test_HMM():
+    """
+    Add a test case to ensure code works poperly
+    """
     A_str = "0.0 0.8 0.1 0.1 0.1 0.0 0.8 0.1 0.1 0.1 0.0 0.8 0.8 0.1 0.1 0.0"
     e_str = "0.9 0.1 0.0 0.0 0.0 0.9 0.1 0.0 0.0 0.0 0.9 0.1 0.1 0.0 0.0 0.9"
     pi_str = "1.0 0.0 0.0 0.0"
