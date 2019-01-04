@@ -374,10 +374,16 @@ Maximize the above equation with respect to $A^k_{i,j}$, we can get:
 \end{align*}
 The update equation of $A$ is:
 \begin{equation}
-    A^k_{i,j} = \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
-                     {\sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M-1} \gamma_{m}^{n;k}(i)}
+    {A^k_{i,j}}^{(t+1)} = 
+        \frac{\sum_{n=1}^{N} \tau_{nk} \sum_{m=2}^{M} \xi_{m}^{n;k}(i,j)}
+             {\sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M-1} \gamma_{m}^{n;k}(i)}
 \end{equation}
 
+Finally, we derive the update equation of $e$.
+\begin{align*}
+    Q_{e^{(t)}}(e) &= \sum_{n=1}^{N} \tau_{nk} \sum_{m=1}^{M} 
+        \mathbb{E}_{p(Z\mid X, \bm{\theta}^{(t)}_k)}[\log e^k_{Z^n_{m},X^n_m}] \\
+\end{align*}
 \end{problem}
 \pagebreak
 
