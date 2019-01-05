@@ -40,7 +40,7 @@ class Tournament(object):
         # random initialize our observation model params
         size = (self.n_states, self.obs_length)
         self.mu = normal(33, 10, size=size)
-        self.sigma2 = normal(1, 1, size=size) + 10
+        self.sigma2 = np.abs(normal(20, 2, size=size))
 
     def forward_pass(self):
         self.alpha = np.zeros((self.n_obs, self.obs_length, self.n_states))
@@ -154,7 +154,7 @@ class Tournament(object):
                     denom = 0
                     for r in range(self.n_obs):
                         num += self.gamma[r, m, i] * (
-                                self.obs_seqs[r, m] - self.mu[i,m])**2
+                            self.obs_seqs[r, m] - new_mu[i, m])**2
                         denom += self.gamma[r, m, i]
                     new_sigma2[i, m] = num / denom
 
@@ -180,28 +180,56 @@ def load_obj(fname):
     return ret
 
 if __name__ == "__main__":
+    M = 5
+    N = 4
     # load the result from the generator
     data = load_obj("./sequence_output.pkl")
 
     p_init = np.array([0.25, 0.75])
     p_trans = np.array([[0.25, 0.75],
                         [0.75, 0.25]])
-    tour = Tournament(p_init, p_trans)
 
-    obs_seqs = []
-    for seq in data[(1,2)].values():
-        obs_seqs.append(np.array(seq)[:, 0])
+    mu_results = dict()
+    sigma2_results = dict()
 
-    obs_seqs = np.array(obs_seqs)
+    print(data.keys())
+    for pair in data.keys():
+        tour = Tournament(p_init, p_trans)
 
-    # set obs
-    tour.set_obs_seqs(obs_seqs)
-    tour.learn()
-    print("Mu:")
-    print(tour.mu)
-    print("sigma2:")
-    print(tour.sigma2)
-    # tour.forward_pass()
-    # tour.backward_pass()
-    # tour.forward_backward()
+        obs_seqs = []
+        for seq in data[pair].values():
+            obs_seqs.append(np.array(seq)[:, 0])
+
+        obs_seqs = np.array(obs_seqs)
+
+        # set obs
+        tour.set_obs_seqs(obs_seqs)
+        tour.learn()
+
+        mu_results[pair] = tour.mu
+        sigma2_results[pair] = tour.sigma2
+
+    # solve mu out
+    a_mat = np.zeros((N, N))
+    b_mat = np.zeros((N, 2*M))
+    for i, (pair, mu) in enumerate(mu_results.items()):
+        # for A matrix
+        p1, p2 = pair
+        a_mat[i, p1-1] = 1
+        a_mat[i, p2-1] = 1
+        # B
+        b_mat[i, :] = mu.flatten()
+
+    # x = np.linalg.lstsq(a_mat, b_mat)[0]
+    # # print(x)
+    # mu = x.reshape(N, 2, M)
+    # mu = np.moveaxis(mu, 0, -1)
+
+    # print(mu)
+
+    target = load_obj("./mu.pkl")
+    print(target)
+
+
+
 
