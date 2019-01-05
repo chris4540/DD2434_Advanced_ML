@@ -179,23 +179,26 @@ by setting the first derivatives of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$
 to zero.
 
 \begin{flushleft}
-    \textbf{\underline{Update $\mu_s$}}
+    \textbf{\underline{Update $\mu_{(i,m)}$}}
 \end{flushleft}
 
 \begin{align*}
-    \frac{\partial}{\partial \mu_s}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
-    &= \sum_{r=1}^{R} \gamma_{rs}(\frac{x_r - \mu_s}{\Sigma_s}) = 0 \\
-    \mu_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}x_r}{\sum_{r=1}^{R}\gamma_{rs}}
+    \frac{\partial}{\partial \mu_{(i,m)}}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+    &= \sum_{r=1}^{R} \gamma^{r}_{m}(i)(\frac{x^r_m - \mu_{(i,m)}}{\Sigma_{(i,m)}}) = 0 \\
+    \mu_{(i,m)}
+    &= \frac{\sum_{r=1}^{R}\gamma^{r}_{m}(i)x^r_m}{\sum_{r=1}^{R}\gamma^{r}_{m}(i)}
 \end{align*}
 
 \begin{flushleft}
-    \textbf{\underline{Update $\Sigma_s$}}
+    \textbf{\underline{Update $\Sigma_{(i,m)}$}}
 \end{flushleft}
 
 \begin{align*}
-    \frac{\partial}{\partial {\Sigma_s}^{-1}}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
-    &= \sum_{r=1}^{R} \gamma_{rs}(\frac{1}{2{\Sigma_s}^{-1}} - \frac{1}{2}(x_r - \mu_s)^2) = 0 \\
-    \Sigma_s &= \frac{\sum_{r=1}^{R}\gamma_{rs}(x_r - \mu_s)^2}{\sum_{r=1}^{R}\gamma_{rs}}
+    \frac{\partial}{\partial {\Sigma_{(i,m)}}^{-1}}Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
+    &= \sum_{r=1}^{R} \gamma^{r}_{m}(i)(\frac{1}{2{\Sigma_{(i,m)}}^{-1}} - \frac{1}{2}(x^r_m - \mu_{(i,m)})^2) = 0 \\
+    \Sigma_{(i,m)}
+    &= \frac{\sum_{r=1}^{R}\gamma^{r}_{m}(i)(x^r_m - \mu_{(i,m)})^2}
+            {\sum_{r=1}^{R}\gamma^{r}_{m}(i)}
 \end{align*}
 
 For each pair of players, we estimate $\mu_s^{n,n'}$ and $\Sigma_s^{n,n'}$ by the
@@ -203,10 +206,10 @@ EM algorithm.
 As what we have discussed in the begining, we have $\mu_s^{n,n'} = \mu_s^{n} + \mu_s^{n'}$.
 Hence, $\mu_s^{n}$ can be obtained by solving the system of linear equations.
 
-\begin{align*}
-    \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
-    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{4 M N^2} \\
-\end{align*}
+% \begin{align*}
+%     \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
+%     &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{4 M N^2} \\
+% \end{align*}
 \end{problem}
 \pagebreak
 
