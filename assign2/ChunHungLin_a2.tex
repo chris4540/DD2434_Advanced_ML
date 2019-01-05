@@ -11,7 +11,7 @@
 \usepackage{listings}
 \usepackage[makeroom]{cancel}
 
-\setlength{\parindent}{0em}
+\setlength{\parindent}{1em}
 \setlength{\parskip}{.3em}
 
 % \newcommand{\N}{\mathbb{N}}
@@ -95,21 +95,23 @@ Notices that the each observation is the sum of two Gaussian random variables.
 Therefore, we can first estimated the parameters of the observation model of 
 a pair of players and then solve the linear equations to get each model parameters.
 \begin{align*}
-    p(x_r^{(n,n')}\mid z_r^{(n,n')} = s) = \mathcal{N}(x_r^{(n,n')} \mid \mu^{n}_s + \mu^{n'}_s, 2\beta)
+    p(x_m^{(n,n';r)}\mid z_m^{(n,n';r)} = i) = \mathcal{N}(x_m^{(n,n';r)} 
+            \mid \mu^{n}_{(i,m)} + \mu^{n'}_{(i,m)}, 2\beta)
 \end{align*}
-where $z_r^{(n,n')} = s$ means the pair of player $(n, n')$ visting 
-subfield $s$ at sequence index $r$ and $z$ means hidden state.
+where $z_m^{(n,n';r)} = i$ means in $r$:th round the pair of player $(n, n')$ visting 
+subfield $s = (i, m)$ at sequence index $m$ and $z$ means hidden state.
 
 First we will derive an EM algorithm for a HMM with Gaussian observation model 
-and then extend it to our case.
+with R observation data and then extend it to our case.
 
 Consider the joint probability of a HMM where the initial state probaility and 
-the transition matrix is given and the observation model is a conditional
+the transition matrix are given and the observation model is a conditional
 Gaussian.
 \begin{align*}
-    p(z_{1:R}, x_{1:R}) &= p(z_1) \prod_{r=2}^{R}p(z_r\mid z_{r-1})
-            \prod_{r=1}^{R}p(x_r\mid z_r) \\
-    p(x_r\mid z_r=s) &= \mathcal{N}(x_r \mid \mu_s, \Sigma_k)
+    p(z_{1:M}, x_{1:M}) &= \prod_{r=1}^{R} \biggl(
+            p(z^r_1) \prod_{m=2}^{M}p(z^r_m\mid z^r_{m-1})
+            \prod_{m=1}^{M}p(x^r_m\mid z^r_m) \biggl)\\
+    p(x^r_m\mid z^r_m= i) &= \mathcal{N}(x^r_m \mid \mu_{(i,m)}, \Sigma_{(i,m)})
 \end{align*}
 
 The expected complete log likelihood (Q term):
