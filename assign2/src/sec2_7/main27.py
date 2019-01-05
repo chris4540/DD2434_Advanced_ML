@@ -1,8 +1,9 @@
 import numpy as np
 import random as rd
 
-# GENERATOR FUNCTIONS _____________________________________________________________________________________________________________________________
-
+################################
+# GENERATOR FUNCTIONS
+################################
 def define_HMMs(K,R,M):
     # Class probabilities - one class is much more probable than the rest
     pi = np.zeros((K))
@@ -98,7 +99,9 @@ def generate_data(N,K,R,M):
 
     return classes, observations
 
-# SOLUTION FUNCTIONS _______________________________________________________________________________________________________________________
+################################
+# SOLUTION FUNCTIONS / CLASSES
+################################
 class HiddenMarkovModel(object):
 
     p_init = None
@@ -140,9 +143,6 @@ class HiddenMarkovModel(object):
         Copy from the provided code in forward_backward.py
         Modifiy to fit into this class
         """
-        # def forward(get_init, get_transition, get_emission, observations):
-        # pi, R = get_init()
-
         M = len(self.obs_seq)
         alpha = np.zeros((M, self.num_state))
 
@@ -156,7 +156,6 @@ class HiddenMarkovModel(object):
         for m in range(1, M):
             for r2 in range(self.num_state):
                 for r1 in range(self.num_state):
-                    # transition = get_transition(r1, m, r2)
                     transition = self.p_trans[r1, r2]
                     emission = self.p_emis[r2, self.obs_seq[m]]
                     alpha[m, r2] += alpha[m-1, r1] * transition * emission
@@ -237,7 +236,7 @@ class MixtureHMMs(object):
     def get_estimated_classes(self):
         est_classes = np.argmax(self.tau, axis=1)
         return est_classes
-# ___________________________________________________________________________________________________________________
+
 
 if __name__ == "__main__":
     nr_vehicles = 10
