@@ -189,6 +189,7 @@ to zero.
     &= \sum_{r=1}^{R} \gamma^{r}_{m}(i)(\frac{x^r_m - \mu_{(i,m)}}{\Sigma_{(i,m)}}) = 0 \\
     \mu_{(i,m)}
     &= \frac{\sum_{r=1}^{R}\gamma^{r}_{m}(i)x^r_m}{\sum_{r=1}^{R}\gamma^{r}_{m}(i)}
+            \numberthis \label{eq:Q26-updateMu}
 \end{align*}
 
 \begin{flushleft}
@@ -200,7 +201,7 @@ to zero.
     &= \sum_{r=1}^{R} \gamma^{r}_{m}(i)(\frac{1}{2{\Sigma_{(i,m)}}^{-1}} - \frac{1}{2}(x^r_m - \mu_{(i,m)})^2) = 0 \\
     \Sigma_{(i,m)}
     &= \frac{\sum_{r=1}^{R}\gamma^{r}_{m}(i)(x^r_m - \mu_{(i,m)})^2}
-            {\sum_{r=1}^{R}\gamma^{r}_{m}(i)}
+            {\sum_{r=1}^{R}\gamma^{r}_{m}(i)}  \numberthis \label{eq:Q26-updateSigma}
 \end{align*}
 
 For each pair of players, we estimate $\mu_s^{n,n'}$ and $\Sigma_s^{n,n'}$ by the
@@ -221,9 +222,11 @@ The implmentation of this part is in Appendix.
 Here is the outline of procedure for each pair of players:
 \begin{enumerate}[Step 1:]
     \item Initialize $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$
-    \item Calculate $\gamma^{r}_{m}(i)$. $r$ is the index of round or index of data.
+    \item Calculate $\gamma^{r}_{m}(i)$ by forward-backward algorithm. \\
+          $r$ is the index of round or index of data.
     \item Use $\gamma^{r}_{m}(i)$ to re-estimate $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$
-    \item Go back to Step 2
+            using the eq \eqref{eq:Q26-updateMu} and \eqref{eq:Q26-updateSigma}
+    \item If $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$, do not converge go back to Step 2
 \end{enumerate}
 
 There are two tricks used in implmentation. The first trick is adding a scaling
@@ -235,6 +238,21 @@ say $1E-15$, and then the $\gamma^{r}_{m}(i)$ goes underflow immediately. To avo
 this situation, we should add a lower bound like $1E-6$ to the emission probability.
 \end{problem}
 \begin{problem}{2.6.20}
+We set the length of sequecne $M$ to 5 and the number of players $N$ to 4.
+
+We will go to discuss the parameter estimation result first and then we will 
+discuss some behaviour in brief.
+
+The true value of $\beta$ is $\pi^2 \approx 9.87$ and the estimated value of it
+$\beta$ is 11.328.
+
+The mean absolute derivation (MAE) between true value and the estimated value of $\mu^{n}_{s}$
+is given by:
+\begin{align*}
+    \text{MAE} = \frac{\sum_{s}\sum_{N}|\mu^{n}_{s} - \hat{\mu}^{n}_{s}|}{2MN}
+\end{align*}
+The MAE of $\mu^{n}_{s}$ is 8.574
+
 \end{problem}
 \pagebreak
 
