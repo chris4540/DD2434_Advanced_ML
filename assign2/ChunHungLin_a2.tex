@@ -10,6 +10,8 @@
 \usepackage{cleveref}
 \usepackage{listings}
 \usepackage[makeroom]{cancel}
+\usepackage[toc,page]{appendix}
+\usepackage{enumerate}
 
 \setlength{\parindent}{1em}
 \setlength{\parskip}{.3em}
@@ -206,10 +208,33 @@ EM algorithm.
 As what we have discussed in the begining, we have $\mu_s^{n,n'} = \mu_s^{n} + \mu_s^{n'}$.
 Hence, $\mu_s^{n}$ can be obtained by solving the system of linear equations.
 
-% \begin{align*}
-%     \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
-%     &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{4 M N^2} \\
-% \end{align*}
+To obtain the value of $\beta$, we can use the following equation:
+\begin{align*}
+    \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
+    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{4 M N^2} \\
+\end{align*}
+\end{problem}
+% 2.6.19
+\begin{problem}{2.6.19}
+The implmentation of this part is in Appendix.
+
+Here is the outline of procedure for each pair of players:
+\begin{enumerate}[Step 1:]
+    \item Initialize $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$
+    \item Calculate $\gamma^{r}_{m}(i)$. $r$ is the index of round or index of data.
+    \item Use $\gamma^{r}_{m}(i)$ to re-estimate $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$
+    \item Go back to Step 2
+\end{enumerate}
+
+There are two tricks used in implmentation. The first trick is adding a scaling
+factor in the alpha-pass and the beta-pass. It is because the result of gamma will 
+underflow as $M$ become large. The second trick is set the lower bound to the 
+emission probability. As the emission probability is a Gaussian distribution, 
+sometime we could have a situation that the probability of emission became tiny,
+say $1E-15$, and then the $\gamma^{r}_{m}(i)$ goes underflow immediately. To avoid
+this situation, we should add a lower bound like $1E-6$ to the emission probability.
+\end{problem}
+\begin{problem}{2.6.20}
 \end{problem}
 \pagebreak
 
@@ -926,7 +951,15 @@ Therefore, the update equations of $q(\theta_{r,c})$ are:
 
 % Appendix
 \pagebreak
+\appendix
+\section{Source code of implementations}
+\lstinputlisting[language=Python, caption=Implmentation of problem 2.6.19, 
+                 basicstyle=\ttfamily\footnotesize, breaklines=true
+                 label={lst:label}]
+                 {src/sec2_6/main26.py}
+\pagebreak
 \lstinputlisting[language=Python, caption=Implmentation of problem 2.7.22, 
                  basicstyle=\ttfamily\footnotesize, breaklines=true]{src/sec2_7/main27.py}
+% \end{appendices}
 %  ===============================================================================
 \end{document}
