@@ -40,7 +40,7 @@ class Tournament(object):
         # random initialize our observation model params
         size = (self.n_states, self.obs_length)
         self.mu = normal(33, 10, size=size)
-        self.sigma2 = np.abs(normal(20, 2, size=size))
+        self.sigma2 = np.abs(normal(20, 5, size=size))
 
     def forward_pass(self):
         self.alpha = np.zeros((self.n_obs, self.obs_length, self.n_states))
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     mu_results = dict()
     sigma2_results = dict()
 
-    print(data.keys())
+    # train the model
     for pair in data.keys():
         tour = Tournament(p_init, p_trans)
 
@@ -209,26 +209,38 @@ if __name__ == "__main__":
         mu_results[pair] = tour.mu
         sigma2_results[pair] = tour.sigma2
 
+    # #######################
     # solve mu out
-    a_mat = np.zeros((N, N))
+    # #######################
+    a_mat = np.zeros((N, N))  # np.linalg only accept square matrix
     b_mat = np.zeros((N, 2*M))
-    for i, (pair, mu) in enumerate(mu_results.items()):
-        # for A matrix
-        p1, p2 = pair
-        a_mat[i, p1-1] = 1
-        a_mat[i, p2-1] = 1
-        # B
+    for i in range(N):
+        if i == N-1:
+            pair = (2, N-1)    # for non-singular A matrix
+        else:
+            pair = (i+1, i+2)
+        mu = mu_results[pair]
+
+        if i == N-1:
+            a_mat[i, 1] = 1.0
+            a_mat[i, i] = 1.0
+        else:
+            a_mat[i, i] = 1.0
+            a_mat[i, i+1] = 1.0
+
         b_mat[i, :] = mu.flatten()
 
-    # x = np.linalg.lstsq(a_mat, b_mat)[0]
-    # # print(x)
-    # mu = x.reshape(N, 2, M)
-    # mu = np.moveaxis(mu, 0, -1)
+    x = np.linalg.solve(a_mat, b_mat)
 
-    # print(mu)
+    mu = x.reshape(N, 2, M)
+    mu = np.moveaxis(mu, 0, -1)  # for easier compare
 
+    # load the target from pickle
     target = load_obj("./mu.pkl")
-    print(target)
+
+    print(target - mu)
+
+    print("Average Abs Error of Mu:", np.mean(np.abs(target - mu)))
 
 
 
