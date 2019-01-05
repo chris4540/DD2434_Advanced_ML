@@ -24,8 +24,8 @@ class Tournament(object):
 
         ret = np.exp(-((obs - mean)**2) * 0.5 / var) / np.sqrt(2 * np.pi * var)
 
-        if ret < 1e-12:
-            ret = 1e-12
+        if ret < 1e-15:
+            ret = 1e-15
         return ret
 
     def set_obs_seqs(self, obs_seqs):
@@ -40,7 +40,7 @@ class Tournament(object):
         # random initialize our observation model params
         size = (self.n_states, self.obs_length)
         self.mu = normal(33, 10, size=size)
-        self.sigma2 = np.ones(size) * 2 * 10
+        self.sigma2 = normal(1, 1, size=size) + 10
 
     def forward_pass(self):
         self.alpha = np.zeros((self.n_obs, self.obs_length, self.n_states))
@@ -122,8 +122,13 @@ class Tournament(object):
 
         return gamma
 
+    @staticmethod
+    def get_L2_norm(x, y):
+        return np.sqrt(np.sum((x-y)**2))
+
     def learn(self):
 
+        param_size = (self.n_states, self.obs_length)
         for _ in range(50):
             self.forward_pass()
             # print(self.alpha)
@@ -131,6 +136,8 @@ class Tournament(object):
             # print(self.beta)
             self.forward_backward()
             # estimate mu again
+            new_mu = np.zeros(param_size)
+            new_sigma2 = np.zeros(param_size)
             for i in range(self.n_states):
                 for m in range(self.obs_length):
                     num = 0
@@ -138,7 +145,7 @@ class Tournament(object):
                     for r in range(self.n_obs):
                         num += self.gamma[r, m, i] * self.obs_seqs[r, m]
                         denom += self.gamma[r, m, i]
-                    self.mu[i, m] = num / denom
+                    new_mu[i, m] = num / denom
 
             # estimate sigma2
             for i in range(self.n_states):
@@ -149,7 +156,14 @@ class Tournament(object):
                         num += self.gamma[r, m, i] * (
                                 self.obs_seqs[r, m] - self.mu[i,m])**2
                         denom += self.gamma[r, m, i]
-                    self.sigma2[i, m] = num / denom
+                    new_sigma2[i, m] = num / denom
+
+            if (self.get_L2_norm(new_mu, self.mu) < 1e-6) and (
+                    self.get_L2_norm(new_sigma2, self.sigma2) < 1e-6):
+                break
+            else:
+                self.mu = new_mu
+                self.sigma2 = new_sigma2
 
     @staticmethod
     def normalize_p_vec(p_vec):
@@ -183,7 +197,9 @@ if __name__ == "__main__":
     # set obs
     tour.set_obs_seqs(obs_seqs)
     tour.learn()
+    print("Mu:")
     print(tour.mu)
+    print("sigma2:")
     print(tour.sigma2)
     # tour.forward_pass()
     # tour.backward_pass()
