@@ -247,7 +247,7 @@ if __name__ == "__main__":
     for sigma2 in sigma2_results.values():
         sigma2_ests.append(np.mean(sigma2))
 
-    beta = np.sqrt(np.mean(sigma2_ests) / 2.0)
+    beta = np.mean(sigma2_ests) / 2.0)
     print("Estimated beta:", beta)
 
     # for case study:
