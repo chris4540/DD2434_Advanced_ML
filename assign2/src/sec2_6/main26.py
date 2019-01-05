@@ -241,7 +241,14 @@ if __name__ == "__main__":
     print(target - mu)
 
     print("Average Abs Error of Mu:", np.mean(np.abs(target - mu)))
+    print("Percentage Error of Mu:", np.mean(np.abs(target - mu) / target))
+    # beta
+    sigma2_ests = list()
+    for sigma2 in sigma2_results.values():
+        sigma2_ests.append(np.mean(sigma2))
 
+    beta = np.sqrt(np.mean(sigma2_ests) / 2.0)
+    print("Estimated beta:", beta)
 
-
-
+    # for case study:
+    print("Est. Mu for pair (1,2):", mu_results[(1,2)])
