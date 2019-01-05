@@ -102,21 +102,24 @@ where $z_m^{(n,n';r)} = i$ means in $r$:th round the pair of player $(n, n')$ vi
 subfield $s = (i, m)$ at sequence index $m$ and $z$ means hidden state.
 
 First we will derive an EM algorithm for a HMM with Gaussian observation model 
-with R observation data and then extend it to our case.
+with R observation data and then extend it to our case. This model can be considered
+for one pair of players.
 
 Consider the joint probability of a HMM where the initial state probaility and 
 the transition matrix are given and the observation model is a conditional
 Gaussian.
 \begin{align*}
-    p(z_{1:M}, x_{1:M}) &= \prod_{r=1}^{R} \biggl(
+    p(z^{1:R}_{1:M}, x^{1:R}_{1:M}) &= \prod_{r=1}^{R} \biggl(
             p(z^r_1) \prod_{m=2}^{M}p(z^r_m\mid z^r_{m-1})
             \prod_{m=1}^{M}p(x^r_m\mid z^r_m) \biggl)\\
     p(x^r_m\mid z^r_m= i) &= \mathcal{N}(x^r_m \mid \mu_{(i,m)}, \Sigma_{(i,m)})
 \end{align*}
+where $x^{1:R}_{1:M}$ means R observation sequences indexed from 1 to M and
+$z^r_m= i$ means the pair of player was visting subfield $(i, m)$ at round $R$.
 
 The expected complete log likelihood (Q term):
 \begin{align*}
-    Q(\theta, \theta^{t}) &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[
+    Q(\theta, \theta^{(t)}) &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{(t)})}[
         \log p(z_{1:R}, x_{1:R}\mid \theta)]
 \end{align*}
 where $\theta$ is a set of parameters for this HMM model.
