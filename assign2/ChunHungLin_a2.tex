@@ -116,27 +116,32 @@ Gaussian.
 \end{align*}
 where $x^{1:R}_{1:M}$ means R observation sequences indexed from 1 to M and
 $z^r_m= i$ means the pair of player was visting subfield $(i, m)$ at round $R$.
+Note that $z^r_m$ can be only 1 or 0 in our case.
 
 The expected complete log likelihood (Q term):
 \begin{align*}
-    Q(\theta, \theta^{(t)}) &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{(t)})}[
-        \log p(z_{1:R}, x_{1:R}\mid \theta)]
+    Q(\theta, \theta^{(t)}) &= \mathbb{E}_{p(Z\mid X, \theta^{(t)})}[
+        \log p(z^{1:R}_{1:M}, x^{1:R}_{1:M})]
 \end{align*}
-where $\theta$ is a set of parameters for this HMM model.
+where $\theta$ is the parameter set for this HMM model.
+
+We can see that $\theta$ is given by:
 \begin{align*}
     \theta = \{\bm{\pi}, \bm{A}, \bm{\mu}, \bm{\Sigma}\}
 \end{align*}
 where $\bm{\pi}$ is the initial state probability vector, $\bm{A}$ is the transition
 matrix, $\bm{\mu} = \{ \mu_s: s \in S\}$ and $\bm{\Sigma} = \{ \Sigma_s: s \in S\}$.
 
+We can write down the $Q(\theta, \theta^{t})$ by combining informations.
 \begin{align*}
     Q(\theta, \theta^{t}) &= 
-    \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[
-        \log p(z_1) + \sum_{r=2}^{R} \log p(z_r \mid z_{r-1}) 
-        + \sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
-    &= \mathbb{E}[\log p(z_1)] 
-        + \mathbb{E}[\sum_{r=2}^{R} \log p(z_r \mid z_{r-1})] 
-        + \mathbb{E}[\sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
+    \mathbb{E}_{p(Z\mid X, \theta^{t})}[ \sum_{r=1}^{R} \biggl(
+        \log p(z^r_1) 
+        + \sum_{m=2}^{M} \log p(z^r_m \mid z^r_{m-1}) 
+        + \sum_{m=1}^{M} \log p(x^r_m\mid z^r_m)\biggl)] \\
+    &= \mathbb{E}[\sum_{r=1}^{R} \log p(z_1)] 
+        + \mathbb{E}[\sum_{r=1}^{R} \sum_{m=2}^{M} \log p(z^r_m \mid z^r_{m-1})] 
+        + \mathbb{E}[\sum_{r=1}^{R} \sum_{m=1}^{M} \log p(x^r_m\mid z^r_m)] \\
     &= Q_{\pi}(\bm{\pi}) + Q_{A}(\bm{A}) + Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})
 \end{align*}
 When $\bm{\pi}$ and $\bm{A}$ are given, $Q_{\pi}(\bm{\pi})$ and $Q_{A}(\bm{A})$ 
@@ -146,16 +151,19 @@ $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ to update $\bm{\mu}$ and $\bm{\Sigma}$.
 Let's go back to see the details of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ 
 \begin{align*}
     Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
-    &= \mathbb{E}_{p(z_{1:R}\mid x_{1:R}, \theta^{t})}[\sum_{r=1}^{R} \log p(x_r\mid z_r)] \\
-    &= \sum_{z_{1:R}}p(z_{1:R}\mid x_{1:R}, \theta^{t})\sum_{r=1}^{R} \log p(x_r\mid z_r) \\
-    &= \sum_{s\in S}\sum_{r=1}^{R} p(z_{r} = s\mid x_{1:R}, \theta^{t})\log p(x_r\mid z_r = s) \\
-    &= \sum_{s\in S}\sum_{r=1}^{R} \gamma_{rs}
-        (-\frac{1}{2}\log 2\pi -\frac{1}{2}\log \Sigma_s - \frac{(x_r - \mu_s)^2}{2\Sigma_s})
+    &= \mathbb{E}_{p(Z\mid X, \theta^{(t)})}[
+            \sum_{r=1}^{R} \sum_{m=1}^{M} \log p(x^r_m\mid z^r_m)] \\
+    &= \mathbb{E}_{p(Z\mid X, \theta^{(t)})}[
+                \sum_{r=1}^{R} \sum_{m=1}^{M} \sum_{i=0}^{1} \mathbb{I}(z^r_m = i)\log p(x^r_m\mid z^r_m = i)] \\
+    &= \sum_{Z} p(Z\mid X, \theta^{(t)})
+            \sum_{r=1}^{R} \sum_{m=1}^{M} \sum_{i=0}^{1} \mathbb{I}(z^r_m = i)\log p(x^r_m\mid z^r_m = i) \\
+    &= \sum_{r=1}^{R} \sum_{m=1}^{M} \sum_{i=0}^{1} p(z^r_m = i\mid X, \theta^{(t)})\log p(x^r_m\mid z^r_m = i) \\
+    &= \sum_{r=1}^{R} \sum_{m=1}^{M} \sum_{i=0}^{1} p(z^r_m = i\mid x^{r}_{1:M}, \theta^{(t)})\log p(x^r_m\mid z^r_m = i) \\
+    &= \sum_{r=1}^{R} \sum_{m=1}^{M} \sum_{i=0}^{1} \gamma^{r}_{m}(i)
+        (-\frac{1}{2}\log 2\pi -\frac{1}{2}\log \Sigma_{(i,m)} - \frac{(x^r_m - \mu_{(i,m)})^2}{2\Sigma_{(i,m)}})
 \end{align*}
-where $\gamma_{rs} = p(z_{r} = s\mid x_{1:R}, \theta^{t})$ and it can be computed
+where $\gamma^{r}_{m}(i) = p(z^r_m = i\mid x^{r}_{1:M}, \theta^{(t)})$ and it can be computed
 by forward-backward algorithm.
-
-The third step is just marginalzing out unrelated variables.
 
 In M step, we have:
 \begin{align*}
