@@ -5,13 +5,16 @@ import numpy as np
 class Tournament(object):
 
     def __init__(self, p_init, p_trans):
-        pass
+        self.p_init = p_init
+        self.p_trans = p_trans
+        self.n_states = p_trans.shape[0]
 
     def set_obs_seqs(self, obs_seqs):
         self.alpha = None
         self.beta = None
 
-        self.obs_seqs =obs_seqs
+        self.n_obs = obs_seqs.shape[0]
+        self.obs_seqs = obs_seqs
 
     def forward_pass(self):
         pass
@@ -34,3 +37,14 @@ if __name__ == "__main__":
     p_trans = np.array([[0.25, 0.75],
                         [0.75, 0.25]])
     tour = Tournament(p_init, p_trans)
+
+    obs_seqs = []
+    for seq in data[(1,2)].values():
+        obs_seqs.append(np.array(seq)[:, 0])
+
+    obs_seqs = np.array(obs_seqs)
+
+    # set obs
+    tour.set_obs_seqs(obs_seqs)
+    tour.forward_pass()
+    tour.backward_pass()
