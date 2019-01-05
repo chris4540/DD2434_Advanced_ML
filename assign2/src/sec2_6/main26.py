@@ -9,18 +9,24 @@ class Tournament(object):
         self.p_trans = p_trans
         self.n_states = p_trans.shape[0]
 
+        # random initialize our observation model params
+
     def set_obs_seqs(self, obs_seqs):
         self.alpha = None
         self.beta = None
 
         self.n_obs = obs_seqs.shape[0]
+        self.obs_length = obs_seqs.shape[1]
         self.obs_seqs = obs_seqs
 
     def forward_pass(self):
-        pass
+        self.alpha = np.zeros((self.n_obs, self.obs_length, self.n_states))
+
+        # base case
+
 
     def backward_pass(self):
-        pass
+        self.beta = np.zeros((self.n_obs, self.obs_length, self.n_states))
 
 def load_obj(fname):
     """
