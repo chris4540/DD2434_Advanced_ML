@@ -3,6 +3,7 @@ import pickle
 import ex_2_3
 import ex_2_3_tree_helper as tree_helper
 import pandas as pd
+import csv
 
 class Tree(tree_helper.Tree):
     """
@@ -98,11 +99,20 @@ if __name__ == '__main__':
             p_obs_nodes = t.get_obs_prob()
             print(sample_name)
             print(p_obs_nodes)
-            result_dict[param_k]["sample_{}".format(s)] = p_obs_nodes
+            result_dict[param_k]["Sample{}".format(s)] = p_obs_nodes
 
     # transform the result to csv
     df = pd.DataFrame.from_dict(result_dict, orient="index")
     df.index.name = "Tree"
     # reorder the columns
-    df = df[["sample_{}".format(i) for i in range(1, 4)]]
-    df.to_csv("result_sec2_3.csv", float_format='%.3e')
+    df = df[["Sample{}".format(i) for i in range(1, 4)]]
+    # rename index
+    idx_map = dict()
+    for idx in df.index:
+        tree_name = idx.split("_alpha_")[0]  # drop alpha values
+        tree_name = tree_name.replace("_", " ")
+        idx_map[idx] = tree_name
+
+    df = df.rename(index=idx_map)
+
+    df.to_csv("result_sec2_3.csv", float_format="%.3e", quoting=csv.QUOTE_NONE)
