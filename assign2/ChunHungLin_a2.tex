@@ -918,25 +918,27 @@ And each term as:
         &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\theta_{r,c}\mid \mu_{1}, \lambda_{1}^{-1}) \\
     p(M) &= \prod_{r \in [R], c\in [C]} p(\mu_{r,c}) \\
     p(M) &= \prod_{r \in [R], c\in [C]} \mathcal{N}(\mu_{r,c}\mid \mu_{0}, \lambda_{0}^{-1}) \\
-    p(x \mid M, \Theta) &= \prod_{r \in [R], c\in [C]} 
-                p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\})\\
-        &= \prod_{r \in [R], c\in [C]} \mathcal{N}(x_{r,c} \mid  
+    p(x \mid M, \Theta)
+        &= \prod_{n=1}^{N}\prod_{r \in [R], c\in [C]} 
+                p(x^{n}_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\})\\
+        &= \prod_{n=1}^{N}\prod_{r \in [R], c\in [C]} \mathcal{N}(x^{n}_{r,c} \mid  
             (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}), \lambda^{-1})
 \end{align*}
 Therefore, the log joint probability is:
 \begin{align*}
     \log p(M, \Theta, x) &= \log p(\Theta) + \log p(M) + \log p(x \mid M, \Theta) \\
-        & = \sum_{r \in [R], c\in [C]} \log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})
+        & = \sum_{r \in [R], c\in [C]} \log p(\theta_{r,c}, \mu_{r,c}, x^{1:N}_{r,c})
 \end{align*}
-,where $\log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})$ is the unnormalized log posterior
+where $\log p(\theta_{r,c}, \mu_{r,c}, x^{1:N}_{r,c})$ is the unnormalized log posterior
 of each grid point:
 \begin{align*}
-    \log p(\theta_{r,c}, \mu_{r,c}, x_{r,c}) =& 
+    \log p(\theta_{r,c}, \mu_{r,c}, x^{1:N}_{r,c}) =& 
     \log p(\theta_{r,c}) + \log p(\mu_{r,c}) 
         + \log p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
     =& \frac{\log \lambda_1}{2} + \frac{\log \lambda_0}{2} + \frac{\log \lambda}{2} 
        - \frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 - \frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2 \\
-     & - \frac{\lambda}{2}(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2 + \text{const}
+     & - \frac{\lambda}{2}\sum_{n=1}^{N}(x^n_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2
+       + \text{const}
 \end{align*}
 By mean field approximation, we can assume the form of the estimated posterior as:
 \begin{align*}
@@ -967,18 +969,18 @@ We get $q(\mu_{r,c})$ by averaging out all the variables except for $\mu_{r,c}$:
     \log q(\mu_{r,c}) &= 
         \mathbb{E}_{q(\Theta)q(M\backslash\mu_{r,c})}[\log p(M, \Theta, x)] 
         + \text{const} \\
-    &= \mathbb{E}_{q(\theta_{r,c})q(\{\mu_{i,j}: i, j \in N(r,c)\})}[\log p(\theta_{r,c}, \mu_{r,c}, x_{r,c})]
+    &= \mathbb{E}_{q(\theta_{r,c})q(\{\mu_{i,j}: i, j \in N(r,c)\})}[\log p(\theta_{r,c}, \mu_{r,c}, x^{1:N}_{r,c})]
     + \text{const} \numberthis \label{eq:q29_indep_asumpt} \\
     &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2
-    -\frac{\lambda}{2}\mathbb{E}[(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2] + \text{const} \\
+    -\frac{\lambda}{2}\sum_n\mathbb{E}[(x^n_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2] + \text{const} \\
     &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 
-    -\frac{\lambda}{2}\mathbb{E}[-2x_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j})\mu_{r,c}]
+    -\frac{\lambda}{2}\sum_n\mathbb{E}[-2x^n_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j})\mu_{r,c}]
     + \text{const} \\
     &= -\frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 
-    -\frac{\lambda}{2}[-2x_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})\mu_{r,c}]
+    -\frac{\lambda}{2}\sum_n[-2x^n_{r,c}\mu_{r,c} + \mu_{r,c}^2 + 2(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})\mu_{r,c}]
     + \text{const} \\
-    &= (-\frac{\lambda_0}{2} -\frac{\lambda}{2})\mu_{r,c}^2
-    + (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))\mu_{r,c}
+    &= (-\frac{\lambda_0}{2} -\frac{N\lambda}{2})\mu_{r,c}^2
+    + (\lambda_0\mu_0 + \lambda (\sum_n x^n_{r,c}) -N\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))\mu_{r,c}
     + \text{const} \\
 \end{align*}
 
@@ -988,21 +990,21 @@ estimated values for simplicity.
 
 Making use of eq. \eqref{eq:logspaceNormal}, the parameters of $q(\mu_{r,c})$ are:
 \begin{align*}
-    -\frac{\tilde{\lambda^{\mu}}_{r,c}}{2} &= -\frac{\lambda_0}{2} -\frac{\lambda}{2} \\
-    \tilde{\lambda^{\mu}}_{r,c} &= \lambda_0 + \lambda \\
+    -\frac{\tilde{\lambda^{\mu}}_{r,c}}{2} &= -\frac{\lambda_0}{2} -\frac{N\lambda}{2} \\
+    \tilde{\lambda^{\mu}}_{r,c} &= \lambda_0 + N\lambda \\
     % mu
     \tilde{m^{\mu}}_{r,c} &= 
     \frac{1}{\tilde{\lambda^{\mu}}_{r,c}}
     (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})) \\
-    &= \frac{1}{\lambda_0 + \lambda}
-    (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))
+    &= \frac{1}{\lambda_0 + N\lambda}
+    (\lambda_0\mu_0 + \lambda (\sum_n x^n_{r,c}) - N\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j}))
 \end{align*}
 Therefore, the update equations of $q(\mu_{r,c})$ are:
 \begin{align}
-    \tilde{\lambda^{\mu}}_{r,c}^{(t+1)} &= \lambda_0 + \lambda \\
+    \tilde{\lambda^{\mu}}_{r,c}^{(t+1)} &= \lambda_0 + N\lambda \\
     % mu
-    \tilde{m^{\mu}}_{r,c}^{(t+1)}  &= \frac{1}{\lambda_0 + \lambda}
-    (\lambda_0\mu_0 + \lambda x_{rc} -\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m^{\mu}}_{r,c}^{(t)}))
+    \tilde{m^{\mu}}_{r,c}^{(t+1)}  &= \frac{1}{\lambda_0 + N\lambda}
+    (\lambda_0\mu_0 + \lambda (\sum_n x^n_{r,c}) - N\lambda(\tilde{m}^{\theta}_{r,c}\sum_{i,j \in N(r,c)}\tilde{m^{\mu}}_{i,j}^{(t)}))
 \end{align}
 
 We get $q(\theta_{r,c})$ by averaging out all the variables except for $\theta_{r,c}$.
