@@ -246,16 +246,9 @@ if __name__ == "__main__":
 
     class_prob, start_prob, transition_prob, emission_prob = define_HMMs(
         nr_classes, nr_rows, nr_columns)
-    # print(type(emission_prob))
-    # print(emission_prob.shape)
-    print("Class probabilities\n", class_prob)
-    # print("\nStart probabilities\n", start_prob)
-    # print("\nTransition probabilities\n", transition_prob)
-    # print("\nEmission probabilities\n", emission_prob)
+
 
     targets, data = generate_data(nr_vehicles, nr_classes, nr_rows, nr_columns)
-    # print("\nObserved sequences\n",data)
-    print("\nTrue classes\n", targets)
 
     mix_HMMs = MixtureHMMs(nr_classes, start_prob,
                            transition_prob, emission_prob)
@@ -263,5 +256,8 @@ if __name__ == "__main__":
     mix_HMMs.get_obs_probs()
     mix_HMMs.cluster_data()
     est = mix_HMMs.get_estimated_classes()
-    print(est)
-    print(targets - est)
+    print("Class probabilities", class_prob)
+    print("Esitmated class prob:", mix_HMMs.cls_prob)
+    print("True classes", targets)
+    print("Estimated classes", est)
+    print("Class differences", targets - est)
