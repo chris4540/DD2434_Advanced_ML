@@ -986,7 +986,7 @@ where $\rho_{nk}$ is a unnormalized posterior responsibility of class k for data
 $r_{nk}$ is a normalized posterior responsibility.
 
 We now have an approximated posterior of the model. $p(X)$ is hard to have an analytical expression
-but one can estimated its lower bound $\mathcal{L}(q)$.
+but one can estimate its lower bound $\mathcal{L}(q)$.
 
 We have:
 \begin{align*}
@@ -1039,7 +1039,7 @@ of each grid point:
 \begin{align*}
     \log p(\theta_{r,c}, \mu_{r,c}, x^{1:N}_{r,c}) =& 
     \log p(\theta_{r,c}) + \log p(\mu_{r,c}) 
-        + \log p(x_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
+        + \sum_{n} \log p(x^{n}_{r,c}\mid \theta_{r,c}, \mu_{r,c}, \{\mu_{i,j}: i, j \in N(r,c)\}) \\
     =& \frac{\log \lambda_1}{2} + \frac{\log \lambda_0}{2} + \frac{\log \lambda}{2} 
        - \frac{\lambda_0}{2}(\mu_{r,c} - \mu_0)^2 - \frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2 \\
      & - \frac{\lambda}{2}\sum_{n=1}^{N}(x^n_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2
