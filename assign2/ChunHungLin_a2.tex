@@ -12,6 +12,7 @@
 \usepackage[makeroom]{cancel}
 \usepackage[toc,page]{appendix}
 \usepackage{enumerate}
+\usepackage{csvsimple}
 
 \setlength{\parindent}{1em}
 \setlength{\parskip}{.3em}
@@ -246,12 +247,12 @@ discuss some behaviour in brief.
 The true value of $\beta$ is $\pi^2 \approx 9.87$ and the estimated value of it
 $\beta$ is 11.328.
 
-The mean absolute derivation (MAE) between true value and the estimated value of $\mu^{n}_{s}$
-is given by:
-\begin{align*}
-    \text{MAE} = \frac{\sum_{s}\sum_{N}|\mu^{n}_{s} - \hat{\mu}^{n}_{s}|}{2MN}
-\end{align*}
-The MAE of $\mu^{n}_{s}$ is 8.574
+The mean absolute derivation (MAE) and mean absolute percentage error (MAPE) 
+between true value and the estimated value of $\mu^{n}_{s}$ are used to evaluate
+the performance.
+
+The MAE of $\hat{\mu}^{n}_{s}$ is 8.574 and the MAPE of $\hat{\mu}^{n}_{s}$ is 
+66.5\%.
 
 \end{problem}
 \pagebreak
