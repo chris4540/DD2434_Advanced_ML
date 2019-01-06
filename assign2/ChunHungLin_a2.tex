@@ -199,7 +199,7 @@ The implementation of this part is in Listing \ref{impl:Sec25}.
 To make the implementation easier, this implementation is modified from the result
 of 2.3.10. We calculate once the likelihood of the tree $p(\beta \mid T, \Theta)$ and
 then save $\{s(u, i) : u \in V(T), i \in [K]\}$. And then use equations 
-\eqref{eq:Q25-post_root} and \eqref{eq:Q25-post_node} to calculate the 
+\eqref{eq:Q25-post_root} and \eqref{eq:Q25-post_node} to calculate the posterior
 categorical distribution parameters for sampling.
 \end{problem}
 
@@ -213,7 +213,7 @@ The sampling result is in Table \ref{tbl:Q25-result}
         precision=6,
         every head row/.style={before row=\toprule,after row=\midrule},
         every last row/.style={after row=\bottomrule},
-        % columns/Probability/.style={column name=$$}
+        % columns/Probability/.style={column name=$p(X_v = i\mid X_{pa(v)}, \beta)$}
         % display columns/0/.style={string type,column name={}}
         ]{src/sec2_5/result_sec2_5.csv}
     \caption{The values of $p(X_v = i\mid X_{pa(v)}, \beta)$}\label{tbl:Q25-result}
