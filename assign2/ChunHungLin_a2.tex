@@ -83,7 +83,45 @@
 
 %2.3
 \begin{problem}{2.3.10}
+The implementation of this part is in Listing \ref{impl:Sec23}.
+
+Define the evidence of subtree $L(T_u)$ as:
+\begin{align*}
+    s(u, i) = p(X_{L(T_u)} \mid X_u = i)
+\end{align*}
+where $L(T_u)$ is the observed leaves under the node $u$.
+
+Consider a node $u$ has the childen $\{ c^{u}_1, c^{u}_2, ..., c^{u}_n\}$
+\begin{align*}
+    s(u, i) &= p(X_{L(T_u)} \mid X_u = i) \\
+    &= \sum_{j_1, j_2, ...,j_n} p(X_{L(T_u)}, X_{c^{u}_1} = j_1, ..., X_{c^{u}_n}=j_n \mid X_u = i) \\
+    &= \sum_{j_1, j_2, ...,j_n} 
+        p(X_{L(T_u)} \mid X_{c^{u}_1} = j_1, ..., X_{c^{u}_n}=j_n, X_u = i)
+        p(X_{c^{u}_1} = j_1, ..., X_{c^{u}_n}=j_n \mid X_u = i) \\
+    &= \sum_{j_1, j_2, ...,j_n} 
+        p(X_{L(T_u)} \mid X_{c^{u}_1} = j_1, ..., X_{c^{u}_n}=j_n)
+        \prod_{l=1}^{N}p(X_{c^{u}_l} = j_l \mid X_u = i) \\
+    &= \sum_{j_1, j_2, ...,j_n} 
+        \prod_{m=1}^{N}p(X_{L(T_{c^{u}_l})}\mid X_{c^{u}_m} = j_m)
+        \prod_{l=1}^{N}p(X_{c^{u}_l} = j_l \mid X_u = i) \\
+    &= \prod_{l=1}^{N} [
+        \sum_{j_l}p(X_{L(T_{c^{u}_l})}\mid X_{c^{u}_l} = j_l)p(c^{u}_l = j_l \mid X_u = i)] \\ 
+        \numberthis \label{eq:Q23-recusive}
+    &= \prod_{l=1}^{N} [
+        \sum_{j_l}s(c^{u}_l, j_l)p(c^{u}_l = j_l \mid X_u = i)]  \\
+    &= \prod_{l=1}^{N} [s(u, c^{u}_l, i)]
+\end{align*}
+
+In the implementation, the value of each $s(u, c^{u}_l, i)$ is saved to avoid repeat
+calculation.
+
+In eq \eqref{eq:Q23-recusive}, we can see that $s(u, i)$ has a recursive relation
+to its childen. Therefore, we use DFS to traversal the tree in order to calculate
+the value of $s(u, i)$.
+
+At the leaf node $l$, we have $s(l, i) = \mathbb{I}(X_l = i)$ obviously.
 \end{problem}
+
 \begin{problem}{2.3.11}
 The implmentation result is in Table \ref{tbl:Q23-result}.
 \begin{table}
@@ -105,7 +143,7 @@ The implmentation result is in Table \ref{tbl:Q23-result}.
 
 We have:
 \begin{align*}
-    s(u, i) = p(x_{L(T_u)} \mid X_u = i)
+    s(u, i) = p(X_{L(T_u)} \mid X_u = i)
 \end{align*}
 $s(u,i)$ can be regarded as the evidence of the leaves of subtree $T_u$ given that
 the value of this vertex $u$ is $i$.
@@ -1035,16 +1073,16 @@ Therefore, the update equations of $q(\theta_{r,c})$ are:
 \pagebreak
 \appendix
 \section{Source code of implementations}
-\lstinputlisting[language=Python, caption=Implmentation of problem 2.3.10, 
+\lstinputlisting[label={impl:Sec23},language=Python, caption=Implmentation of problem 2.3.10, 
                  basicstyle=\ttfamily\footnotesize, breaklines=true
                  label={lst:label}]
                  {src/sec2_3/main23.py}
-\lstinputlisting[language=Python, caption=Implmentation of problem 2.6.19, 
+\lstinputlisting[label={impl:Sec26},language=Python, caption=Implmentation of problem 2.6.19, 
                  basicstyle=\ttfamily\footnotesize, breaklines=true
                  label={lst:label}]
                  {src/sec2_6/main26.py}
 \pagebreak
-\lstinputlisting[language=Python, caption=Implmentation of problem 2.7.22, 
+\lstinputlisting[label={impl:Sec27},language=Python, caption=Implmentation of problem 2.7.22, 
                  basicstyle=\ttfamily\footnotesize, breaklines=true]{src/sec2_7/main27.py}
 % \end{appendices}
 %  ===============================================================================
