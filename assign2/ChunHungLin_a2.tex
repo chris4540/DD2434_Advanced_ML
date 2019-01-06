@@ -37,6 +37,44 @@
 \title{DD2434 Machine Learning, Advanced Course Assignment 2}
 \author{Lin Chun Hung, chlin3@kth.se}
 \maketitle
+%2.1
+\begin{problem}{2.1.1}
+    Yes, I have read it.
+\end{problem}
+\begin{problem}{2.1.2}
+    I have asked problem formulations on Slacks. All of them were answered by Jens
+    and TAs.
+\end{problem}
+\begin{problem}{2.1.2}
+    No. I did not discuss solutions with anybody.
+\end{problem}
+%2.2
+\begin{problem}{2.2.4}
+    No
+\end{problem}
+\begin{problem}{2.2.5}
+    Yes
+\end{problem}
+\begin{problem}{2.2.6}
+\begin{align*}
+    A = \{ \mu_{r,c}, 
+            \mu_{(r-1 ~\text{mod}~ R,c)},
+            \mu_{(r, c-1 ~\text{mod}~ C)},
+            \mu_{(r, c+1 ~\text{mod}~ C)},
+            \mu_{(r+1 ~\text{mod}~ R,c)}
+        \}    
+\end{align*}
+\end{problem}
+\begin{problem}{2.2.7}
+    Yes
+\end{problem}
+%2.3
+\begin{problem}{2.3.10}
+\end{problem}
+\begin{problem}{2.3.11}
+\end{problem}
+\pagebreak
+
 % 2.5
 \begin{problem}{2.5.15}
 
@@ -972,6 +1010,10 @@ Therefore, the update equations of $q(\theta_{r,c})$ are:
 \pagebreak
 \appendix
 \section{Source code of implementations}
+\lstinputlisting[language=Python, caption=Implmentation of problem 2.3.10, 
+                 basicstyle=\ttfamily\footnotesize, breaklines=true
+                 label={lst:label}]
+                 {src/sec2_3/main23.py}
 \lstinputlisting[language=Python, caption=Implmentation of problem 2.6.19, 
                  basicstyle=\ttfamily\footnotesize, breaklines=true
                  label={lst:label}]
