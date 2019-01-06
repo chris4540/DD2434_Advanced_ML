@@ -24,8 +24,9 @@ class Tournament(object):
 
         ret = np.exp(-((obs - mean)**2) * 0.5 / var) / np.sqrt(2 * np.pi * var)
 
-        if ret < 1e-15:
-            ret = 1e-15
+        # Add lower bound to aviod underflow
+        if ret < 1e-6:
+            ret = 1e-6
         return ret
 
     def set_obs_seqs(self, obs_seqs):
