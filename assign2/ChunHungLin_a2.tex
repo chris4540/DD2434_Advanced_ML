@@ -82,19 +82,21 @@
 \pagebreak
 
 %2.3
-% \begin{problem}{2.3.10}
-% \end{problem}
+\begin{problem}{2.3.10}
+\end{problem}
 \begin{problem}{2.3.11}
-11111222111
-
-\pgfplotstabletypeset[
-    col sep = comma,
-    string replace*={_}{\textsubscript},
-    every head row/.style={before row=\toprule,after row=\midrule},
-    every last row/.style={after row=\bottomrule},
-    display columns/0/.style={string type,column name={}}
-    ]
-    {src/sec2_3/result_sec2_3.csv}
+The implmentation result is in Table \ref{tbl:Q23-result}.
+\begin{table}
+    \centering
+    \pgfplotstabletypeset[
+        col sep = comma,
+        string replace*={_}{\textsubscript},
+        every head row/.style={before row=\toprule,after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        display columns/0/.style={string type,column name={}}
+        ]{src/sec2_3/result_sec2_3.csv}
+    \caption{The values of $p(\beta \mid T, \Theta)$}\label{tbl:Q23-result}
+\end{table} 
 \end{problem}
 \pagebreak
 
