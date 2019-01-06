@@ -342,8 +342,8 @@ Hence, $\mu_s^{n}$ can be obtained by solving the system of linear equations.
 
 To obtain the value of $\beta$, we can use the following equation:
 \begin{align*}
-    \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N^2)} \\
-    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{4 M N^2} \\
+    \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N(N-1)/2)} \\
+    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2 M N(N-1)} \\
 \end{align*}
 \end{problem}
 % 2.6.19
@@ -369,20 +369,30 @@ say $1E-15$, and then the $\gamma^{r}_{m}(i)$ goes underflow immediately. To avo
 this situation, we should add a lower bound like $1E-6$ to the emission probability.
 \end{problem}
 \begin{problem}{2.6.20}
-We set the length of sequecne $M$ to 5 and the number of players $N$ to 4.
+We set the length of sequecne $M$ to 5 and the number of players $N$ to 4 and $R$
+to 50.
 
-We will go to discuss the parameter estimation result first and then we will 
-discuss some behaviour in brief.
+% We will go to discuss the parameter estimation result first and then we will 
+% discuss some behaviours in brief.
 
-The true value of $\beta$ is $\pi^2 \approx 9.87$ and the estimated value of it
-$\beta$ is 11.328.
+The true value of $\beta$ is $\pi^2 \approx 9.870$ and the estimated value of it
+$\beta$ is 11.328. These two numbers are closed as the number of samples is 
+large enough. The number of samples is $2MN(N-1)/2 = 60$.
 
 The mean absolute derivation (MAE) and mean absolute percentage error (MAPE) 
 between true value and the estimated value of $\mu^{n}_{s}$ are used to evaluate
-the performance.
+the performance of the estimation of $\mu_{i,m}$.
 
 The MAE of $\hat{\mu}^{n}_{s}$ is 8.574 and the MAPE of $\hat{\mu}^{n}_{s}$ is 
-66.5\%.
+66.5\%. The error is quite big becasuse some estimated states are swapped. Table
+\ref{tbl:Q26-est-mu} and \ref{tbl:Q26-true-mu} show the estimated value and 
+the true value of $\mu_{i,m}$ for the pair of players (1,2). We can see that 
+at $m = 2$ and $m = 3$, two estimated states should be swapped as the original values
+of two states are quite closed.
+
+If the transition probability of stating among the subfields becomes lower and 
+the performance difference of a pair of players becomes larger, the model will 
+have a lower probability to mix up two states.
 
 \begin{table}
     \centering
@@ -392,7 +402,7 @@ The MAE of $\hat{\mu}^{n}_{s}$ is 8.574 and the MAPE of $\hat{\mu}^{n}_{s}$ is
         every head row/.style={before row=\toprule,after row=\midrule},
         every last row/.style={after row=\bottomrule},
         ]{src/sec2_6/est_mu_pair_1_2.csv}
-    \caption{The esitmated values of $\mu^{1,2}_{i,m}$}
+    \caption{The esitmated values of $\mu^{1,2}_{i,m}$}\label{tbl:Q26-est-mu}
 \end{table}
 
 \begin{table}
@@ -403,7 +413,7 @@ The MAE of $\hat{\mu}^{n}_{s}$ is 8.574 and the MAPE of $\hat{\mu}^{n}_{s}$ is
         every head row/.style={before row=\toprule,after row=\midrule},
         every last row/.style={after row=\bottomrule},
         ]{src/sec2_6/true_mu_pair_1_2.csv}
-    \caption{The values of $p(X_v = i\mid X_{pa(v)}, \beta)$}
+    \caption{The true values of $\mu^{1,2}_{i,m}$}\label{tbl:Q26-true-mu}
 \end{table}  
 
 \end{problem}
