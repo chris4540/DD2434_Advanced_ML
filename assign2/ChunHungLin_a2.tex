@@ -224,18 +224,18 @@ The sampling result is in Table \ref{tbl:Q25-result}
 \pagebreak
 % 2.6
 \begin{problem}{2.6.18}
-Notices that the each observation is the sum of two Gaussian random variables.
+Notice that the each observation is the sum of two Gaussian random variables.
 Therefore, we can first estimated the parameters of the observation model of 
-a pair of players and then solve the linear equations to get each model parameters.
+a pair of players and then solve the linear equations to get each model parameter.
 \begin{align*}
     p(x_m^{(n,n';r)}\mid z_m^{(n,n';r)} = i) = \mathcal{N}(x_m^{(n,n';r)} 
             \mid \mu^{n}_{(i,m)} + \mu^{n'}_{(i,m)}, 2\beta)
 \end{align*}
-where $z_m^{(n,n';r)} = i$ means in $r$:th round the pair of player $(n, n')$ visting 
+where $z_m^{(n,n';r)} = i$ means in $r$:th round the pair of player $(n, n')$ is visting 
 subfield $s = (i, m)$ at sequence index $m$ and $z$ means hidden state.
 
-First we will derive an EM algorithm for a HMM with Gaussian observation model 
-with R observation data and then extend it to our case. This model can be considered
+First we will derive an EM algorithm for a HMM with a Gaussian observation model 
+and then extend it to our case. Each model can be considered simulating the tournament
 for one pair of players.
 
 Consider the joint probability of a HMM where the initial state probaility and 
@@ -343,12 +343,12 @@ Hence, $\mu_s^{n}$ can be obtained by solving the system of linear equations.
 To obtain the value of $\beta$, we can use the following equation:
 \begin{align*}
     \beta &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2(2M)(N(N-1)/2)} \\
-    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2 M N(N-1)} \\
+    &= \frac{\sum_{s \in S}\sum_{n, n' \in [N]}\Sigma_s^{n,n'}}{2 M N(N-1)} \numberthis \label{eq:Q26-beta}
 \end{align*}
 \end{problem}
 % 2.6.19
 \begin{problem}{2.6.19}
-The implmentation of this part is in Appendix.
+The implmentation of this part is in Listing \ref{impl:Sec26}.
 
 Here is the outline of procedure for each pair of players:
 \begin{enumerate}[Step 1:]
@@ -358,6 +358,8 @@ Here is the outline of procedure for each pair of players:
     \item Use $\gamma^{r}_{m}(i)$ to re-estimate $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$
             using the eq \eqref{eq:Q26-updateMu} and \eqref{eq:Q26-updateSigma}
     \item If $\mu_{(i,m)}$ and $\Sigma_{(i,m)}$, do not converge go back to Step 2
+    \item Use a solver for the system of linear equations to extract each $\mu^{n}_{(i,m)}$
+    \item Use equation \eqref{eq:Q26-beta} to estimate $\beta$
 \end{enumerate}
 
 There are two tricks used in implmentation. The first trick is adding a scaling
