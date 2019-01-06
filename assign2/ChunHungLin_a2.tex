@@ -657,7 +657,38 @@ each type of model $p(X^n \mid \theta_k$ to update $\tau_{nk}$ with equation
 \end{problem}
 
 \begin{problem}{2.7.23}
-    
+The problem is simplfied as we do not need to re-estimate all the
+parameters. Therefore, the clustering is very successful. 
+
+In table \ref{tbl:Q27-class},
+we can see that all classes are correctly re-estimated. 
+
+In table \ref{tbl:Q27-classProb},
+we can see that the estimated values of parameters are not closed to the true values.
+However, it does not affect our purpose that we have to correctly cluster all observation
+sequences.
+
+\begin{table}
+    \centering
+    \pgfplotstabletypeset[
+        col sep = comma,
+        precision=6,
+        every head row/.style={before row=\toprule,after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        ]{src/sec2_7/class_prob.csv}
+    \caption{The true value and estimated value of $\pi_k$}\label{tbl:Q27-classProb}
+\end{table}
+
+\begin{table}
+    \centering
+    \pgfplotstabletypeset[
+        col sep = comma,
+        % precision=6,
+        every head row/.style={before row=\toprule,after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        ]{src/sec2_7/class.csv}
+    \caption{The true class and estimated class of observation data}\label{tbl:Q27-class}
+\end{table}
 \end{problem}
 \pagebreak
 
