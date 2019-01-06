@@ -372,9 +372,6 @@ this situation, we should add a lower bound like $1E-6$ to the emission probabil
 We set the length of sequecne $M$ to 5 and the number of players $N$ to 4 and $R$
 to 50.
 
-% We will go to discuss the parameter estimation result first and then we will 
-% discuss some behaviours in brief.
-
 The true value of $\beta$ is $\pi^2 \approx 9.870$ and the estimated value of it
 $\beta$ is 11.328. These two numbers are closed as the number of samples is 
 large enough. The number of samples is $2MN(N-1)/2 = 60$.
@@ -421,7 +418,7 @@ have a lower probability to mix up two states.
 
 \begin{problem}{2.7.21}
 Since vehicles are going from east to west monotonically, we can simplfy the
-HMM models. The transition probabilites can be simplfied as 
+mixture of HMM models. The transition probabilites can be simplfied as 
 $\{A^{k}_{i,j}: i, j \in [R]\}$ and the emission distribution can be simplfied as
 $\{e^{k}_{r,(r+w)\mod R}: r \in [R], w \in \{-\Delta, -\Delta+1, ..., \Delta\}\}$
 Also, the column index can be used as time index to define the order of the sequence.
@@ -626,10 +623,11 @@ Finally, we derive the update equation of $e$.
         [\sum_{i=1}^{R}\sum_{l=1}^{R} \gamma_{m}^{n;k}(i)
         \mathbb{I}(X^n_{m} = l)\log e^k_{i,l}] \\
 \end{align*}
-Here we assume that the number of observation states is $R$ since the noise can
-be very large.
+Here we assume that the number of observation states is $R$ since 
+the maximum number of possible observation states is $R$ and it will occur as 
+the noise $\Delta$ becomes very large.
 
-The Lagrangian function is:
+The Lagrangian function for $e^k_{i,l}$ is:
 \begin{align*}
     \mathcal{L} = 
         \sum_{n=1}^{N} \sum_{k=1}^{K} \tau_{nk} \sum_{m=1}^{M} 
