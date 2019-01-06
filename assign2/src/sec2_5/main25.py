@@ -18,7 +18,9 @@ class Tree(tree_helper.Tree):
         ex_2_3.load_sample(self.root, sample)
 
     def get_s_fun_value(self, node, value):
-        # print("s_fun({}, {})".format(node.name, value))
+        if (node.name, value) in self.s_fun:
+            return self.s_fun[(node.name, value)]
+
         if self.is_leaf(node):
             if node.sample == value:
                 ret = 1
@@ -27,8 +29,7 @@ class Tree(tree_helper.Tree):
             # store s_fun value
             self.s_fun[(node.name, value)] = ret
 
-        if (node.name, value) in self.s_fun:
-            return self.s_fun[(node.name, value)]
+            return ret
 
         # for each child of this node, consider all its possible values
         ret = 1
@@ -71,7 +72,6 @@ class Tree(tree_helper.Tree):
         Return:
             return the probability of the set observations (samples)
         """
-        self.st_evids = dict()
         # consider all posible value of the root
         # prob: the probability of the root has that i-th catagory
         #    i: the label of a catagory
@@ -95,9 +95,17 @@ class Tree(tree_helper.Tree):
             parent_val = node.ancestor.sample
             theta = node.cat[parent_val]
 
-        sample = self.get_sample_from_cat(theta)
+        post_theta = np.zeros(len(theta))  # posterior catagorial distribution
+        for i in range(len(theta)):
+            post_theta[i] = theta[i] * self.s_fun[(node.name, i)]
+
+        post_theta = self.normalize_p_vec(post_theta)
+
+        sample = self.get_sample_from_cat(post_theta)
         # write sample to this node
         node.sample = sample
+
+        print("{},{},{}".format(node.name, sample, post_theta[sample]))
 
         for c in node.descendants:
             self._sample(c)
@@ -108,7 +116,9 @@ class Tree(tree_helper.Tree):
     @staticmethod
     def get_sample_from_cat(theta):
         """
-        Sample from 1D catagorial distribution
+        Sample from categorical distribution
+        Args:
+            theta (np.array/list): categorical parameter for each category
         """
         return np.random.choice([i for i in range(len(theta))], p=theta)
 
@@ -118,6 +128,7 @@ class Tree(tree_helper.Tree):
         normalize a probability vector to sum to 1
         """
         return p_vec / np.sum(p_vec)
+
 
 def load_pickle(fname):
     with open(fname, 'rb') as f:
