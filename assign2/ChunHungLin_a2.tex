@@ -306,7 +306,7 @@ In M step, we have:
         &= \underset{\bm{\Sigma}}{\mathrm{argmin}} ~ Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma}) 
 \end{align*}
 By inspection, we can see that $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$ 
-is a convex function and therefore
+is a concave function and therefore
 we can find $\bm{\mu}^{(t+1)}$ and $\bm{\Sigma}^{(t+1)}$ 
 by setting the first derivatives of $Q_{\mu, \Sigma}(\bm{\mu}, \bm{\Sigma})$
 to zero.
@@ -645,6 +645,19 @@ Maximize the Lagrangian function and we can get:
 \end{equation}
 
 These update equations can be reduced to one model N data case by setting $K = 1$.
+\end{problem}
+
+\begin{problem}{2.7.22}
+The implementation of this problem is given by Listing \ref{impl:Sec27}.
+
+As we do not re-estimate the transition matrix $A^{k}_{i,j}$ and the emission
+matrix $e^{k}_{i,l}$, we can calcalate the probability of each observation sequence of 
+each type of model $p(X^n \mid \theta_k$ to update $\tau_{nk}$ with equation
+\eqref{eq:Q27_tau}. And then use eq \eqref{eq:Q27-update_pi_k} to update $\pi_k$.
+\end{problem}
+
+\begin{problem}{2.7.23}
+    
 \end{problem}
 \pagebreak
 
