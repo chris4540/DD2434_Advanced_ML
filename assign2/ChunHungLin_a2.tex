@@ -131,7 +131,7 @@ The implmentation result is in Table \ref{tbl:Q23-result}.
         string replace*={_}{\textsubscript},
         every head row/.style={before row=\toprule,after row=\midrule},
         every last row/.style={after row=\bottomrule},
-        display columns/0/.style={string type,column name={}}
+        display columns/0/.style={string type,column name={Tree}}
         ]{src/sec2_3/result_sec2_3.csv}
     \caption{The values of $p(\beta \mid T, \Theta)$}\label{tbl:Q23-result}
 \end{table} 
@@ -171,7 +171,7 @@ the leaves not under the subtree $T_v$.
 
 Then, the sampling distribution of vertex except the root node is given by:
 \begin{align*}
-    p(X_v = i\mid X_{pa(v)}, \beta) 
+    p(X_v = i\mid X_{pa(v)}, \beta)
     &= p(X_v = i\mid X_{pa(v)}, \beta^{-}_{v}, \beta^{+}_{v}) \\
     &= p(X_v = i\mid X_{pa(v)}, \beta^{-}_{v}, \cancel{\beta^{+}_{v}}) && \text{(By d-speration rule)}\\
     &= \frac{p(X_v = i, X_{pa(v)}, \beta^{-}_{v})}{p(X_{pa(v)}, \beta^{-}_{v})} \\
@@ -187,11 +187,40 @@ Therefore, we should first compute $s(u, i)$ for each vertex and each value
 from bottom to top and then sampling from the posterior from top to bottom
 recursively.
 \begin{align}
-    X_r &\sim \frac{s(r,i)p(X_r =i)}{\sum_{i}s(r,i)p(X_r =i)} \\
+    X_r &\sim \frac{s(r,i)p(X_r =i)}{\sum_{i}s(r,i)p(X_r =i)} \label{eq:Q25-post_root} \\ 
     X_v &\sim \frac{s(v,i)p(X_v = i\mid X_{pa(v)}^{s})}
-                {\sum_{j}s(v,j)p(X_v = j\mid X_{pa(v)}^{s})}
+                {\sum_{j}s(v,j)p(X_v = j\mid X_{pa(v)}^{s})} \label{eq:Q25-post_node}
 \end{align}
 \end{problem}
+
+\begin{problem}{2.5.16}
+The implementation of this part is in Listing \ref{impl:Sec25}.
+
+To make the implementation easier, this implementation is modified from the result
+of 2.3.10. We calculate once the likelihood of the tree $p(\beta \mid T, \Theta)$ and
+then save $\{s(u, i) : u \in V(T), i \in [K]\}$. And then use equations 
+\eqref{eq:Q25-post_root} and \eqref{eq:Q25-post_node} to calculate the 
+categorical distribution parameters for sampling.
+\end{problem}
+
+\begin{problem}{2.5.17}
+The sampling result:
+
+\begin{table}
+    \centering
+    \pgfplotstabletypeset[
+        col sep = comma,
+        precision=4,
+        every head row/.style={before row=\toprule,after row=\midrule},
+        every last row/.style={after row=\bottomrule},
+        % columns/Probability/.style={column name=$$}
+        % display columns/0/.style={string type,column name={}}
+        ]{src/sec2_5/result_sec2_5.csv}
+    \caption{The values of $p(X_v = i\mid X_{pa(v)}, \beta)$}\label{tbl:Q25-result}
+\end{table} 
+\end{problem}
+
+
 \pagebreak
 % 2.6
 \begin{problem}{2.6.18}
@@ -1083,9 +1112,11 @@ Therefore, the update equations of $q(\theta_{r,c})$ are:
                  basicstyle=\ttfamily\footnotesize, breaklines=true
                  label={lst:label}]
                  {src/sec2_3/main23.py}
+\lstinputlisting[label={impl:Sec25},language=Python, caption=Implmentation of problem 2.5.16, 
+                 basicstyle=\ttfamily\footnotesize, breaklines=true]
+                 {src/sec2_5/main25.py}
 \lstinputlisting[label={impl:Sec26},language=Python, caption=Implmentation of problem 2.6.19, 
-                 basicstyle=\ttfamily\footnotesize, breaklines=true
-                 label={lst:label}]
+                 basicstyle=\ttfamily\footnotesize, breaklines=true]
                  {src/sec2_6/main26.py}
 \pagebreak
 \lstinputlisting[label={impl:Sec27},language=Python, caption=Implmentation of problem 2.7.22, 
