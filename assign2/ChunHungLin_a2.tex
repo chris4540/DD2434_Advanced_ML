@@ -1018,17 +1018,18 @@ For sake of convenient, we define:
         \mathbb{E}_{q(M)q(\Theta\backslash\theta_{r,c})}[\log p(M, \Theta, x)] 
         + \text{const} \\
     &= -\frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2
-    -\frac{\lambda}{2}\mathbb{E}[(x_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2]
+    -\frac{\lambda}{2}\sum_n\mathbb{E}[(x^n_{r,c} - (\mu_{r,c} + \theta_{r,c}\sum_{i,j \in N(r,c)}\mu_{i,j}))^2]
     + \text{const} \\
     &= -\frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2
-    -\frac{\lambda}{2}\mathbb{E}[\theta^2_{r,c}a_{r,c}^2 + (2\mu_{r,c}a_{r,c} - 2x_{r,c}a_{r,c})\theta_{r,c}]
+    -\frac{\lambda}{2}\sum_n\mathbb{E}[\theta^2_{r,c}a_{r,c}^2 + (2\mu_{r,c}a_{r,c} - 2x^n_{r,c}a_{r,c})\theta_{r,c}]
     + \text{const} \\
     &=-\frac{\lambda_1}{2}(\theta_{r,c} - \mu_1)^2  
-    -\frac{\lambda}{2}(\theta^2_{r,c}\mathbb{E}[a_{r,c}^2] 
-            + (2\tilde{m}^{\mu}_{r,c}\mathbb{E}[a_{r,c}] - 2x_{r,c}\mathbb{E}[a_{r,c}])\theta_{r,c})
+    -\frac{\lambda}{2}(N\theta^2_{r,c}\mathbb{E}[a_{r,c}^2] 
+            + (2N\tilde{m}^{\mu}_{r,c}\mathbb{E}[a_{r,c}] - 2(\sum_n x^n_{r,c})\mathbb{E}[a_{r,c}])\theta_{r,c})
     + \text{const} \\
-    &= (-\frac{\lambda_1}{2} -\frac{\lambda\mathbb{E}[a_{r,c}^2]}{2})\theta_{r,c}^2 
-    + (\lambda_1\mu_1 - \lambda\tilde{m}^{\mu}_{r,c}\mathbb{E}[a_{r,c}] + \lambda x_{r,c}\mathbb{E}[a_{r,c}])\theta_{r,c}
+    &= (-\frac{\lambda_1}{2} -\frac{N\lambda\mathbb{E}[a_{r,c}^2]}{2})\theta_{r,c}^2 
+    + (\lambda_1\mu_1 - N\lambda\tilde{m}^{\mu}_{r,c}\mathbb{E}[a_{r,c}] 
+        + \lambda (\sum_n x^n_{r,c})\mathbb{E}[a_{r,c}])\theta_{r,c}
     + \text{const} \\
 \end{align*}
 Consider $a_{r,c}$ is a sum of random variables and each of them has a posterior distribution $q(\mu_{r,c})$. 
@@ -1043,26 +1044,27 @@ Making use of eq.\eqref{eq:logspaceNormal}, we have:
 \begin{align*}
     % lambda of theta given x
     -\frac{\tilde{\lambda^{\theta}}_{r,c}}{2} 
-    &= -\frac{\lambda_1}{2} -\frac{\lambda\mathbb{E}_{q(M)}[a_{r,c}^2]}{2} \\
+    &= -\frac{\lambda_1}{2} -\frac{N\lambda\mathbb{E}_{q(M)}[a_{r,c}^2]}{2} \\
     \tilde{\lambda^{\theta}}_{r,c}
-    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + (\tilde{m}^{\mu}_{i,j})^2) \\
+    &= \lambda_1 + N\lambda\sum_{i,j \in N(r,c)}(\tilde{\lambda^{\mu}}^{-1}_{i,j} + (\tilde{m}^{\mu}_{i,j})^2) \\
     % mu of theta given x
     \tilde{m^{\theta}}_{r,c} 
     &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}}
-    (\lambda_1\mu_1 - \lambda\tilde{m}^{\mu}_{r,c}\mathbb{E}_{q(M)}[a_{r,c}] + \lambda x_{r,c}\mathbb{E}_{q(M)}[a_{r,c}]) \\
+    (\lambda_1\mu_1 - N\lambda\tilde{m}^{\mu}_{r,c}\mathbb{E}_{q(M)}[a_{r,c}] 
+    + \lambda (\sum_n x^n_{r,c})\mathbb{E}_{q(M)}[a_{r,c}]) \\
     &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}}
-    (\lambda_1\mu_1 + (x_{r,c} - \tilde{m}^{\mu}_{r,c})\lambda\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})
+    (\lambda_1\mu_1 + (\sum_n x^n_{r,c} - N\tilde{m}^{\mu}_{r,c})\lambda\sum_{i,j \in N(r,c)}\tilde{m}^{\mu}_{i,j})
 \end{align*}
 
 Therefore, the update equations of $q(\theta_{r,c})$ are:
 \begin{align*}
     % lambda of theta given x
     \tilde{\lambda^{\theta}}_{r,c}^{(t+1)}
-    &= \lambda_1 + \lambda\sum_{i,j \in N(r,c)}((\tilde{\lambda^{\mu}}^{(t)}_{i,j})^{-1} + (\tilde{m^{\mu}}_{i,j}^{(t)})^2) \\
+    &= \lambda_1 + N\lambda\sum_{i,j \in N(r,c)}((\tilde{\lambda^{\mu}}^{(t)}_{i,j})^{-1} + (\tilde{m^{\mu}}_{i,j}^{(t)})^2) \\
     % mu of theta given x
     \tilde{m^{\theta}}_{r,c}^{(t+1)}
-    &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}}
-    (\lambda_1\mu_1 + (x_{r,c} - \tilde{m^{\mu}}_{r,c}^{(t)})\lambda\sum_{i,j \in N(r,c)}\tilde{m^{\mu}}_{i,j}^{(t)})
+    &= \frac{1}{\tilde{\lambda^{\theta}}_{r,c}^{(t+1)}}
+    (\lambda_1\mu_1 + (\sum_n x^n_{r,c} - N\tilde{m^{\mu}}_{r,c}^{(t)})\lambda\sum_{i,j \in N(r,c)}\tilde{m^{\mu}}_{i,j}^{(t)})
 \end{align*}
 \end{problem} % 2.9.25
 
