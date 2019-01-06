@@ -32,7 +32,7 @@ class Tree(tree_helper.Tree):
         # for each child of this node, consider all its possible values
         ret = 1
         for c in node.descendants:
-            key = "{},{},{}".format(node.name, c.name, value)
+            key = "{},{},{}".format(node.name, c.name, value) # (u,v,i)
 
             if key in self.st_evids:
                 st_evid = self.st_evids[key]
@@ -101,10 +101,8 @@ if __name__ == '__main__':
             result_dict[param_k]["sample_{}".format(s)] = p_obs_nodes
 
     # transform the result to csv
-
     df = pd.DataFrame.from_dict(result_dict, orient="index")
     df.index.name = "Tree"
+    # reorder the columns
     df = df[["sample_{}".format(i) for i in range(1, 4)]]
-    df.to_csv("result.csv", float_format='%.3e')
-
-
+    df.to_csv("result_sec2_3.csv", float_format='%.3e')
