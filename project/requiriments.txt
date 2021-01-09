@@ -1,0 +1,7 @@
+numpy
+scipy
+sklearn
+theano
+https://github.com/Lasagne/Lasagne/archive/master.zip
+pandas
+gensim

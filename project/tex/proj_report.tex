@@ -1,0 +1,346 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{bm}
+\usepackage{multirow}
+\usepackage{placeins}
+
+\title{DD2434 Group Project:\\Text Classification using String Kernels}
+
+\author{
+    José Alejandro Mellado \\
+    \href{mailto:jamf@kth.se}{jamf@kth.se}
+    \and
+    Chun Hung Lin \\
+    \href{mailto:chlin3@kth.se}{chlin3@kth.se}
+    \and
+    Jian GU \\
+    \href{mailto:jiagu@kth.se}{jiagu@kth.se}
+    \and
+    Styliani Katsarou \\
+    \href{mailto:stykat@kth.se}{stykat@kth.se}
+}
+
+\date{January 2019}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+
+A Kernel is a function that projects two data points into a higher dimensional space where the points can be linearly separable. It can be considered as a representation of similarity, and a mechanism by which we inject our domain knowledge into the SVM algorithm.
+
+In this paper we conducted basic re-implementation of the String Subsequence Kernel (SSK) which is a kernel method introduced by Lodhi et al., 2002\cite{1}, as well as a speed-up and approximation of the methods. The Kernels can define a feature space for Support Vector Machines algorithm, a linear classifier used for the purposes of categorizing text documents. The results yielded by our implementations are assessed by having the results of 2002, Lodhi et al. as a reference point. We then conduct a comparison between the efficiency of SSK and $n$-Grams (NGK), Word Kernel (WK) as well as Latent Semantic Kernel and SIF model which is a sentence classifier based on a weighted mean of GloVe vectors. Experimental comparisons of the methods mentioned show that the implemented Approximated SSK results are not as good as the other methods, where NGK and Latent Semantic Kernel has the best performance.
+
+\end{abstract}
+\newpage
+
+\FloatBarrier
+\section{Introduction}
+
+In Support Vector Machines (SVM), Kernel Methods or Kernel tricks map data into higher dimensions in order to get a non-linear classification boundary. With kernel methods, explicit extraction of features in feature space is not necessary, making them ideal for accessing too expensive or too complicated to represent feature spaces, as the inner product can be computed between very complex or infinite dimensional vectors. The kernel method proposed in the paper, was motivated by bioinformatics applications, and was a different method than the classical approach of word-kernels which was used for text categorization until then.
+
+In this report we reproduced experiments presented in the paper \cite{1}, regarding basic implementation of SSK and the approximation of it and we also made use of cythonization and parallelization for accelerating our implementation. We also investigated and compared the results between SSK and other methods of text classification. These methods are $n$-grams and Word Kernels, which can be considered as more conventional ones, but we also experiment with implementation of more up-to-date methods, which are Latent Semantic Kernels and SIF model.
+
+\FloatBarrier
+\subsection{Review of the state of the art in string kernels for text classification}
+
+Before the kernel method proposed in the given paper was introduced, k-spectrum kernel introduced by  Leslie et al.\cite{2} was used for protein classification, which was based on the idea of creating all possible k-element sequences but did not allow for gaps. One year later Leslie et al.\cite{3} proposed an extension of k-spectrum kernel which can handle mismatching, which was the basis for Sonnenburg et al.\cite{4} to propose a fast k-spectrum kernel with mismatching. Saigo et al.\cite{5} introduced a method based on distance and was used for protein sequence classification. Despite the fact that local alignment distance could not be used as a kernel function because it did not fulfill the Mercer condition that a kernel has to be non-negative definite, they achieved to use a mimic of it in a kernel called local alignment kernel.
+
+Taking into account the high computational complexity of SSK, Seewald and Kleedorfer\cite{6} created an approximation technique for the SSK called Lambda Pruning (SSK-LP). According to this method, an upper limit is introduced, called $Maximum Lambda Exponent$ or $\theta$ to prune these kernel computations where the exponent of $\lambda$ ($l(i)+l(j)$) exceeds it. This way, an important amount of extra computational time is saved. In \cite{7} the authors developed a kernel function based on the weights of the class improving classification accuracy and in \cite{8} authors developed a kernel function based on the knowledge system similarity using the Omiotis library function in order to measure the similarity of English words and improve the classification accuracy. Based on \cite{7} and \cite{8}, \cite{9} combines the statistical methods with the knowledge-based methods to construct a kernel functions to improve the accuracy of text classification. It computes semantic information based on HowNet and statistical information based on a kernel function with class-based weighting.
+
+\FloatBarrier
+\section{Methods}
+\subsection{Re-implementation and Approximation of SSK}
+
+SSK compares how similar two strings are, based on how many sub-strings they have in common. Since a string is defined as a finite sequence of characters, a whole document can be considered as a string, being a sequence of words and spaces if we ignore punctuation. Hence SSK can be used to compare documents.  The common sub-strings’ weight to the comparison is determined by the frequency of occurrence and the degree of contiguity, since SSK allows for non-contiguous sub-strings. SSK maps strings to a feature vector where the indexes are all the subsequences of length $k$, mentioned in the paper as k-tuples. If the subsequence appears somewhere in the string, even discontinuously, it is considered an occurrence and will have a non zero entry. To express the degree of contiguity, SSK introduces a decay factor $\lambda$ to the power of the sub-string’s length $l(i)$ which indicates how far apart in a string the subsequence is. $\lambda$ value can be tuned to any value between 0 and 1, with values closer to 0 indicating lower tolerance to gaps between the subsequence characters, and those closer to 1 allowing for occurrences of bigger length to be weighted the same as contiguous subsequences. So the feature mapping of a string $s$ is defined as $$\phi_{u}(s)=\sum_{\bm{i}:u=s[\bm{i}]} \lambda^{l(\bm{i)}}$$ where $u$ is a sub-string of $s$, $i$ is the indicator of a character’s position in $s$, $l(i)$ is the length of $u$ which equals $l(i) = i_{|u|}-i_{1}+1$ , and $\lambda$ is the decay factor, and it measures the number of occurrences of subsequences in $s$ weighting them according to $l(i)$. So, according to the paper, the inner product between documents $s$ and $t$ would be $$K_{n}(s,t)=\sum_{u\in\Sigma^{n}}\sum_{\bm{i}:u=s[\bm{i}]}\sum_{\bm{j}:u=s[{\bm{j}}]} \lambda^{i_{|u|} + j_{|u|} - i_{1} - i_{1} + 2}$$
+\par{This direct computation would involve $O(|\Sigma|^{n})$ time and space where $\Sigma$ stands for the alphabet used and $n$ stands for the length of the subsequences, which would not be efficient. In order to provide a more efficient solution, the paper introduces an additional function which measures the length of each subsequence from its beginning of it to the string (i.e $\lambda^{|s| + |t| - i_{1} - i_{1} + 2}$ instead of $\lambda^{i_{|u|} + j_{|u|} - i_{1} - i_{1} + 2}$ allowing for a recursive computation to take place, reducing the complexity to $O(n|s||t|^{2})$. Going one step further into complexity reduction down to $O(n|s||t|)$, it proposes an approximation of SSK which is based on the idea of selecting a feature subset consists of sub-strings of higher occurrence frequency, based on a heuristic.}
+
+For the approximated kernel, we can use a subset of substrings from dataset to compute the approximation of SSK entries as suggested by Lodhi et al \cite{1}. For the number of substrings, Lodhi also suggested using around 200 substrings to get a good approximation of the kernel entries.
+
+\FloatBarrier
+\subsection{Efficient Implementation and Scalability}
+
+Since computation of the whole kernel matrix turns out very heavy, we explored several different strategies and finally utilized some of them to speed-up the computation process.
+\begin{itemize}
+    \item{1. Cythonization}
+
+    Cython is an optimizing static compiler for both Python programming language and extended Cython programming language (based on Pyrex). It makes writing C extensions for Python as easy as Python itself. Cython is the ideal language for wrapping external C libraries, embedding CPython into existing applications, and for fast C modules that speed up the execution of Python code.
+
+    Cython was mainly used to speed up the calculation of all elements of the kernel matrix, as well as the steps of normalization.
+
+    \item{2. Parallelization}
+
+    Parallelization is the act of designing a computer program or system to process data in parallel. Normally, computer programs compute data serially. If a computer program is parallelized, it breaks a problem down into smaller pieces that can each independently be solved at the same time by discrete computing resources. When optimized for this type of computation, parallelized programs can arrive at a solution much faster than programs executing processes in serial.
+
+    We use parallelization to accelerate computing with the help of multi-core hardware. We also observed that there is a conflict between parallelism and chunking, to some extent, as chunking is not suitable for parallel technology. After comparing the contributions of both in reducing computation time, we ended up choosing parallelization to calculate experimental results.
+
+    \item{3. The Gram matrix properties}
+
+    The Gram matrix for training is a symmetric matrix since the inner product of mapped samples is commutative.
+    i.e. $k_{ij} = <\phi(d_i), \phi(d_j)> = <\phi(d_j), \phi(d_i)> = k_{ji}$.
+    Moreover, the diagonal terms of the gram matrix for training are 1 since we normalize those feature vectors in the mapped space by $\hat{\phi}(d) = \frac{\phi(d)}{||\phi(d)||}$. Therefore, we have to compute 4950 kernel entries in training phase if we have 100 samples.
+\end{itemize}
+
+We tested different sample sizes to estimate the scalability of this implementation. We performed the test on a server. The server operation system is Red Hat Enterprise Linux 6.10, with 24 AMD Opteron 6172 processors. The clock rate of each processor is 2.1 GHz. In the scalability test, we only used 22 cores for this test. In table \ref{scale_sample},
+we used different sample sizes to train the SVM with SSK. The number of training samples varied but the number of test samples was fixed to be 90.
+
+\begin{table}[!htbp]
+\centering
+\caption{Training time and prediction time for different training sample sizes}
+\label{scale_sample}
+    \begin{tabular}{| c | c | c | c |}
+    \hline
+    Sample size & Training time & Prediction time & Total \\ \hline
+    150 & 520 sec & 286 sec & 806 sec \\ \hline
+    250 & 1694 sec & 594 sec & 2288 sec \\ \hline
+    380 & 3521 sec & 2445 sec & 5966 sec \\ \hline
+    \end{tabular}
+\end{table}
+
+\FloatBarrier
+\subsection{Conventional Methods}
+
+\paragraph{$n$-grams}
+
+$n$-grams is a text representation technique where string is sliced into a set of overlapping sequences of adjacent characters of the alphabet and spaces, called $n$-grams, where $n$ denotes length. The idea behind this method is converting a document into a high dimensional feature vector where each feature corresponds to the number of times an $n$-gram occurs in the document. The higher number of $n$-grams two documents share in common, the more similar they are.
+
+\paragraph{Word Kernels}
+
+This is a standard approach to text categorization, where a document is mapped to a very high dimensional feature vector, every element of which represents the occurrence or non-occurrence of a word. Hence, the dimensionality of the feature space equals the number of unique words. This method does not represent word order in any way, so it leads to loss of meaning information. Grammatical information and potential relations between words are also not represented.
+
+\FloatBarrier
+\subsection{Going Beyond Conventional Methods}
+
+\paragraph{SIF}
+
+This approach is quite different from the others because is based on word embedding, concretely GloVe \cite{11}. GloVe provides vector representations for words based on global word-word co-occurrence in large text corpus (such as Wikipedia articles). It allows that two words with similar meaning have vectors that are close in a representation space. SIF algorithm \cite{12} (Smooth Inverse Frequency) constructs text embedding as a weighted average of the embeddings of all the words in the text, with a weight $\omega_i = \frac{a}{a + P(w_i)}$, where $a$ is an hyper-parameter (in our setting, $a = 10^{-3}$) and $P(w_i)$ is the estimated word frequency. As a next step, the document categorization is done by using a simple multi-layer perception. This text representation technique allows representing the "meaning" of the words in the text, instead of considering it as a character chain. A drawback of this method is that it does not take word order into account, leading to a loss of meaning information.
+
+\paragraph{Latent Semantic Kernels}
+
+Latent Semantic Indexing or Latent Semantic Analysis is a technique that maps words and documents into a “concept space” in which it measures the similarity between documents\cite{13}. In order to make the problem tractable, LSK accepts some simplifications. It follows the bag of words concept, which loses the information about word order, and it represents concepts as word patterns that usually appear together and assumed that each word has only one meaning. Usually, documents would be transformed to a document-term matrix which is projected to first N principal components using the singular value decomposition (SVD), in order to reduce computation time.
+
+\FloatBarrier
+\section{Experiment and Results}
+
+We first re-implemented the SSK according to the original paper \cite{1} and tested the kernel with SVM for few parameters. Due to the page number limitation, we only presented part of the results in table \ref{reimpl_exact}.
+
+In keeping with the original paper \cite{1}, we conducted experiments on the data-set of Reuters-21578. The training set and testing set were obtained by different splits and identical to the original paper (i.e. 380 for training set and 90 for testing set). For each run of experiement, we re-drew the training set and testing from the data-set. We chose the most frequent contiguous strings from the training set as the basis set for approximating the SSK kernel. We compared the performance of SSK and some popular kernels such as NGK, WK, as well as other models like SIF and LSK.
+
+For the approximated SSK, we set the size of the basis set, namely the representative feature-set, as 200, which was recommended by the paper \cite{1}.
+
+For the latent semantic kernel, we chose the first 100 components to approximate the data matrix in the training phase.
+
+In table \ref{lamdba_0.5_performance}, we presented the results of different kernels or models with specific values of $n$-gram size. As a result, we were able to compare the performance of SVM with the approximated SSK or NGK more reliably. We also showed the performance of the classification using SVM with different kernels like WK and LSK in order to compare results more objectively. In table \ref{k_5_performance}, we have chosen $k=5$ as the fixed value of $n$-gram size and then measure the performance of approximated SSK, with specific values of the decay factor. For convenience, we also included the performance of other kernels and models.\\
+
+\FloatBarrier
+\section{Evaluation and Discussion}
+
+The re-implementation was successful since the overall results were close to the result mentioned in the paper \cite{1} and therefore the experiment can be reproduced.
+
+One thing we have to keep in mind is that the time for running one SVM with approximated SSK is far greater than running other kernels or models. The approximated version has significantly reduced the computational resources required by the full SSK. Needless to say, we had considered a lot of acceleration methods on this. Therefore, one of the hard drawbacks of SSK is the expensive algorithm complexity.
+
+Considering the case when the decay factor was fixed to 0.5, we investigated how performances of kernels or models are influenced when the value of the sub-string size varied among 3, 6, 9 and 12. The approximated SSK seemed to always obtain the best performance when $n$-gram size had the largest value, which was a bit different from the conclusion of the paper stating that SSK would perform better when $n$-gram size was in between 4 and 7. However, this difference was acceptable as there were some differences between the implementations of both. The results also showed that the size of sub-string was an important factor regarding the performance of SSK. It was obvious that NGK could obtain its best results when $n$-gram size was around 6. Compared with SSK, NGK was less likely to be influenced by the $n$-gram size value. On the other hand, WK and LSK always had similar performance, which was close to the performance of NGK. All three of them performed the best. Usually, SIF did not perform so great, but still not bad. In some cases, it had the best performance, such as in the case of "crude" category. However, we found that the performance of the approximated SSK seemed to be the worst among them as we were only able to choose basis from the training set. Those substrings may not appear in the test set and therefore we could not perform a good approximation of the SSK value. We tried to use more basis for text classification but it still could not give a satisfactory result as exact SSK. When we used more substrings, the computational time of approximated SSK will tend to the exact SSK. Therefore, using approximated SSK for text classification is not a reasonable choice.
+
+We also considered the case when the value of $n$-gram size was fixed to 5, in order to investigate how the performance of approximated SSK was influenced when the decay factor was 0.01, 0.07, 0.3 or 0.9. Unlike the $n$-gram size, the decay factor only had a mild effect on the final performance. When the decay factor became larger, the approximated SSK usually had a better performance. For the case of "crude" and "corn", they were a little bit unusual.
+
+In conclusion, the approximated SSK did not show obvious advantages in terms of performance and the computational complexity. The exact SSK had much better performance than the approximated SSK but undoubtedly it would cost much more computing resources. SSK seems not so practical as other popular kernels or models but it is still one inspiring kernel, since the methodology and strategy of seeking one approximation implementation and the tricks of efficient implementation, such as iterative chunking, are reference worthy.
+
+\newpage
+\begin{thebibliography}{8}
+
+\bibitem{1}
+Huma Lodhi, Craig Saunders, John Shawe-Taylor, Nello Christianini, Chris Watkins. Text Classification using String Kernels. University of London, 2002.
+
+\bibitem{2}
+C. S. Leslie, E. Eskin, and W. S. Noble. The spectrum kernel: A string kernel for SVM protein classification. In Pacific Symposium on Biocomputing, pages 566–575, 2002.
+
+\bibitem{3}
+C. S. Leslie and R. Kuang. Fast string kernels using inexact matching for protein sequences. Journal of Machine Learning Research, 5:1435–1455, 2004.
+
+\bibitem{4}
+S. Sonnenburg, G. Ratsch, and B. Scholkopf. Large scale genomic sequence svm classifiers. In ICML 05: Proceedings of the 22nd international conference on Machine learning, pages 848–855, 2005.
+
+\bibitem{5}
+H. Saigo, J.-P. Vert, N. Ueda, and T. Akutsu. Protein homology detection using string alignment kernels. Bioinformatics, 20(11):1682–1689, 2004
+
+\bibitem{6}
+Alexander Seewald and Florian Kleedorfer. Lambda pruning: an approximation of the string subsequence kernel. Advances in Data Analysis and Classification, 1(3):221-239, 2007.
+
+\bibitem{7}
+Altinel, B.Diri, B.Ganiz, M. C.: A Novel Semantic Smoothing Kernel for Text Classfication with Class Based Weighting. Knowledge Based Systems, Vol. 89, 2015, pp. 265-277.
+
+\bibitem{8}
+Nasir, J. A.Karim, A.Tsatsaronis, G.Varlamis, I.: A Knowledge-Based
+Semantic Kernel for Text Classification. In: Grossi, R., Sebastiani, F., Silvestri, F. (Eds.): String Processing and Information Retrieval (SPIRE 2011). Springer, Berlin, Heidelberg, Lecture Notes in Computer Science, Vol. 7024, 2011, pp. 261-266.
+
+\bibitem{9}
+Yao, Haipeng \& Zhang, Bo \& Zhang, Peiying \& Li, Maozhen. (2018). A Novel Kernel for Text Classification Based on Semantic and Statistical Information. Computing and Informatics. 37. 992-1010. 10.4149/cai\_2018\_4\_992.
+
+\bibitem{10}
+Pabitra Mitra, C. A. Murthy, and Sankar K. Pal. 2004. A Probabilistic Active Support Vector Learning Algorithm. IEEE Trans. Pattern Anal. Mach. Intell. 26, 3 (March 2004), 413-418. DOI: https://doi.org/10.1109/TPAMI.2004.1262340
+
+\bibitem{11}
+R. JeffreyPennington and C. Manning. 2014. Glove: Global vectors for word representation. In Proceedings of the 2014 conference on empirical methods in natural language processing (EMNLP) (pp. 1532-1543).
+
+\bibitem{12}
+Arora, S., Liang, Y.,\& Ma, T. 2016. A simple but tough-to-beat baseline for sentence embeddings.
+
+\bibitem{13}
+Cristianini, N., Lodhi, H., Shawe-Taylor, J.:Latent semantic kernels. J. Intell. Inf. Syst. (JJIS) 18(2-3), 127-152(2002)
+\end{thebibliography}
+
+\begin{table}[]
+\centering
+\caption{Re-implementation of exact SSK results for category 'earn'}
+\label{reimpl_exact}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{category} & \multirow{2}{*}{model} & \multirow{2}{*}{k} &
+\multirow{2}{*}{$\lambda$} & \multicolumn{2}{|c|}{F1} & \multicolumn{2}{|c|}{Recall} &
+\multicolumn{2}{|c|}{Precision} \\ \cline{5-10}
+ & & & & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} &
+ \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} \\ \hline
+\multirow{8}{*}{earn} &
+\multirow{4}{*}{Original article SSK}
+   & 6  & 0.5 & 0.936 & 0.033 & 0.888 & 0.060 & 0.922  & 0.013 \\
+ & & 12 & 0.5 & 0.931 & 0.036 & 0.888 & 0.058 & 0.981 & 0.025 \\
+ & & 5 & 0.3 & 0.943 & 0.029 & 0.900 & 0.055 & 0.992 & 0.013 \\
+ & & 5 & 0.9 & 0.914 & 0.050 & 0.853 & 0.075 & 0.989 & 0.020 \\
+\cline{2-10} &
+\multirow{4}{*}{Re-implemented SSK}
+  & 6  & 0.5 & 0.936 & 0.016 & 0.957 & 0.035 & 0.917 & 0.040 \\
+& & 12 & 0.5 & 0.757 & 0.037 & 0.975 & 0.043 & 0.623 & 0.073 \\
+& & 5 & 0.3 & 0.913 & 0.047 & 0.958 & 0.029 & 0.873 & 0.063 \\
+& & 5 & 0.9 & 0.891 & 0.045 & 0.888 & 0.047 & 0.895 & 0.049 \\
+\cline{2-10}
+\hline
+\end{tabular}
+\end{table}
+
+%Results-table i
+\begin{table}[]
+\centering
+\caption{The performance for approximated SSK ($\lambda = 0.5$) NGK, WK, SIF, and LSK}
+\label{lamdba_0.5_performance}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{category} & \multirow{2}{*}{model} & \multirow{2}{*}{k} & \multicolumn{2}{|c|}{F1} & \multicolumn{2}{|c|}{Recall} & \multicolumn{2}{|c|}{Precision} \\ \cline{4-9}
+ & & & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std}\\ \hline
+\multirow{11}{*}{earn}
+& \multirow{4}{*}{Approx. SSK}
+   & 3 & 0.551 & 0.115 & 0.645 & 0.350 & 0.711  & 0.263 \\
+ & & 6 & 0.674 & 0.053 & 0.938 & 0.132 & 0.561 & 0.167  \\
+ & & 9 & 0.752 & 0.060 & 0.850 & 0.142 & 0.719 & 0.173  \\
+ & & 12 & 0.799 & 0.036 & 0.878 & 0.085 & 0.707 & 0.060  \\
+\cline{2-9}
+& \multirow{4}{*}{NGK}
+& 3 & 0.924 & 0.018 & 0.945 & 0.029 & 0.905 & 0.025 \\
+& & 6 & 0.927 & 0.024 & 0.955 & 0.037 & 0.901 & 0.024 \\
+& & 9 & 0.921 & 0.034 & 0.950 & 0.034 & 0.895 & 0.055 \\
+& & 12 & 0.906 & 0.040 & 0.948 & 0.036 & 0.871 & 0.059 \\
+ \cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.925 & 0.023 & 0.955 & 0.029 & 0.897 & 0.028 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.868 & 0.027 & 0.908 & 0.057 & 0.833 & 0.019 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & \textbf{0.931} & 0.015 & 0.962 & 0.017 & 0.903 & 0.030 \\ \hline
+\multirow{11}{*}{acq}
+& \multirow{4}{*}{Approx. SSK}
+   & 3 & 0.229 & 0.267 & 0.455 & 0.527 & 0.154 & 0.179  \\
+ & & 6 & 0.154 & 0.226 & 0.212 & 0.385 & 0.331 & 0.384  \\
+ & & 9 & 0.449 & 0.220 & 0.472 & 0.356 & 0.617 & 0.159  \\
+ & & 12 & 0.586 & 0.113 & 0.500 & 0.176 & 0.767 & 0.059  \\ \cline{2-9}
+& \multirow{4}{*}{NGK}
+   & 3 & 0.892 & 0.032 & 0.892 & 0.047 & 0.894 & 0.039  \\
+ & & 6 & 0.895 & 0.041 & 0.892 & 0.054 & 0.900 & 0.043  \\
+ & & 9 & 0.855 & 0.054 & 0.856 & 0.072 & 0.859 & 0.060  \\
+& & 12 & 0.825 & 0.076 & 0.836 & 0.099 & 0.818 & 0.072  \\
+\cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.900 & 0.036 & 0.888 & 0.061 & 0.915 & 0.038 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.822 & 0.031 & 0.816 & 0.032 & 0.834 & 0.070 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & \textbf{0.904} & 0.038 & 0.876 & 0.058 & 0.937 & 0.040 \\ \hline
+\multirow{11}{*}{crude}
+& \multirow{4}{*}{Approx. SSK} & 3 & 0.026 & 0.090 & 0.079 & 0.274 & 0.016 & 0.054  \\
+ & & 6 & 0.125 & 0.147 & 0.080 & 0.103 & 0.437 & 0.416  \\
+ & & 9 & 0.472 & 0.119 & 0.413 & 0.233 & 0.726 & 0.219  \\
+ & & 12 & 0.622 & 0.144 & 0.653 & 0.140 & 0.627 & 0.218  \\ \cline{2-9}
+ & \multirow{4}{*}{NGK}
+   & 3 & 0.840 & 0.061 & 0.807 & 0.105 & 0.887 & 0.053 \\
+ & & 6 & 0.843 & 0.050 & 0.800 & 0.089 & 0.898 & 0.045 \\
+ & & 9 & 0.817 & 0.059 & 0.793 & 0.113 & 0.857 & 0.060 \\
+& & 12 & 0.803 & 0.070 & 0.747 & 0.111 & 0.884 & 0.082 \\
+\cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.866 & 0.061 & 0.827 & 0.090 & 0.916 & 0.068 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & \textbf{0.921} & 0.014 & 0.860 & 0.020 & 0.993 & 0.021 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & 0.846 & 0.070 & 0.833 & 0.100 & 0.867 & 0.076 \\ \hline
+ \multirow{11}{*}{corn}
+& \multirow{4}{*}{Approx. SSK}
+   & 3 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000   \\
+ & & 6 & 0.178 & 0.191 & 0.110 & 0.129 & 0.600 & 0.516  \\
+ & & 9 & 0.526 & 0.225 & 0.500 & 0.267 & 0.632 & 0.278  \\
+ & & 12 & 0.596 & 0.176 & 0.490 & 0.179 & 0.795 & 0.157  \\ \cline{2-9}
+ & \multirow{4}{*}{NGK}
+   & 3 &  \textbf{0.880} & 0.073 & 0.860 & 0.102 & 0.905 & 0.060  \\
+ & & 6 &  0.865 & 0.062 & 0.840 & 0.080 & 0.893 & 0.050  \\
+ & & 9 &  0.861 & 0.113 & 0.800 & 0.161 & 0.950 & 0.064  \\
+& & 12 &  0.811 & 0.103 & 0.730 & 0.127 & 0.924 & 0.090  \\
+\cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.880 & 0.079 & 0.860 & 0.102 & 0.906 & 0.074 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.857 & 0.035 & 0.800 & 0.000 & 0.927 & 0.080 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & 0.874 & 0.074 & 0.850 & 0.112 & 0.908 & 0.072 \\ \hline
+\end{tabular}
+\end{table}
+
+%Results- table ii
+\begin{table}[]
+\centering
+\caption{The performance for approximated SSK ($k=5$) NGK, WK, SIF, and LSK}
+\label{k_5_performance}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{category} & \multirow{2}{*}{model} & \multirow{2}{*}{$\lambda$} & \multicolumn{2}{|c|}{F1} & \multicolumn{2}{|c|}{Recall} & \multicolumn{2}{|c|}{Precision} \\ \cline{4-9}
+ & & & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std} & \multirow{1}{*}{Mean} & \multirow{1}{*}{Std}\\ \hline
+\multirow{8}{*}{earn} &
+\multirow{4}{*}{Approx. SSK}
+   & 0.01 & 0.638 & 0.077 & 0.900 & 0.203 & 0.545  & 0.173 \\
+ & & 0.07 & 0.641 & 0.074 & 0.975 & 0.071 & 0.496 & 0.156 \\
+ & & 0.3 & 0.647 & 0.566 & 0.965 & 0.102 & 0.512 & 0.161 \\
+ & & 0.9 & 0.733 & 0.118 & 0.872 & 0.138 & 0.698 & 0.243 \\ \cline{2-9}
+ & \multirow{1}{*}{NGK} & - & 0.928 & 0.021 & 0.955 & 0.033 & 0.904 & 0.025  \\ \cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.925 & 0.023 & 0.955 & 0.029 & 0.897 & 0.028 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.868 & 0.027 & 0.908 & 0.057 & 0.833 & 0.019 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & \textbf{0.931} & 0.015 & 0.962 & 0.017 & 0.903 & 0.030 \\ \hline
+ \multirow{8}{*}{acq} &
+ \multirow{4}{*}{Approx. SSK}
+   & 0.01 & 0.079 & 0.169 & 0.056 & 0.120 & 0.135 & 0.290  \\
+ & & 0.07 & 0.071 & 0.198 & 0.100 & 0.302 & 0.147 & 0.334  \\
+ & & 0.3 & 0.095 & 0.126 & 0.060 & 0.089 & 0.385 & 0.430  \\
+ & & 0.9 & 0.262 & 0.316 & 0.409 & 0.497 & 0.195 & 0.236  \\ \cline{2-9}
+ & \multirow{1}{*}{NGK} & - & 0.895 & 0.031 & 0.888 & 0.053 & 0.904 & 0.033 \\ \cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.900 & 0.036 & 0.888 & 0.061 & 0.915 & 0.038 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.822 & 0.031 & 0.816 & 0.032 & 0.834 & 0.070 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & \textbf{0.904} & 0.038 & 0.876 & 0.058 & 0.937 & 0.040 \\ \hline
+ \multirow{8}{*}{crude} &
+ \multirow{4}{*}{Approx. SSK}
+   & 0.01 & 0.134 & 0.158 & 0.227 & 0.379 & 0.258 & 0.357  \\
+ & & 0.07 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000  \\
+ & & 0.3 & 0.051 & 0.125 & 0.107 & 0.315 & 0.124 & 0.317  \\
+ & & 0.9 & 0.095 & 0.154 & 0.133 & 0.324 & 0.216 & 0.164  \\ \cline{2-9}
+ & \multirow{1}{*}{NGK} & - & 0.837 & 0.072 & 0.800 & 0.103 & 0.884 & 0.066 \\ \cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.866 & 0.061 & 0.827 & 0.090 & 0.916 & 0.068 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & \textbf{0.921} & 0.014 & 0.860 & 0.020 & 0.993 & 0.021 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & 0.846 & 0.070 & 0.833 & 0.100 & 0.867 & 0.076 \\ \hline
+ \multirow{8}{*}{corn} &
+ \multirow{4}{*}{Approx. SSK}
+   & 0.01 & 0.116 & 0.169 & 0.070 & 0.106 & 0.400 & 0.516  \\
+ & & 0.07 & 0.160 & 0.250 & 0.110 & 0.191 & 0.400 & 0.516  \\
+ & & 0.3  & 0.052 & 0.114 & 0.030 & 0.067 & 0.200 & 0.422  \\
+ & & 0.9  & 0.099 & 0.095 & 0.056 & 0.053 & 0.500 & 0.496  \\ \cline{2-9}
+ & \multirow{1}{*}{NGK} & - & \textbf{0.88} & 0.073 & 0.86 & 0.102 & 0.905 & 0.06 \\ \cline{2-9}
+ & \multirow{1}{*}{WK}  & - & 0.880 & 0.079 & 0.860 & 0.102 & 0.906 & 0.074 \\ \cline{2-9}
+ & \multirow{1}{*}{SIF} & - & 0.857 & 0.035 & 0.800 & 0.000 & 0.927 & 0.080 \\ \cline{2-9}
+ & \multirow{1}{*}{LSK} & - & 0.874 & 0.074 & 0.850 & 0.112 & 0.908 & 0.072 \\ \hline
+\end{tabular}
+\end{table}
+
+\end{document}
